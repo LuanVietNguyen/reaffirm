@@ -1,11 +1,17 @@
 Model {
-  Name			  "partial_acc_model_resilient"
+  Name			  "partial_acc_model"
   Version		  8.9
   SavedCharacterEncoding  "windows-1252"
   GraphicalInterface {
-    NumRootInports	    1
+    NumRootInports	    2
     Inport {
       Name		      "ngps"
+      BusObject		      ""
+      OutputFunctionCall      "off"
+      UnitExpr		      "inherit"
+    }
+    Inport {
+      Name		      "nenc"
       BusObject		      ""
       OutputFunctionCall      "off"
       UnitExpr		      "inherit"
@@ -77,7 +83,7 @@ Model {
       $ObjectID		      2
       $ClassName	      "Simulink.WindowInfo"
       IsActive		      [1]
-      Location		      [1912.0, -8.0, 1936.0, 1056.0]
+      Location		      [8.0, 8.0, 1554.0, 882.0]
       Object {
 	$PropName		"ModelBrowserInfo"
 	$ObjectID		3
@@ -99,11 +105,11 @@ Model {
 	$ObjectID		5
 	$ClassName		"Simulink.EditorInfo"
 	IsActive		[1]
-	ViewObjType		"StateflowChart"
-	LoadSaveID		"1"
-	Extents			[1882.0, 875.0]
-	ZoomFactor		[1.000250062515629]
-	Offset			[-336.533, -136.683]
+	ViewObjType		"SimulinkTopLevel"
+	LoadSaveID		"0"
+	Extents			[1879.0, 887.0]
+	ZoomFactor		[1.25]
+	Offset			[58.079999999999927, 76.479999999999961]
       }
       Array {
 	Type			"Simulink.DockComponentInfo"
@@ -117,8 +123,8 @@ Model {
 	  UserData		  ""
 	  Floating		  [0]
 	  DockPosition		  "Right"
-	  Width			  [640]
-	  Height		  [480]
+	  Width			  [512]
+	  Height		  [384]
 	}
 	Object {
 	  $ObjectID		  7
@@ -129,21 +135,21 @@ Model {
 	  UserData		  "1"
 	  Floating		  [0]
 	  DockPosition		  "Top"
-	  Width			  [254]
-	  Height		  [970]
+	  Width			  [252]
+	  Height		  [800]
 	}
 	PropName		"DockComponentsInfo"
       }
       WindowState	      "AAAA/wAAAAD9AAAAAwAAAAAAAAC9AAAB+PwCAAAAA/sAAAAWAEQAbwBjAGsAVwBpAGQAZwBlAHQAMwEAAAAxAAAB+AAAA"
       "AAAAAAA+wAAABYARABvAGMAawBXAGkAZABnAGUAdAA0AAAAAAD/////AAAAAAAAAAD7AAAAUgBHAEwAVQBFADIAIAB0AHIAZQBlACAAYwBvAG0Ac"
-      "ABvAG4AZQBuAHQALwBHAEwAVQBFADIAIAB0AHIAZQBlACAAYwBvAG0AcABvAG4AZQBuAHQAAAAAAP////8AAABjAP///wAAAAEAAAECAAADhvwCA"
+      "ABvAG4AZQBuAHQALwBHAEwAVQBFADIAIAB0AHIAZQBlACAAYwBvAG0AcABvAG4AZQBuAHQAAAAAAP////8AAAB4AP///wAAAAEAAAECAAADhvwCA"
       "AAAAfsAAABUAEcATABVAEUAMgA6AFAAcgBvAHAAZQByAHQAeQBJAG4AcwBwAGUAYwB0AG8AcgAvAFAAcgBvAHAAZQByAHQAeQAgAEkAbgBzAHAAZ"
-      "QBjAHQAbwByAAAAAAD/////AAAAKwD///8AAAACAAAGkAAAAhX8AQAAAAH7AAAAQgBHAEwAVQBFADIAOgBEAEQARwAgAEMAbwBtAHAAbwBuAGUAb"
-      "gB0AC8AUwB5AG0AYgBvAGwATQBhAG4AYQBnAGUAcgAAAAAAAAAGkAAAAFAA////AAAHgAAAA6QAAAABAAAAAgAAAAEAAAAC/AAAAAEAAAACAAAAD"
+      "QBjAHQAbwByAAAAAAD/////AAAANAD///8AAAACAAAGkAAAAhX8AQAAAAH7AAAAQgBHAEwAVQBFADIAOgBEAEQARwAgAEMAbwBtAHAAbwBuAGUAb"
+      "gB0AC8AUwB5AG0AYgBvAGwATQBhAG4AYQBnAGUAcgAAAAAAAAAGkAAAAFsA////AAAHhAAAA7wAAAABAAAAAgAAAAEAAAAC/AAAAAEAAAACAAAAD"
       "/////8AAAAAAP////8AAAAAAAAAAP////8BAAAAAP////8AAAAAAAAAAP////8AAAAAAP////8AAAAAAAAAAP////8AAAAAAP////8AAAAAAAAAA"
-      "P////8AAAAAAP////8AAAAAAAAAAP////8BAAAAef////8AAAAAAAAAAP////8BAAAA2v////8AAAAAAAAAAP////8AAAAAAP////8AAAAAAAAAA"
-      "P////8BAAABU/////8AAAAAAAAAAP////8AAAAAAP////8AAAAAAAAAAP////8AAAAAAP////8AAAAAAAAAAP////8AAAAAAP////8AAAAAAAAAA"
-      "P////8BAAADK/////8AAAAAAAAAAP////8BAAADWv////8AAAAAAAAAAP////8AAAAAAP////8AAAAAAAAAAA=="
+      "P////8AAAAAAP////8AAAAAAAAAAP////8BAAAAkf////8AAAAAAAAAAP////8BAAABBP////8AAAAAAAAAAP////8AAAAAAP////8AAAAAAAAAA"
+      "P////8BAAABlf////8AAAAAAAAAAP////8AAAAAAP////8AAAAAAAAAAP////8AAAAAAP////8AAAAAAAAAAP////8AAAAAAP////8AAAAAAAAAA"
+      "P////8BAAADxv////8AAAAAAAAAAP////8BAAAD/v////8AAAAAAAAAAP////8AAAAAAP////8AAAAAAAAAAA=="
     }
   }
   HideAutomaticNames	  on
@@ -153,8 +159,8 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "LuanNguyen"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Tue Jun 12 15:23:35 2018"
-  RTWModifiedTimeStamp	  450717815
+  LastModifiedDate	  "Tue Jul 03 16:05:52 2018"
+  RTWModifiedTimeStamp	  452534750
   ModelVersionFormat	  "1.%<AutoIncrement:26>"
   ConfigurationManager	  "none"
   SampleTimeColors	  off
@@ -207,12 +213,12 @@ Model {
     $PropName		    "DataLoggingOverride"
     $ObjectID		    8
     $ClassName		    "Simulink.SimulationData.ModelLoggingInfo"
-    model_		    "partial_acc_model_resilient"
+    model_		    "partial_acc_model"
     overrideMode_	    [0.0]
     Array {
       Type		      "Cell"
       Dimension		      1
-      Cell		      "partial_acc_model_resilient"
+      Cell		      "partial_acc_model"
       PropName		      "logAsSpecifiedByModels_"
     }
     Array {
@@ -1103,9 +1109,9 @@ Model {
     }
   }
   System {
-    Name		    "partial_acc_model_resilient"
-    Location		    [1912, -8, 3848, 1048]
-    Open		    off
+    Name		    "partial_acc_model"
+    Location		    [8, 8, 1562, 890]
+    Open		    on
     PortBlocksUseCompactNotation off
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -1117,9 +1123,9 @@ Model {
     TiledPaperMargins	    [0.500000, 0.500000, 0.500000, 0.500000]
     TiledPageScale	    1
     ShowPageBoundaries	    off
-    ZoomFactor		    "100"
+    ZoomFactor		    "125"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    "20"
+    SIDHighWatermark	    "21"
     Block {
       BlockType		      Inport
       Name		      "ngps"
@@ -1129,11 +1135,20 @@ Model {
       IconDisplay	      "Port number"
     }
     Block {
+      BlockType		      Inport
+      Name		      "nenc"
+      SID		      "21"
+      Position		      [300, 483, 330, 497]
+      ZOrder		      19
+      Port		      "2"
+      IconDisplay	      "Port number"
+    }
+    Block {
       BlockType		      SubSystem
       Name		      "ACC"
       SID		      "1"
-      Ports		      [5, 4]
-      Position		      [530, 179, 855, 461]
+      Ports		      [6, 4]
+      Position		      [530, 181, 855, 464]
       ZOrder		      2
       ErrorFcn		      "Stateflow.Translate.translate"
       PermitHierarchicalResolution "ExplicitOnly"
@@ -1163,7 +1178,7 @@ Model {
       }
       System {
 	Name			"ACC"
-	Location		[1912, -8, 3848, 1048]
+	Location		[8, 8, 1562, 890]
 	Open			off
 	PortBlocksUseCompactNotation off
 	ModelBrowserVisibility	off
@@ -1177,7 +1192,7 @@ Model {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
-	SIDHighWatermark	"100"
+	SIDHighWatermark	"101"
 	Block {
 	  BlockType		  Inport
 	  Name			  "d0"
@@ -1223,6 +1238,15 @@ Model {
 	  IconDisplay		  "Port number"
 	}
 	Block {
+	  BlockType		  Inport
+	  Name			  "nenc"
+	  SID			  "1::101"
+	  Position		  [20, 281, 40, 299]
+	  ZOrder		  81
+	  Port			  "6"
+	  IconDisplay		  "Port number"
+	}
+	Block {
 	  BlockType		  Demux
 	  Name			  " Demux "
 	  SID			  "1::82"
@@ -1235,13 +1259,13 @@ Model {
 	  BlockType		  S-Function
 	  Name			  " SFunction "
 	  SID			  "1::81"
-	  Tag			  "Stateflow S-Function partial_acc_model_resilient 3"
-	  Ports			  [5, 5]
-	  Position		  [180, 110, 230, 230]
+	  Tag			  "Stateflow S-Function partial_acc_model 3"
+	  Ports			  [6, 5]
+	  Position		  [180, 112, 230, 253]
 	  ZOrder		  61
 	  FunctionName		  "sf_sfun"
-	  Parameters		  "nenc,nrad,vl"
-	  PortCounts		  "[5 5]"
+	  Parameters		  "nrad,vl"
+	  PortCounts		  "[6 5]"
 	  SFunctionDeploymentMode off
 	  EnableBusSupport	  on
 	  SFcnIsStateOwnerBlock	  off
@@ -1305,43 +1329,50 @@ Model {
 	  IconDisplay		  "Port number"
 	}
 	Line {
-	  ZOrder		  108
+	  ZOrder		  119
 	  SrcBlock		  "d0"
 	  SrcPort		  1
 	  DstBlock		  " SFunction "
 	  DstPort		  1
 	}
 	Line {
-	  ZOrder		  109
+	  ZOrder		  120
 	  SrcBlock		  "v0"
 	  SrcPort		  1
 	  DstBlock		  " SFunction "
 	  DstPort		  2
 	}
 	Line {
-	  ZOrder		  110
+	  ZOrder		  121
 	  SrcBlock		  "ed0"
 	  SrcPort		  1
 	  DstBlock		  " SFunction "
 	  DstPort		  3
 	}
 	Line {
-	  ZOrder		  111
+	  ZOrder		  122
 	  SrcBlock		  "ev0"
 	  SrcPort		  1
 	  DstBlock		  " SFunction "
 	  DstPort		  4
 	}
 	Line {
-	  ZOrder		  112
+	  ZOrder		  123
 	  SrcBlock		  "ngps"
 	  SrcPort		  1
 	  DstBlock		  " SFunction "
 	  DstPort		  5
 	}
 	Line {
+	  ZOrder		  124
+	  SrcBlock		  "nenc"
+	  SrcPort		  1
+	  DstBlock		  " SFunction "
+	  DstPort		  6
+	}
+	Line {
 	  Name			  "d_out"
-	  ZOrder		  113
+	  ZOrder		  125
 	  Labels		  [0, 0]
 	  SrcBlock		  " SFunction "
 	  SrcPort		  2
@@ -1350,7 +1381,7 @@ Model {
 	}
 	Line {
 	  Name			  "v_out"
-	  ZOrder		  114
+	  ZOrder		  126
 	  Labels		  [0, 0]
 	  SrcBlock		  " SFunction "
 	  SrcPort		  3
@@ -1359,7 +1390,7 @@ Model {
 	}
 	Line {
 	  Name			  "ed_out"
-	  ZOrder		  115
+	  ZOrder		  127
 	  Labels		  [0, 0]
 	  SrcBlock		  " SFunction "
 	  SrcPort		  4
@@ -1368,7 +1399,7 @@ Model {
 	}
 	Line {
 	  Name			  "ev_out"
-	  ZOrder		  116
+	  ZOrder		  128
 	  Labels		  [0, 0]
 	  SrcBlock		  " SFunction "
 	  SrcPort		  5
@@ -1376,14 +1407,14 @@ Model {
 	  DstPort		  1
 	}
 	Line {
-	  ZOrder		  117
+	  ZOrder		  129
 	  SrcBlock		  " Demux "
 	  SrcPort		  1
 	  DstBlock		  " Terminator "
 	  DstPort		  1
 	}
 	Line {
-	  ZOrder		  118
+	  ZOrder		  130
 	  SrcBlock		  " SFunction "
 	  SrcPort		  1
 	  DstBlock		  " Demux "
@@ -1464,7 +1495,7 @@ Model {
       Labels		      [2, 1]
       SrcBlock		      "ACC"
       SrcPort		      1
-      Points		      [118, 0; 0, -35]
+      Points		      [118, 0; 0, -40]
       DstBlock		      "d"
       DstPort		      1
     }
@@ -1474,7 +1505,7 @@ Model {
       Labels		      [2, 1]
       SrcBlock		      "ACC"
       SrcPort		      2
-      Points		      [118, 0; 0, -35]
+      Points		      [118, 0; 0, -40]
       DstBlock		      "v"
       DstPort		      1
     }
@@ -1484,7 +1515,7 @@ Model {
       Labels		      [2, 1]
       SrcBlock		      "ACC"
       SrcPort		      3
-      Points		      [118, 0; 0, -35]
+      Points		      [118, 0; 0, -40]
       DstBlock		      "ed"
       DstPort		      1
     }
@@ -1494,7 +1525,7 @@ Model {
       Labels		      [2, 1]
       SrcBlock		      "ACC"
       SrcPort		      4
-      Points		      [118, 0; 0, -35]
+      Points		      [118, 0; 0, -40]
       DstBlock		      "ev"
       DstPort		      1
     }
@@ -1510,7 +1541,7 @@ Model {
       ZOrder		      6
       SrcBlock		      "v0"
       SrcPort		      1
-      Points		      [88, 0; 0, 35]
+      Points		      [88, 0; 0, 25]
       DstBlock		      "ACC"
       DstPort		      2
     }
@@ -1518,7 +1549,7 @@ Model {
       ZOrder		      7
       SrcBlock		      "ed0"
       SrcPort		      1
-      Points		      [88, 0; 0, 35]
+      Points		      [88, 0; 0, 15]
       DstBlock		      "ACC"
       DstPort		      3
     }
@@ -1526,7 +1557,7 @@ Model {
       ZOrder		      8
       SrcBlock		      "ev0"
       SrcPort		      1
-      Points		      [88, 0; 0, 35]
+      Points		      [88, 0; 0, 5]
       DstBlock		      "ACC"
       DstPort		      4
     }
@@ -1534,9 +1565,17 @@ Model {
       ZOrder		      26
       SrcBlock		      "ngps"
       SrcPort		      1
-      Points		      [113, 0; 0, -20]
+      Points		      [113, 0; 0, -60]
       DstBlock		      "ACC"
       DstPort		      5
+    }
+    Line {
+      ZOrder		      27
+      SrcBlock		      "nenc"
+      SrcPort		      1
+      Points		      [137, 0; 0, -55]
+      DstBlock		      "ACC"
+      DstPort		      6
     }
   }
 }
@@ -1548,25 +1587,24 @@ Model {
 Stateflow {
   machine {
     id			    1
-    name		    "partial_acc_model_resilient"
+    name		    "partial_acc_model"
     created		    "04-Jun-2018 22:42:50"
     isLibrary		    0
     sfVersion		    80000011
-    firstTarget		    31
+    firstTarget		    25
   }
   chart {
     id			    2
     machine		    1
     name		    "ACC"
     windowPosition	    [199.5 216.75 417 348.75]
-    viewLimits		    [-336.533 1544.996 -136.683 738.098]
+    viewLimits		    [-336.533 1199.083 -136.683 727.101]
     zoomFactor		    1.333
     screen		    [1 1 3200 1200 1.25]
     treeNode		    [0 3 0 0]
     viewObj		    2
-    subviewS {
-    }
-    ssIdHighWaterMark	    46
+    visible		    1
+    ssIdHighWaterMark	    40
     decomposition	    CLUSTER_CHART
     updateMethod	    CONTINUOUS
     chartFileNumber	    3
@@ -1575,8 +1613,8 @@ Stateflow {
     userSpecifiedStateTransitionExecutionOrder 1
     disableImplicitCasting  1
     actionLanguage	    2
-    firstData		    7
-    firstTransition	    23
+    firstData		    5
+    firstTransition	    21
   }
   state {
     id			    3
@@ -1599,41 +1637,14 @@ Stateflow {
     position		    [112.9 136.8 241.8 167.4]
     fontSize		    12
     chart		    2
-    treeNode		    [2 0 3 5]
+    treeNode		    [2 0 3 0]
     subviewer		    2
     ssIdNumber		    1
     type		    OR_STATE
     decomposition	    CLUSTER_STATE
   }
-  state {
-    id			    5
-    labelString		    "Spacing_Control_Resilient\ndu:\nd_dot = -v+vl;\nv_dot = 0.25*d - 2*v - 0.25*ed + ev - 0.25*(10 +"
-    " 2*(v-ev))+2*vl;\ned_dot = -10*ed - ev + nrad;\nev_dot = -2*ev+0.5*(0 + nenc);\nd_out = d;\nv_out = v;\ned_out = e"
-    "d;\nev_out = ev;"
-    position		    [647.6 436.1667 534.1447 227.652]
-    fontSize		    12
-    chart		    2
-    treeNode		    [2 0 4 6]
-    subviewer		    2
-    ssIdNumber		    41
-    type		    OR_STATE
-    decomposition	    CLUSTER_STATE
-  }
-  state {
-    id			    6
-    labelString		    "Speed_Control_Resilient\ndu:\nd_dot = -v+vl;\nv_dot = -2*v+ev+2*vl;\ned_dot = -10*ed - ev + nrad"
-    ";\nev_dot = -2*ev+0.5*(0 + nenc);\nd_out = d;\nv_out = v;\ned_out = ed;\nev_out = ev;"
-    position		    [112.9 436.8 241.8 167.4]
-    fontSize		    12
-    chart		    2
-    treeNode		    [2 0 5 0]
-    subviewer		    2
-    ssIdNumber		    42
-    type		    OR_STATE
-    decomposition	    CLUSTER_STATE
-  }
   data {
-    id			    7
+    id			    5
     ssIdNumber		    19
     name		    "ed"
     scope		    LOCAL_DATA
@@ -1653,10 +1664,10 @@ Stateflow {
       }
     }
     dataType		    "Inherit: From definition in chart"
-    linkNode		    [2 0 8]
+    linkNode		    [2 0 6]
   }
   data {
-    id			    8
+    id			    6
     ssIdNumber		    20
     name		    "ev"
     scope		    LOCAL_DATA
@@ -1676,10 +1687,10 @@ Stateflow {
       }
     }
     dataType		    "Inherit: From definition in chart"
-    linkNode		    [2 7 9]
+    linkNode		    [2 5 7]
   }
   data {
-    id			    9
+    id			    7
     ssIdNumber		    21
     name		    "v"
     scope		    LOCAL_DATA
@@ -1699,12 +1710,56 @@ Stateflow {
       }
     }
     dataType		    "Inherit: From definition in chart"
+    linkNode		    [2 6 8]
+  }
+  data {
+    id			    8
+    ssIdNumber		    22
+    name		    "d_out"
+    scope		    OUTPUT_DATA
+    machine		    1
+    props {
+      type {
+	method			SF_INHERITED_TYPE
+	primitive		SF_DOUBLE_TYPE
+	isSigned		1
+	wordLength		"16"
+      }
+      complexity	      SF_COMPLEX_INHERITED
+      frame		      SF_FRAME_NO
+      unit {
+	name			"inherit"
+      }
+    }
+    dataType		    "Inherit: Same as Simulink"
+    linkNode		    [2 7 9]
+  }
+  data {
+    id			    9
+    ssIdNumber		    23
+    name		    "v_out"
+    scope		    OUTPUT_DATA
+    machine		    1
+    props {
+      type {
+	method			SF_INHERITED_TYPE
+	primitive		SF_DOUBLE_TYPE
+	isSigned		1
+	wordLength		"16"
+      }
+      complexity	      SF_COMPLEX_INHERITED
+      frame		      SF_FRAME_NO
+      unit {
+	name			"inherit"
+      }
+    }
+    dataType		    "Inherit: Same as Simulink"
     linkNode		    [2 8 10]
   }
   data {
     id			    10
-    ssIdNumber		    22
-    name		    "d_out"
+    ssIdNumber		    24
+    name		    "ed_out"
     scope		    OUTPUT_DATA
     machine		    1
     props {
@@ -1725,8 +1780,8 @@ Stateflow {
   }
   data {
     id			    11
-    ssIdNumber		    23
-    name		    "v_out"
+    ssIdNumber		    25
+    name		    "ev_out"
     scope		    OUTPUT_DATA
     machine		    1
     props {
@@ -1747,55 +1802,55 @@ Stateflow {
   }
   data {
     id			    12
-    ssIdNumber		    24
-    name		    "ed_out"
-    scope		    OUTPUT_DATA
-    machine		    1
-    props {
-      type {
-	method			SF_INHERITED_TYPE
-	primitive		SF_DOUBLE_TYPE
-	isSigned		1
-	wordLength		"16"
-      }
-      complexity	      SF_COMPLEX_INHERITED
-      frame		      SF_FRAME_NO
-      unit {
-	name			"inherit"
-      }
-    }
-    dataType		    "Inherit: Same as Simulink"
-    linkNode		    [2 11 13]
-  }
-  data {
-    id			    13
-    ssIdNumber		    25
-    name		    "ev_out"
-    scope		    OUTPUT_DATA
-    machine		    1
-    props {
-      type {
-	method			SF_INHERITED_TYPE
-	primitive		SF_DOUBLE_TYPE
-	isSigned		1
-	wordLength		"16"
-      }
-      complexity	      SF_COMPLEX_INHERITED
-      frame		      SF_FRAME_NO
-      unit {
-	name			"inherit"
-      }
-    }
-    dataType		    "Inherit: Same as Simulink"
-    linkNode		    [2 12 14]
-  }
-  data {
-    id			    14
     ssIdNumber		    26
     name		    "vl"
     scope		    LOCAL_DATA
     initFromWorkspace	    1
-    paramIndexForInitFromWorkspace 2
+    paramIndexForInitFromWorkspace 1
+    machine		    1
+    props {
+      type {
+	method			SF_DOUBLE_TYPE
+	primitive		SF_DOUBLE_TYPE
+	isSigned		1
+	wordLength		"16"
+      }
+      frame		      SF_FRAME_NO
+      unit {
+	name			"inherit"
+      }
+    }
+    dataType		    "double"
+    linkNode		    [2 11 13]
+  }
+  data {
+    id			    13
+    ssIdNumber		    27
+    name		    "nrad"
+    scope		    LOCAL_DATA
+    initFromWorkspace	    1
+    machine		    1
+    props {
+      type {
+	method			SF_DOUBLE_TYPE
+	primitive		SF_DOUBLE_TYPE
+	isSigned		1
+	wordLength		"16"
+      }
+      frame		      SF_FRAME_NO
+      unit {
+	name			"inherit"
+      }
+    }
+    dataType		    "double"
+    linkNode		    [2 12 14]
+  }
+  data {
+    id			    14
+    ssIdNumber		    31
+    name		    "d0"
+    scope		    INPUT_DATA
+    initFromWorkspace	    1
     machine		    1
     props {
       type {
@@ -1814,11 +1869,10 @@ Stateflow {
   }
   data {
     id			    15
-    ssIdNumber		    27
-    name		    "nrad"
-    scope		    LOCAL_DATA
+    ssIdNumber		    32
+    name		    "v0"
+    scope		    INPUT_DATA
     initFromWorkspace	    1
-    paramIndexForInitFromWorkspace 1
     machine		    1
     props {
       type {
@@ -1837,9 +1891,9 @@ Stateflow {
   }
   data {
     id			    16
-    ssIdNumber		    29
-    name		    "nenc"
-    scope		    LOCAL_DATA
+    ssIdNumber		    33
+    name		    "ed0"
+    scope		    INPUT_DATA
     initFromWorkspace	    1
     machine		    1
     props {
@@ -1859,8 +1913,8 @@ Stateflow {
   }
   data {
     id			    17
-    ssIdNumber		    31
-    name		    "d0"
+    ssIdNumber		    34
+    name		    "ev0"
     scope		    INPUT_DATA
     initFromWorkspace	    1
     machine		    1
@@ -1881,72 +1935,6 @@ Stateflow {
   }
   data {
     id			    18
-    ssIdNumber		    32
-    name		    "v0"
-    scope		    INPUT_DATA
-    initFromWorkspace	    1
-    machine		    1
-    props {
-      type {
-	method			SF_DOUBLE_TYPE
-	primitive		SF_DOUBLE_TYPE
-	isSigned		1
-	wordLength		"16"
-      }
-      frame		      SF_FRAME_NO
-      unit {
-	name			"inherit"
-      }
-    }
-    dataType		    "double"
-    linkNode		    [2 17 19]
-  }
-  data {
-    id			    19
-    ssIdNumber		    33
-    name		    "ed0"
-    scope		    INPUT_DATA
-    initFromWorkspace	    1
-    machine		    1
-    props {
-      type {
-	method			SF_DOUBLE_TYPE
-	primitive		SF_DOUBLE_TYPE
-	isSigned		1
-	wordLength		"16"
-      }
-      frame		      SF_FRAME_NO
-      unit {
-	name			"inherit"
-      }
-    }
-    dataType		    "double"
-    linkNode		    [2 18 20]
-  }
-  data {
-    id			    20
-    ssIdNumber		    34
-    name		    "ev0"
-    scope		    INPUT_DATA
-    initFromWorkspace	    1
-    machine		    1
-    props {
-      type {
-	method			SF_DOUBLE_TYPE
-	primitive		SF_DOUBLE_TYPE
-	isSigned		1
-	wordLength		"16"
-      }
-      frame		      SF_FRAME_NO
-      unit {
-	name			"inherit"
-      }
-    }
-    dataType		    "double"
-    linkNode		    [2 19 21]
-  }
-  data {
-    id			    21
     ssIdNumber		    36
     name		    "d"
     scope		    LOCAL_DATA
@@ -1969,10 +1957,10 @@ Stateflow {
       }
     }
     dataType		    "Inherit: From definition in chart"
-    linkNode		    [2 20 22]
+    linkNode		    [2 17 19]
   }
   data {
-    id			    22
+    id			    19
     ssIdNumber		    28
     name		    "ngps"
     scope		    INPUT_DATA
@@ -1992,10 +1980,32 @@ Stateflow {
       }
     }
     dataType		    "double"
-    linkNode		    [2 21 0]
+    linkNode		    [2 18 20]
+  }
+  data {
+    id			    20
+    ssIdNumber		    29
+    name		    "nenc"
+    scope		    INPUT_DATA
+    initFromWorkspace	    1
+    machine		    1
+    props {
+      type {
+	method			SF_DOUBLE_TYPE
+	primitive		SF_DOUBLE_TYPE
+	isSigned		1
+	wordLength		"16"
+      }
+      frame		      SF_FRAME_NO
+      unit {
+	name			"inherit"
+      }
+    }
+    dataType		    "double"
+    linkNode		    [2 19 0]
   }
   transition {
-    id			    23
+    id			    21
     labelString		    "{d = d0; v = v0; ed = ed0; ev = ev0;}"
     labelPosition	    [187.433 89.607 191.984 16]
     fontSize		    12
@@ -2015,10 +2025,10 @@ Stateflow {
     }
     executionOrder	    1
     ssIdNumber		    40
-    linkNode		    [2 0 24]
+    linkNode		    [2 0 22]
   }
   transition {
-    id			    24
+    id			    22
     labelString		    "[d - ed < 10 + 2*(v-ev)]"
     labelPosition	    [435.466 142.826 121.922 16]
     fontSize		    12
@@ -2040,34 +2050,10 @@ Stateflow {
     }
     executionOrder	    1
     ssIdNumber		    6
-    linkNode		    [2 23 25]
+    linkNode		    [2 21 23]
   }
   transition {
-    id			    25
-    labelString		    "[ngps>21]"
-    labelPosition	    [216.213 336.466 55.016 16]
-    fontSize		    12
-    src {
-      id		      4
-      intersection	      [3 0 1 0.5 233.8 304.2 0 0]
-    }
-    dst {
-      id		      6
-      intersection	      [1 0 -1 0.5 233.8 436.8 0 0]
-    }
-    midPoint		    [233.8 366.5]
-    chart		    2
-    dataLimits		    [156.149 233.8 199.407 436.8]
-    subviewer		    2
-    slide {
-      sticky		      BOTH_STICK
-    }
-    executionOrder	    2
-    ssIdNumber		    46
-    linkNode		    [2 24 26]
-  }
-  transition {
-    id			    26
+    id			    23
     labelString		    "[d - ed >= 10 + 2*(v-ev)]"
     labelPosition	    [444.955 255.409 128.922 16]
     fontSize		    12
@@ -2089,88 +2075,16 @@ Stateflow {
     }
     executionOrder	    1
     ssIdNumber		    10
-    linkNode		    [2 25 27]
-  }
-  transition {
-    id			    27
-    labelString		    "[ngps>21]"
-    labelPosition	    [879.537 411.716 55.016 16]
-    fontSize		    12
-    src {
-      id		      3
-      intersection	      [3 0 1 0.5 914.6724 363.8187 0 0]
-    }
-    dst {
-      id		      5
-      intersection	      [1 0 -1 0.5 914.6724 436.1667 0 0]
-    }
-    midPoint		    [914.6724 395.9927]
-    chart		    2
-    dataLimits		    [912.272 917.072 363.819 436.167]
-    subviewer		    2
-    slide {
-      sticky		      BOTH_STICK
-    }
-    executionOrder	    2
-    ssIdNumber		    45
-    linkNode		    [2 26 28]
-  }
-  transition {
-    id			    28
-    labelString		    "[d - ed < 10 + 2*(v-ev)]"
-    labelPosition	    [435 442 121 16]
-    fontSize		    12
-    src {
-      id		      6
-      intersection	      [2 1 0 0.2116 354.7 472.2262 0 0]
-    }
-    dst {
-      id		      5
-      intersection	      [4 -1 0 0.8416 647.6 472.2262 0 0]
-    }
-    midPoint		    [497.15 472.2262]
-    chart		    2
-    dataLimits		    [354.7 647.6 469.826 474.626]
-    subviewer		    2
-    slide {
-      sticky		      BOTH_STICK
-    }
-    executionOrder	    1
-    ssIdNumber		    43
-    linkNode		    [2 27 29]
-  }
-  transition {
-    id			    29
-    labelString		    "[d - ed >= 10 + 2*(v-ev)]"
-    labelPosition	    [444 555 128 16]
-    fontSize		    12
-    src {
-      id		      5
-      intersection	      [4 -1 0 0.5605 647.6 536.2262 0 0]
-    }
-    dst {
-      id		      6
-      intersection	      [2 1 0 0.5939 354.7 536.2262 0 0]
-    }
-    midPoint		    [505.15 536.2262]
-    chart		    2
-    dataLimits		    [354.7 647.6 533.826 538.626]
-    subviewer		    2
-    slide {
-      sticky		      BOTH_STICK
-    }
-    executionOrder	    1
-    ssIdNumber		    44
-    linkNode		    [2 28 0]
+    linkNode		    [2 22 0]
   }
   instance {
-    id			    30
+    id			    24
     machine		    1
     name		    "ACC"
     chart		    2
   }
   target {
-    id			    31
+    id			    25
     machine		    1
     name		    "sfun"
     description		    "Default Simulink S-Function Target."

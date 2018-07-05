@@ -4,16 +4,21 @@ function guard = guard_inferrence(mono, vars, robustness)
     guard = [vars{1}, inequality_check(mono(1)), num2str(robustness(1))];
     if length(mono) > 1
         for i = 2 : length(mono)
-            str = ['||', vars{i}, inequality_check(mono(i)), num2str(robustness(i))];
+            if mono(i) < 1
+                str = [' & ', vars{i}, inequality_check(mono(i)), num2str(robustness(i))];
+            else
+                str = [' || ', vars{i}, inequality_check(mono(i)), num2str(robustness(i))];
+            end
             guard = strcat(guard, str);
         end
     end
+    guard = ['[', guard,']'];
 end
 
 function sign = inequality_check(value)
-    if value < 0
-        sign = '>';
+    if value < 1
+        sign = ' > ';
     else
-        sign = '<';
+        sign = ' < ';
     end
 end
