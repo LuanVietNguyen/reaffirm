@@ -17,7 +17,6 @@ function [chart] = resilient_to_nomial_guards(model, destStatesName, n, guard)
             end
             if  count(states(i).Name,destStatesName(k)) == 1 && count(states(i).Name,'Resilient') == n 
                 srcTrans{k} = states(i);
-                srcTrans{k}.Name
             end
         end
     end
