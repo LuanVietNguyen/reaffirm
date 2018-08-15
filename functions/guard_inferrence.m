@@ -1,6 +1,7 @@
 % input: monotonicity values, uncertain parameters and their values
 % output: return candidate guards
 function guard = guard_inferrence(mono, newGuards, robustness)
+    guard = '';
     vars = newGuards.params;
     if isempty(newGuards.template)
         guard = [vars{1}, inequality_check(mono(1)), num2str(robustness(1))];
@@ -16,7 +17,11 @@ function guard = guard_inferrence(mono, newGuards, robustness)
         end
         guard = ['[', guard,']'];
     else
-        guard =strcat(newGuards.template, inequality_check(mono(1)),' ', num2str(robustness(1)));
+        if contains(newGuards.template, 'abs')
+            if robustness(1) < 0
+                guard =[char(newGuards.template), inequality_check((-1)*mono(1)), num2str(abs(robustness(1)))];
+            end
+        end
     end
 end
 

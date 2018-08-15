@@ -9,7 +9,6 @@ function [chart] = resilient_to_nomial_guards(model, destStatesName, n, guard)
     numOfDestStates = length(destStatesName);  
     srcTrans = cell(numOfDestStates,1);
     destTrans = cell(numOfDestStates,1);
-    
     for i = 1: numOfStates
         for k = 1:numOfDestStates
             if strcmp(states(i).Name,destStatesName(k))
@@ -20,5 +19,5 @@ function [chart] = resilient_to_nomial_guards(model, destStatesName, n, guard)
             end
         end
     end
-    add_new_guards(chart, srcTrans , destTrans, numOfDestStates, guard)  
+    add_new_guards(chart, srcTrans , destTrans, numOfDestStates, guard) 
 end

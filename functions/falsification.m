@@ -43,9 +43,9 @@ function [obj, robustness, best_value, mono, inputValues, nLoop, flag, option_ch
             obj_result = falsify_pb.GetBrSet_Best();
         end
         figure
-        obj_result.PlotRobustSat(safe_distance);
-        % figure
-        % obj_result.PlotSignals({'ngps','d','v','ev', 'ed'}, [], {'LineWidth', 1.3});
+        obj_result.PlotRobustSat(spec);
+        figure
+        obj_result.PlotSignals({'ngps','d','v','ev', 'ed'}, [], {'LineWidth', 1.3});
     end 
     if robustness > 0 && nLoop == 1
         flag = 1;

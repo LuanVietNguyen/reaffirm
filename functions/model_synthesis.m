@@ -1,4 +1,4 @@
-function [resilient_model, originalStateNames] = model_synthesis(partial_model, newGuards, pos)
+function [resilient_model, originalStateNames] = model_synthesis(partial_model, newGuards, flowPattern, pos)
     
     % Reference: http://blogs.mathworks.com/seth/2010/01/21/building-models-with-matlab-code/
     % Reference: http://www.mathworks.com/help/stateflow/api/quick-start-for-the-stateflow-api.html
@@ -6,7 +6,6 @@ function [resilient_model, originalStateNames] = model_synthesis(partial_model, 
     rt = sfroot;
     resilient_model = rt.find('-isa','Simulink.BlockDiagram');
     chart = resilient_model.find('-isa', 'Stateflow.Chart');
-   
     % add new states in resilient model
     [states, stateNames, copyStates, copyStateNames, numOfStates] = copy_states(chart, pos);
     if pos == 1
@@ -19,7 +18,7 @@ function [resilient_model, originalStateNames] = model_synthesis(partial_model, 
     add_new_guards(chart, states, copyStates, numOfStates, newGuards);
     
     % fix dynamic by ignoring unsafe parameters 
-    fix_dynamics(copyStates, numOfStates, newGuards);
+    fix_dynamics(copyStates, numOfStates, newGuards, flowPattern);
     %save model file
     slsf_model_path = [partial_model,'_resilient.mdl'];
     sfsave(resilient_model.Name, slsf_model_path);
@@ -79,17 +78,25 @@ function  [] = copy_transitions(chart, copyStates, copyStateNames, pos)
 end
 
 
-function  [] = fix_dynamics(copyStates, numOfStates, newGuards)
+function  [] = fix_dynamics(copyStates, numOfStates, newGuards, flowPattern)
     % replace variables in destination states by zeros
     for  i = 1: numOfStates
         oldLabel = copyStates{i}.Label;
         newLabel = oldLabel;
         for j = 1 : length(newGuards.params)
-            newLabel = strrep(newLabel,newGuards.params{j},'0');
+            if ~isempty(flowPattern)
+                newLabel = strrep(newLabel,newGuards.params{j},flowPattern);
+            else
+                newLabel = strrep(newLabel,newGuards.params{j},'0');
+            end
         end
         copyStates{i}.Label = newLabel;
     end
 end
+
+
+
+
 
 
 
