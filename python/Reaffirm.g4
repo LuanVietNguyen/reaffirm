@@ -5,39 +5,37 @@ grammar Reaffirm;
 prog		: 	stat+	;
 
 
-stat   		:	expr NEWLINE        # printExpr     
+stat   		:	expr NEWLINE        # printExpr
     		|   assign				# assignment
     		|   forloop				# loop
     		|	ifstat				# condtion
-    		| 	NEWLINE             # blank      
+    		| 	NEWLINE             # blank
     		;
 
 block		: 	'{' stat* '}' ; // possibly empty statement block
 
 expr   		:	funcall 			# method
-    		|   ID					# id	
+    		|   ID					# id
     		|   objref				# objectRef
-    		|	STRING				# string	
-    		|   varDecl	            # varDec            
+    		|	STRING				# string
+    		|   varDecl	            # varDec
     		;
 
-assign		: 	ID '=' expr;		 
+assign		: 	ID '=' expr;
 exprList 	: 	expr (',' expr)* ; // arg list
 forloop		:	('formode' |'fortran') assign block ; // forloop over modes or transitions
 ifstat		:	'if' bexpr 'then' stat ('else' stat)? ;
 
-funcall		:	ID '(' exprList? ')' ; // funtion call 
+funcall		:	ID '(' exprList? ')' ; // funtion call
 
-fieldref	: 	ID ('.' ID)* ; // e.g., model.mode.flowstring
-
-objref		:	ID ('.' ( funcall | fieldref ) )* ;	// e.g., model.mode.addVariable 
+objref		:	ID ('.' ( funcall | ID ) )* ;	// e.g., model.mode.addVariable
 
 varDecl		:	types ID ;
 types		:	'local' | 'input' | 'output'| 'param' ; // user-defined types
 
 bexpr		:	expr (BOOLOP expr)* ;
 
-ID  		:   [a-zA-Z0-9_]+ ;   
+ID  		:   [a-zA-Z0-9_]+ ;
 STRING 		: 	'"' .*? '"' ;
 BOOLOP		:	'&&' | '||' | '==' ;
 NEWLINE 	:	'\r'? '\n';

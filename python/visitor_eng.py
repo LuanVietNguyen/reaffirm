@@ -13,270 +13,155 @@ from ReaffirmVisitor import ReaffirmVisitor
 from matlab import engine
 import io
 
-class MatlabEmitter(ReaffirmListener):
-    def __init__(self, inputargs):
-        self.matlab = {}
-        # declare a dictionay of equivalent functions
-        self.funcMap = {'replace':'strrep', 'addTransition':'add_transition'}
-        self.fieldMap = {'flow': 'Label', 'guardLabel': 'LabelString'}
+class MATLABVisitor(ReaffirmVisitor):
+    def __init__(self):
+        self.model = None
+        self.env = {}
 
-        sessions = engine.find_matlab()
-        if sessions == ():
-            print("Starting MATLAB engine")
-            self.eng = engine.start_matlab()
-        else:
-            print("Connecting to MATLAB engine")
-            self.eng = engine.connect_matlab(sessions[0])
+        # sessions = engine.find_matlab()
+        # if sessions == ():
+        #     print("Starting MATLAB engine")
+        #     self.eng = engine.start_matlab()
+        # else:
+        #     print("Connecting to MATLAB engine")
+        #     self.eng = engine.connect_matlab(sessions[0])
+        print("initializing!")
 
-        print("loading model")
-        # TODO: how do we handle/catch MatlabExecutionErrors?
-        self.eng.load_system(args['modelName'])
-        e = self.eng
-        self.model = e.find(e.find(e.sfroot(),'-isa','Simulink.BlockDiagram')
-                            ,'-isa','Stateflow.Chart')
+    # Visit a parse tree produced by ReaffirmParser#prog.
+    def visitProg(self, ctx:ReaffirmParser.ProgContext):
+        print("visitProg")
+        return self.visitChildren(ctx)
 
-    # Enter a parse tree produced by ReaffirmParser#prog.
-    def enterProg(self, ctx:ReaffirmParser.ProgContext):
-        print(ctx)
-        print("calling enterProg")
-        print(ctx.getPayload())
 
-    # Exit a parse tree produced by ReaffirmParser#prog.
-    def exitProg(self, ctx:ReaffirmParser.ProgContext):
-        print(ctx)
-        print("calling exitProg")
+    # Visit a parse tree produced by ReaffirmParser#printExpr.
+    def visitPrintExpr(self, ctx:ReaffirmParser.PrintExprContext):
+        print("visitPrintExpr")
+        return self.visitChildren(ctx)
 
-    # Enter a parse tree produced by ReaffirmParser#printExpr.
-    def enterPrintExpr(self, ctx:ReaffirmParser.PrintExprContext):
-        print(ctx)
-        print("calling enterPrintExpr")
+
+    # Visit a parse tree produced by ReaffirmParser#assignment.
+    def visitAssignment(self, ctx:ReaffirmParser.AssignmentContext):
+        print("visitAssignment")
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ReaffirmParser#loop.
+    def visitLoop(self, ctx:ReaffirmParser.LoopContext):
+        print("visitLoop")
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ReaffirmParser#condtion.
+    def visitCondtion(self, ctx:ReaffirmParser.CondtionContext):
+        print("visitCondtion")
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ReaffirmParser#blank.
+    def visitBlank(self, ctx:ReaffirmParser.BlankContext):
+        print("visitBlank")
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ReaffirmParser#block.
+    def visitBlock(self, ctx:ReaffirmParser.BlockContext):
+        print("visitBlock")
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ReaffirmParser#method.
+    def visitMethod(self, ctx:ReaffirmParser.MethodContext):
+        print("visitMethod")
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ReaffirmParser#id.
+    def visitId(self, ctx:ReaffirmParser.IdContext):
+        print("visitId")
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ReaffirmParser#objectRef.
+    def visitObjectRef(self, ctx:ReaffirmParser.ObjectRefContext):
+        print("visitObjectRef")
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ReaffirmParser#string.
+    def visitString(self, ctx:ReaffirmParser.StringContext):
+        print("visitString")
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ReaffirmParser#varDec.
+    def visitVarDec(self, ctx:ReaffirmParser.VarDecContext):
+        print("visitVarDec")
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ReaffirmParser#assign.
+    def visitAssign(self, ctx:ReaffirmParser.AssignContext):
+        print("visitAssign")
+        val = self.visit(ctx.expr())
+        self.env[ctx.ID().getText()] = val
         pass
-    # Exit a parse tree produced by ReaffirmParser#printExpr.
-    def exitPrintExpr(self, ctx:ReaffirmParser.PrintExprContext):
-        print(ctx)
-        print("calling exitPrintExpr")
 
 
-    # Enter a parse tree produced by ReaffirmParser#assignment.
-    def enterAssignment(self, ctx:ReaffirmParser.AssignmentContext):
+    # Visit a parse tree produced by ReaffirmParser#exprList.
+    def visitExprList(self, ctx:ReaffirmParser.ExprListContext):
+        print("visitExprList")
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ReaffirmParser#forloop.
+    def visitForloop(self, ctx:ReaffirmParser.ForloopContext):
+        print("visitForloop")
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ReaffirmParser#ifstat.
+    def visitIfstat(self, ctx:ReaffirmParser.IfstatContext):
+        print("visitIfstat")
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ReaffirmParser#funcall.
+    def visitFuncall(self, ctx:ReaffirmParser.FuncallContext):
+        print("visitFuncall")
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ReaffirmParser#fieldref.
+    def visitFieldref(self, ctx:ReaffirmParser.FieldrefContext):
+        print("visitFieldref")
         pdb.set_trace()
-        print(ctx)
-        print("calling enterAssignment")
+        return self.visitChildren(ctx)
 
-    # Exit a parse tree produced by ReaffirmParser#assignment.
-    def exitAssignment(self, ctx:ReaffirmParser.AssignmentContext):
+
+    # Visit a parse tree produced by ReaffirmParser#objref.
+    def visitObjref(self, ctx:ReaffirmParser.ObjrefContext):
+        print("visitObjref")
         pdb.set_trace()
-        print(ctx)
-        print("calling exitAssignment")
+        return self.visitChildren(ctx)
 
 
-    # Enter a parse tree produced by ReaffirmParser#loop.
-    def enterLoop(self, ctx:ReaffirmParser.LoopContext):
-        print(ctx)
-        print("calling enterLoop")
-
-    # Exit a parse tree produced by ReaffirmParser#loop.
-    def exitLoop(self, ctx:ReaffirmParser.LoopContext):
-        print(ctx)
-        print("calling exitLoop")
+    # Visit a parse tree produced by ReaffirmParser#varDecl.
+    def visitVarDecl(self, ctx:ReaffirmParser.VarDeclContext):
+        print("visitVarDecl")
+        return self.visitChildren(ctx)
 
 
-    # Enter a parse tree produced by ReaffirmParser#condtion.
-    def enterCondtion(self, ctx:ReaffirmParser.CondtionContext):
-        print(ctx)
-        print("calling enterCondtion")
-
-    # Exit a parse tree produced by ReaffirmParser#condtion.
-    def exitCondtion(self, ctx:ReaffirmParser.CondtionContext):
-        print(ctx)
-        print("calling exitCondtion")
+    # Visit a parse tree produced by ReaffirmParser#types.
+    def visitTypes(self, ctx:ReaffirmParser.TypesContext):
+        print("visitTypes")
+        return self.visitChildren(ctx)
 
 
-    # Enter a parse tree produced by ReaffirmParser#blank.
-    def enterBlank(self, ctx:ReaffirmParser.BlankContext):
-        print(ctx)
-        print("calling enterBlank")
+    # Visit a parse tree produced by ReaffirmParser#bexpr.
+    def visitBexpr(self, ctx:ReaffirmParser.BexprContext):
+        print("visitBexpr")
+        return self.visitChildren(ctx)
 
-    # Exit a parse tree produced by ReaffirmParser#blank.
-    def exitBlank(self, ctx:ReaffirmParser.BlankContext):
-        print(ctx)
-        print("calling exitBlank")
-
-
-    # Enter a parse tree produced by ReaffirmParser#block.
-    def enterBlock(self, ctx:ReaffirmParser.BlockContext):
-        print(ctx)
-        print("calling enterBlock")
-
-    # Exit a parse tree produced by ReaffirmParser#block.
-    def exitBlock(self, ctx:ReaffirmParser.BlockContext):
-        print(ctx)
-        print("calling exitBlock")
-
-
-    # Enter a parse tree produced by ReaffirmParser#method.
-    def enterMethod(self, ctx:ReaffirmParser.MethodContext):
-        print(ctx)
-        print("calling enterMethod")
-
-    # Exit a parse tree produced by ReaffirmParser#method.
-    def exitMethod(self, ctx:ReaffirmParser.MethodContext):
-        print(ctx)
-        print("calling exitMethod")
-
-
-    # Enter a parse tree produced by ReaffirmParser#id.
-    def enterId(self, ctx:ReaffirmParser.IdContext):
-        print(ctx)
-        print("calling enterId")
-
-    # Exit a parse tree produced by ReaffirmParser#id.
-    def exitId(self, ctx:ReaffirmParser.IdContext):
-        print(ctx)
-        print("calling exitId")
-
-
-    # Enter a parse tree produced by ReaffirmParser#objectRef.
-    def enterObjectRef(self, ctx:ReaffirmParser.ObjectRefContext):
-        print(ctx)
-        print("calling enterObjectRef")
-
-    # Exit a parse tree produced by ReaffirmParser#objectRef.
-    def exitObjectRef(self, ctx:ReaffirmParser.ObjectRefContext):
-        print(ctx)
-        print("calling exitObjectRef")
-
-
-    # Enter a parse tree produced by ReaffirmParser#string.
-    def enterString(self, ctx:ReaffirmParser.StringContext):
-        print(ctx)
-        print("calling enterString")
-
-    # Exit a parse tree produced by ReaffirmParser#string.
-    def exitString(self, ctx:ReaffirmParser.StringContext):
-        print(ctx)
-        print("calling exitString")
-
-
-    # Enter a parse tree produced by ReaffirmParser#varDec.
-    def enterVarDec(self, ctx:ReaffirmParser.VarDecContext):
-        print(ctx)
-        print("calling enterVarDec")
-
-    # Exit a parse tree produced by ReaffirmParser#varDec.
-    def exitVarDec(self, ctx:ReaffirmParser.VarDecContext):
-        print(ctx)
-        print("calling exitVarDec")
-
-
-    # Enter a parse tree produced by ReaffirmParser#assign.
-    def enterAssign(self, ctx:ReaffirmParser.AssignContext):
-        print(ctx)
-        print("calling enterAssign")
-
-    # Exit a parse tree produced by ReaffirmParser#assign.
-    def exitAssign(self, ctx:ReaffirmParser.AssignContext):
-        print(ctx)
-        print("calling exitAssign")
-
-
-    # Enter a parse tree produced by ReaffirmParser#exprList.
-    def enterExprList(self, ctx:ReaffirmParser.ExprListContext):
-        print(ctx)
-        print("calling enterExprList")
-
-    # Exit a parse tree produced by ReaffirmParser#exprList.
-    def exitExprList(self, ctx:ReaffirmParser.ExprListContext):
-        print(ctx)
-        print("calling exitExprList")
-
-
-    # Enter a parse tree produced by ReaffirmParser#forloop.
-    def enterForloop(self, ctx:ReaffirmParser.ForloopContext):
-        print(ctx.getPayload())
-        print("calling enterForloop")
-
-    # Exit a parse tree produced by ReaffirmParser#forloop.
-    def exitForloop(self, ctx:ReaffirmParser.ForloopContext):
-        print(ctx)
-        print("calling exitForloop")
-
-
-    # Enter a parse tree produced by ReaffirmParser#ifstat.
-    def enterIfstat(self, ctx:ReaffirmParser.IfstatContext):
-        print(ctx)
-        print("calling enterIfstat")
-
-    # Exit a parse tree produced by ReaffirmParser#ifstat.
-    def exitIfstat(self, ctx:ReaffirmParser.IfstatContext):
-        print(ctx)
-        print("calling exitIfstat")
-
-
-    # Enter a parse tree produced by ReaffirmParser#funcall.
-    def enterFuncall(self, ctx:ReaffirmParser.FuncallContext):
-        print(ctx)
-        print("calling enterFuncall")
-
-    # Exit a parse tree produced by ReaffirmParser#funcall.
-    def exitFuncall(self, ctx:ReaffirmParser.FuncallContext):
-        print(ctx)
-        print("calling exitFuncall")
-
-
-    # Enter a parse tree produced by ReaffirmParser#fieldref.
-    def enterFieldref(self, ctx:ReaffirmParser.FieldrefContext):
-        print(ctx)
-        print("calling enterFieldref")
-
-    # Exit a parse tree produced by ReaffirmParser#fieldref.
-    def exitFieldref(self, ctx:ReaffirmParser.FieldrefContext):
-        print(ctx)
-        print("calling exitFieldref")
-
-
-    # Enter a parse tree produced by ReaffirmParser#objref.
-    def enterObjref(self, ctx:ReaffirmParser.ObjrefContext):
-        print(ctx)
-        print("calling enterObjref")
-
-    # Exit a parse tree produced by ReaffirmParser#objref.
-    def exitObjref(self, ctx:ReaffirmParser.ObjrefContext):
-        print(ctx)
-        print("calling exitObjref")
-
-
-    # Enter a parse tree produced by ReaffirmParser#varDecl.
-    def enterVarDecl(self, ctx:ReaffirmParser.VarDeclContext):
-        print(ctx)
-        print("calling enterVarDecl")
-
-    # Exit a parse tree produced by ReaffirmParser#varDecl.
-    def exitVarDecl(self, ctx:ReaffirmParser.VarDeclContext):
-        print(ctx)
-        print("calling exitVarDecl")
-
-
-    # Enter a parse tree produced by ReaffirmParser#types.
-    def enterTypes(self, ctx:ReaffirmParser.TypesContext):
-        print(ctx)
-        print("calling enterTypes")
-
-    # Exit a parse tree produced by ReaffirmParser#types.
-    def exitTypes(self, ctx:ReaffirmParser.TypesContext):
-        print(ctx)
-        print("calling exitTypes")
-
-
-    # Enter a parse tree produced by ReaffirmParser#bexpr.
-    def enterBexpr(self, ctx:ReaffirmParser.BexprContext):
-        print(ctx)
-        print("calling enterBexpr")
-
-    # Exit a parse tree produced by ReaffirmParser#bexpr.
-    def exitBexpr(self, ctx:ReaffirmParser.BexprContext):
-        print(ctx)
-        print("calling exitBexpr")
 
 def parse_script(script, args):
 
@@ -286,12 +171,11 @@ def parse_script(script, args):
     tree = parser.prog()
     print(tree.toStringTree(recog=parser))
 
-    listener = MatlabEmitter(args)
-    walker = ParseTreeWalker()
-    walker.walk(listener, tree)
-    print(listener)
+    v = MATLABVisitor()
+    v.visit(tree)
+    print(v)
 
-    return listener
+    return v
 
 
 if __name__ == '__main__':
