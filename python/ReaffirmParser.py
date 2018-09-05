@@ -136,13 +136,11 @@ class ReaffirmParser ( Parser ):
         def getRuleIndex(self):
             return ReaffirmParser.RULE_prog
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterProg" ):
-                listener.enterProg(self)
-
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitProg" ):
-                listener.exitProg(self)
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitProg" ):
+                return visitor.visitProg(self)
+            else:
+                return visitor.visitChildren(self)
 
 
 
@@ -200,13 +198,11 @@ class ReaffirmParser ( Parser ):
             return self.getTypedRuleContext(ReaffirmParser.IfstatContext,0)
 
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterCondtion" ):
-                listener.enterCondtion(self)
-
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitCondtion" ):
-                listener.exitCondtion(self)
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitCondtion" ):
+                return visitor.visitCondtion(self)
+            else:
+                return visitor.visitChildren(self)
 
 
     class BlankContext(StatContext):
@@ -218,13 +214,11 @@ class ReaffirmParser ( Parser ):
         def NEWLINE(self):
             return self.getToken(ReaffirmParser.NEWLINE, 0)
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterBlank" ):
-                listener.enterBlank(self)
-
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitBlank" ):
-                listener.exitBlank(self)
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitBlank" ):
+                return visitor.visitBlank(self)
+            else:
+                return visitor.visitChildren(self)
 
 
     class AssignmentContext(StatContext):
@@ -237,13 +231,11 @@ class ReaffirmParser ( Parser ):
             return self.getTypedRuleContext(ReaffirmParser.AssignContext,0)
 
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterAssignment" ):
-                listener.enterAssignment(self)
-
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitAssignment" ):
-                listener.exitAssignment(self)
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitAssignment" ):
+                return visitor.visitAssignment(self)
+            else:
+                return visitor.visitChildren(self)
 
 
     class LoopContext(StatContext):
@@ -256,13 +248,11 @@ class ReaffirmParser ( Parser ):
             return self.getTypedRuleContext(ReaffirmParser.ForloopContext,0)
 
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterLoop" ):
-                listener.enterLoop(self)
-
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitLoop" ):
-                listener.exitLoop(self)
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitLoop" ):
+                return visitor.visitLoop(self)
+            else:
+                return visitor.visitChildren(self)
 
 
     class PrintExprContext(StatContext):
@@ -277,13 +267,11 @@ class ReaffirmParser ( Parser ):
         def NEWLINE(self):
             return self.getToken(ReaffirmParser.NEWLINE, 0)
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterPrintExpr" ):
-                listener.enterPrintExpr(self)
-
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitPrintExpr" ):
-                listener.exitPrintExpr(self)
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitPrintExpr" ):
+                return visitor.visitPrintExpr(self)
+            else:
+                return visitor.visitChildren(self)
 
 
 
@@ -357,13 +345,11 @@ class ReaffirmParser ( Parser ):
         def getRuleIndex(self):
             return ReaffirmParser.RULE_block
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterBlock" ):
-                listener.enterBlock(self)
-
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitBlock" ):
-                listener.exitBlock(self)
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitBlock" ):
+                return visitor.visitBlock(self)
+            else:
+                return visitor.visitChildren(self)
 
 
 
@@ -423,13 +409,11 @@ class ReaffirmParser ( Parser ):
             return self.getTypedRuleContext(ReaffirmParser.ObjrefContext,0)
 
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterObjectRef" ):
-                listener.enterObjectRef(self)
-
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitObjectRef" ):
-                listener.exitObjectRef(self)
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitObjectRef" ):
+                return visitor.visitObjectRef(self)
+            else:
+                return visitor.visitChildren(self)
 
 
     class MethodContext(ExprContext):
@@ -442,13 +426,11 @@ class ReaffirmParser ( Parser ):
             return self.getTypedRuleContext(ReaffirmParser.FuncallContext,0)
 
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterMethod" ):
-                listener.enterMethod(self)
-
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitMethod" ):
-                listener.exitMethod(self)
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitMethod" ):
+                return visitor.visitMethod(self)
+            else:
+                return visitor.visitChildren(self)
 
 
     class StringContext(ExprContext):
@@ -460,13 +442,11 @@ class ReaffirmParser ( Parser ):
         def STRING(self):
             return self.getToken(ReaffirmParser.STRING, 0)
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterString" ):
-                listener.enterString(self)
-
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitString" ):
-                listener.exitString(self)
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitString" ):
+                return visitor.visitString(self)
+            else:
+                return visitor.visitChildren(self)
 
 
     class IdContext(ExprContext):
@@ -478,13 +458,11 @@ class ReaffirmParser ( Parser ):
         def ID(self):
             return self.getToken(ReaffirmParser.ID, 0)
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterId" ):
-                listener.enterId(self)
-
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitId" ):
-                listener.exitId(self)
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitId" ):
+                return visitor.visitId(self)
+            else:
+                return visitor.visitChildren(self)
 
 
     class VarDecContext(ExprContext):
@@ -497,13 +475,11 @@ class ReaffirmParser ( Parser ):
             return self.getTypedRuleContext(ReaffirmParser.VarDeclContext,0)
 
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterVarDec" ):
-                listener.enterVarDec(self)
-
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitVarDec" ):
-                listener.exitVarDec(self)
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitVarDec" ):
+                return visitor.visitVarDec(self)
+            else:
+                return visitor.visitChildren(self)
 
 
 
@@ -575,13 +551,11 @@ class ReaffirmParser ( Parser ):
         def getRuleIndex(self):
             return ReaffirmParser.RULE_assign
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterAssign" ):
-                listener.enterAssign(self)
-
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitAssign" ):
-                listener.exitAssign(self)
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitAssign" ):
+                return visitor.visitAssign(self)
+            else:
+                return visitor.visitChildren(self)
 
 
 
@@ -622,13 +596,11 @@ class ReaffirmParser ( Parser ):
         def getRuleIndex(self):
             return ReaffirmParser.RULE_exprList
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterExprList" ):
-                listener.enterExprList(self)
-
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitExprList" ):
-                listener.exitExprList(self)
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitExprList" ):
+                return visitor.visitExprList(self)
+            else:
+                return visitor.visitChildren(self)
 
 
 
@@ -679,13 +651,11 @@ class ReaffirmParser ( Parser ):
         def getRuleIndex(self):
             return ReaffirmParser.RULE_forloop
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterForloop" ):
-                listener.enterForloop(self)
-
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitForloop" ):
-                listener.exitForloop(self)
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitForloop" ):
+                return visitor.visitForloop(self)
+            else:
+                return visitor.visitChildren(self)
 
 
 
@@ -736,13 +706,11 @@ class ReaffirmParser ( Parser ):
         def getRuleIndex(self):
             return ReaffirmParser.RULE_ifstat
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterIfstat" ):
-                listener.enterIfstat(self)
-
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitIfstat" ):
-                listener.exitIfstat(self)
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitIfstat" ):
+                return visitor.visitIfstat(self)
+            else:
+                return visitor.visitChildren(self)
 
 
 
@@ -795,13 +763,11 @@ class ReaffirmParser ( Parser ):
         def getRuleIndex(self):
             return ReaffirmParser.RULE_funcall
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterFuncall" ):
-                listener.enterFuncall(self)
-
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitFuncall" ):
-                listener.exitFuncall(self)
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitFuncall" ):
+                return visitor.visitFuncall(self)
+            else:
+                return visitor.visitChildren(self)
 
 
 
@@ -850,13 +816,11 @@ class ReaffirmParser ( Parser ):
         def getRuleIndex(self):
             return ReaffirmParser.RULE_fieldref
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterFieldref" ):
-                listener.enterFieldref(self)
-
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitFieldref" ):
-                listener.exitFieldref(self)
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitFieldref" ):
+                return visitor.visitFieldref(self)
+            else:
+                return visitor.visitChildren(self)
 
 
 
@@ -916,13 +880,11 @@ class ReaffirmParser ( Parser ):
         def getRuleIndex(self):
             return ReaffirmParser.RULE_objref
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterObjref" ):
-                listener.enterObjref(self)
-
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitObjref" ):
-                listener.exitObjref(self)
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitObjref" ):
+                return visitor.visitObjref(self)
+            else:
+                return visitor.visitChildren(self)
 
 
 
@@ -984,13 +946,11 @@ class ReaffirmParser ( Parser ):
         def getRuleIndex(self):
             return ReaffirmParser.RULE_varDecl
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterVarDecl" ):
-                listener.enterVarDecl(self)
-
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitVarDecl" ):
-                listener.exitVarDecl(self)
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitVarDecl" ):
+                return visitor.visitVarDecl(self)
+            else:
+                return visitor.visitChildren(self)
 
 
 
@@ -1023,13 +983,11 @@ class ReaffirmParser ( Parser ):
         def getRuleIndex(self):
             return ReaffirmParser.RULE_types
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterTypes" ):
-                listener.enterTypes(self)
-
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitTypes" ):
-                listener.exitTypes(self)
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitTypes" ):
+                return visitor.visitTypes(self)
+            else:
+                return visitor.visitChildren(self)
 
 
 
@@ -1078,13 +1036,11 @@ class ReaffirmParser ( Parser ):
         def getRuleIndex(self):
             return ReaffirmParser.RULE_bexpr
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterBexpr" ):
-                listener.enterBexpr(self)
-
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitBexpr" ):
-                listener.exitBexpr(self)
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitBexpr" ):
+                return visitor.visitBexpr(self)
+            else:
+                return visitor.visitChildren(self)
 
 
 
