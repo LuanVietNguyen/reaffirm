@@ -14,7 +14,7 @@ stat   		:	expr NEWLINE        # printExpr
 
 block		: 	'{' stat* '}' ; // possibly empty statement block
 
-expr   		:	funcall 			# method
+expr   		:	funcall 			# function
     		|   ID					# id
     		|   objref				# objectRef
     		|	STRING				# string
@@ -28,7 +28,11 @@ ifstat		:	'if' bexpr 'then' stat ('else' stat)? ;
 
 funcall		:	ID '(' exprList? ')' ; // funtion call
 
-objref		:	ID ('.' ( funcall | ID ) )* ;	// e.g., model.mode.addVariable
+fieldref	: 	 '.' ID ; // e.g., model.mode.flowstring
+
+methodref	: 	 '.' funcall ; // e.g., model.mode.flowstring
+
+objref		:	ID (fieldref | methodref )* ;	// e.g., model.mode.addVariable
 
 varDecl		:	types ID ;
 types		:	'local' | 'input' | 'output'| 'param' ; // user-defined types

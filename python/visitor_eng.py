@@ -3,6 +3,8 @@ from antlr4 import *
 from antlr4.InputStream import InputStream
 import pdb
 
+from enum import Enum
+
 sys.path.append("/Users/gautam/research/CASE/reaffirm/python")
 os.chdir("python")
 
@@ -13,21 +15,49 @@ from ReaffirmVisitor import ReaffirmVisitor
 from matlab import engine
 import io
 
+class Variable():
+    def __init__(self, vartype, matlab_var):
+        self.vartype = vartype
+        self.matlab = matlab_var
+
+class Transition:
+    def __init__(self, matlab_var, engine):
+        self.engine = engine
+        self.matlab_var = matlab_var
+        self.modes = 2
+
+        pass
+    def transitions():
+        pass
+    def addMode():
+        pass
+    def addTransition():
+        pass
+
+    #todo: should we add dimensionality to the variable or should
+    #that be calculated on the fly?
+
 class MATLABVisitor(ReaffirmVisitor):
     def __init__(self):
-        self.model = None
+        print("Initializing!")
         self.env = {}
 
-        # sessions = engine.find_matlab()
-        # if sessions == ():
-        #     print("Starting MATLAB engine")
-        #     self.eng = engine.start_matlab()
-        # else:
-        #     print("Connecting to MATLAB engine")
-        #     self.eng = engine.connect_matlab(sessions[0])
-        print("initializing!")
+        sessions = engine.find_matlab()
+        if sessions == ():
+            print("Starting MATLAB engine")
+            self.eng = engine.start_matlab()
+        else:
+            print("Connecting to MATLAB engine")
+            self.eng = engine.connect_matlab(sessions[0])
 
-    # Visit a parse tree produced by ReaffirmParser#prog.
+        print("Loading Initial Model")
+        self.eng.load_system('test_model')
+        e = self.eng
+        m = e.find(e.find(e.sfroot(),'-isa','Simulink.BlockDiagram')
+                            ,'-isa','Stateflow.Chart')
+        self.env['initial_model'] =     Transition(m)
+
+    # visit a parse tree produced by ReaffirmParser#prog.
     def visitProg(self, ctx:ReaffirmParser.ProgContext):
         print("visitProg")
         return self.visitChildren(ctx)
@@ -71,7 +101,7 @@ class MATLABVisitor(ReaffirmVisitor):
 
     # Visit a parse tree produced by ReaffirmParser#method.
     def visitMethod(self, ctx:ReaffirmParser.MethodContext):
-        print("visitMethod")
+g        print("visitMethod")
         return self.visitChildren(ctx)
 
 
@@ -84,7 +114,38 @@ class MATLABVisitor(ReaffirmVisitor):
     # Visit a parse tree produced by ReaffirmParser#objectRef.
     def visitObjectRef(self, ctx:ReaffirmParser.ObjectRefContext):
         print("visitObjectRef")
+        refs = ctx.children[0].children[:]
+        ident = refs.pop(0).getText() #must be Terminal
+        #need to check that ident is in env
+        if ident not in env:
+            #throw an error here
+            pass
+        pdb.set_trace()
+        obj = env[ident]
+        for ref in refs:
+            try:
+                attr = getattr(obj,ref)
+            except AttributeError:
+                print("Unknown field/method {0} ", attr)
+
+            #if attr is a fieldref, resolve it.
+        obj = attr
+
+        #TODO: if it's a methodref, we have to invoke it with the
+        #proper arguments
+        #obj = attr(...)
+
+        return obj
+
+    # Visit a parse tree produced by ReaffirmParser#fieldref.
+    def visitFieldref(self, ctx:ReaffirmParser.FieldrefContext):
         return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by ReaffirmParser#methodref.
+    def visitMethodref(self, ctx:ReaffirmParser.MethodrefContext):
+        return self.visitChildren(ctx)
+
 
 
     # Visit a parse tree produced by ReaffirmParser#string.
@@ -129,14 +190,6 @@ class MATLABVisitor(ReaffirmVisitor):
     def visitFuncall(self, ctx:ReaffirmParser.FuncallContext):
         print("visitFuncall")
         return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by ReaffirmParser#fieldref.
-    def visitFieldref(self, ctx:ReaffirmParser.FieldrefContext):
-        print("visitFieldref")
-        pdb.set_trace()
-        return self.visitChildren(ctx)
-
 
     # Visit a parse tree produced by ReaffirmParser#objref.
     def visitObjref(self, ctx:ReaffirmParser.ObjrefContext):
