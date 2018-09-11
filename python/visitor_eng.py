@@ -20,22 +20,47 @@ class Variable():
         self.vartype = vartype
         self.matlab = matlab_var
 
-class Transition:
+class Model:
     def __init__(self, matlab_var, engine):
         self.engine = engine
         self.matlab_var = matlab_var
-        self.modes = 2
+        self.modes = {Mode(m,engine)
+                      for m in engine.find(matlab_var,'-isa','Stateflow.State')}
+        self.transitions = 2 #TODO create this
 
-        pass
-    def transitions():
-        pass
     def addMode():
         pass
+
     def addTransition():
         pass
 
     #todo: should we add dimensionality to the variable or should
     #that be calculated on the fly?
+
+class Mode:
+    def __init__(self, matlab_var, engine):
+        self.matlab_var = matlab_var
+        self.outgoing = 2
+        self.incoming = 2
+        self.flow = 2
+
+class Transition:
+    def __init__(self, matlab_var, engine):
+        self.matlab_var = matlab_var
+        self.source = 2
+        self.dest = 2
+        self.guard = 2
+        self.guard = 2
+
+    def extend():
+        pass
+
+# class Flow:
+#     def __init__(self, matlab_var, engine):
+#         self.matlab_var = matlab_var
+
+
+
 
 class MATLABVisitor(ReaffirmVisitor):
     def __init__(self):
@@ -55,7 +80,7 @@ class MATLABVisitor(ReaffirmVisitor):
         e = self.eng
         m = e.find(e.find(e.sfroot(),'-isa','Simulink.BlockDiagram')
                             ,'-isa','Stateflow.Chart')
-        self.env['initial_model'] =     Transition(m)
+        self.env['initial_model'] = Model(m, e)
 
     # visit a parse tree produced by ReaffirmParser#prog.
     def visitProg(self, ctx:ReaffirmParser.ProgContext):
@@ -101,7 +126,7 @@ class MATLABVisitor(ReaffirmVisitor):
 
     # Visit a parse tree produced by ReaffirmParser#method.
     def visitMethod(self, ctx:ReaffirmParser.MethodContext):
-g        print("visitMethod")
+        print("visitMethod")
         return self.visitChildren(ctx)
 
 
@@ -117,23 +142,24 @@ g        print("visitMethod")
         refs = ctx.children[0].children[:]
         ident = refs.pop(0).getText() #must be Terminal
         #need to check that ident is in env
-        if ident not in env:
+        if ident not in self.env:
             #throw an error here
             pass
-        pdb.set_trace()
-        obj = env[ident]
+        obj = self.env[ident]
         for ref in refs:
+            attr = None
+            refname = ref.getText()[1:] #strip away leading '.'
             try:
-                attr = getattr(obj,ref)
+                attr = getattr(obj,refname)
             except AttributeError:
-                print("Unknown field/method {0} ", attr)
+                print("Unknown field/method ", refname)
 
             #if attr is a fieldref, resolve it.
-        obj = attr
+            obj = attr
 
-        #TODO: if it's a methodref, we have to invoke it with the
-        #proper arguments
-        #obj = attr(...)
+            #TODO: if it's a methodref, we have to invoke it with the
+            #proper arguments
+            #obj = attr(...)
 
         return obj
 
@@ -164,6 +190,7 @@ g        print("visitMethod")
     def visitAssign(self, ctx:ReaffirmParser.AssignContext):
         print("visitAssign")
         val = self.visit(ctx.expr())
+        pdb.set_trace()
         self.env[ctx.ID().getText()] = val
         pass
 
@@ -194,7 +221,6 @@ g        print("visitMethod")
     # Visit a parse tree produced by ReaffirmParser#objref.
     def visitObjref(self, ctx:ReaffirmParser.ObjrefContext):
         print("visitObjref")
-        pdb.set_trace()
         return self.visitChildren(ctx)
 
 
