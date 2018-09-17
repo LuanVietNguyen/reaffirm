@@ -24,7 +24,7 @@ class Model:
     def __init__(self, matlab_var, engine):
         self.engine = engine
         self.matlab_var = matlab_var
-        self.modes = {Mode(m,engine)
+        self.modes = {Mode(m[0],engine)
                       for m in engine.find(matlab_var,'-isa','Stateflow.State')}
         self.transitions = 2 #TODO create this
 
@@ -39,10 +39,23 @@ class Model:
 
 class Mode:
     def __init__(self, matlab_var, engine):
+        self.engine = engine
         self.matlab_var = matlab_var
         self.outgoing = 2
         self.incoming = 2
-        self.flow = 2
+
+    def replace(self,old_var,new_var):
+        pdb.set_trace()
+        old_flow = self.engine.get(self.matlab_var,'LabelString')
+        new_flow = old_flow.replace(old_var,new_var)
+        self.engine.set(self.matlab_var,'LabelString',new_flow,nargout=0)
+
+    #Flow is read-only, since updates must happen per-mode otherwise
+    #changes will not be propagated to MATLAB
+    @property
+    def flow(self):
+        return self.engine.get(self.matlab_var,'LabelString')
+
 
 class Transition:
     def __init__(self, matlab_var, engine):
@@ -58,9 +71,6 @@ class Transition:
 # class Flow:
 #     def __init__(self, matlab_var, engine):
 #         self.matlab_var = matlab_var
-
-
-
 
 class MATLABVisitor(ReaffirmVisitor):
     def __init__(self):
@@ -85,60 +95,74 @@ class MATLABVisitor(ReaffirmVisitor):
     # visit a parse tree produced by ReaffirmParser#prog.
     def visitProg(self, ctx:ReaffirmParser.ProgContext):
         print("visitProg")
-        return self.visitChildren(ctx)
+        print(self.env)
+        self.visitChildren(ctx)
+
+        self.eng.sfsave('test_model','test_model_resilient',nargout=0)
+
+        return
 
 
     # Visit a parse tree produced by ReaffirmParser#printExpr.
     def visitPrintExpr(self, ctx:ReaffirmParser.PrintExprContext):
         print("visitPrintExpr")
+        print(self.env)
         return self.visitChildren(ctx)
 
 
     # Visit a parse tree produced by ReaffirmParser#assignment.
     def visitAssignment(self, ctx:ReaffirmParser.AssignmentContext):
         print("visitAssignment")
+        print(self.env)
         return self.visitChildren(ctx)
 
 
     # Visit a parse tree produced by ReaffirmParser#loop.
     def visitLoop(self, ctx:ReaffirmParser.LoopContext):
         print("visitLoop")
+        print(self.env)
         return self.visitChildren(ctx)
 
 
     # Visit a parse tree produced by ReaffirmParser#condtion.
     def visitCondtion(self, ctx:ReaffirmParser.CondtionContext):
         print("visitCondtion")
+        print(self.env)
         return self.visitChildren(ctx)
 
 
     # Visit a parse tree produced by ReaffirmParser#blank.
     def visitBlank(self, ctx:ReaffirmParser.BlankContext):
         print("visitBlank")
+        print(self.env)
         return self.visitChildren(ctx)
 
 
     # Visit a parse tree produced by ReaffirmParser#block.
     def visitBlock(self, ctx:ReaffirmParser.BlockContext):
         print("visitBlock")
+        print(self.env)
         return self.visitChildren(ctx)
 
 
     # Visit a parse tree produced by ReaffirmParser#method.
     def visitMethod(self, ctx:ReaffirmParser.MethodContext):
         print("visitMethod")
+        print(self.env)
         return self.visitChildren(ctx)
 
 
     # Visit a parse tree produced by ReaffirmParser#id.
     def visitId(self, ctx:ReaffirmParser.IdContext):
         print("visitId")
+        print(self.env)
         return self.visitChildren(ctx)
 
 
     # Visit a parse tree produced by ReaffirmParser#objectRef.
     def visitObjectRef(self, ctx:ReaffirmParser.ObjectRefContext):
         print("visitObjectRef")
+        print(self.env)
         refs = ctx.children[0].children[:]
         ident = refs.pop(0).getText() #must be Terminal
         #need to check that ident is in env
@@ -148,18 +172,24 @@ class MATLABVisitor(ReaffirmVisitor):
         obj = self.env[ident]
         for ref in refs:
             attr = None
-            refname = ref.getText()[1:] #strip away leading '.'
+            #find the attr name. methods have junk after '(' that we
+            #have to get rid of. also strip leading '.'
+            refname = ref.getText().split('(')[0][1:]
             try:
                 attr = getattr(obj,refname)
             except AttributeError:
                 print("Unknown field/method ", refname)
 
             #if attr is a fieldref, resolve it.
-            obj = attr
 
-            #TODO: if it's a methodref, we have to invoke it with the
-            #proper arguments
-            #obj = attr(...)
+            if not callable(attr):
+                obj = attr
+            else:
+                # if attr is methodref, find args, eval them, and apply
+                # the method
+                args = [ct for ct in ref.children[1].children[2].children
+                        if not type(ct).__name__ == 'TerminalNodeImpl']
+                obj = attr(*[self.visit(arg) for arg in args])
 
         return obj
 
@@ -177,20 +207,21 @@ class MATLABVisitor(ReaffirmVisitor):
     # Visit a parse tree produced by ReaffirmParser#string.
     def visitString(self, ctx:ReaffirmParser.StringContext):
         print("visitString")
-        return self.visitChildren(ctx)
+        return ctx.getText().strip('"')
 
 
     # Visit a parse tree produced by ReaffirmParser#varDec.
     def visitVarDec(self, ctx:ReaffirmParser.VarDecContext):
         print("visitVarDec")
+        print(self.env)
         return self.visitChildren(ctx)
 
 
     # Visit a parse tree produced by ReaffirmParser#assign.
     def visitAssign(self, ctx:ReaffirmParser.AssignContext):
         print("visitAssign")
+        print(self.env)
         val = self.visit(ctx.expr())
-        pdb.set_trace()
         self.env[ctx.ID().getText()] = val
         pass
 
@@ -198,47 +229,68 @@ class MATLABVisitor(ReaffirmVisitor):
     # Visit a parse tree produced by ReaffirmParser#exprList.
     def visitExprList(self, ctx:ReaffirmParser.ExprListContext):
         print("visitExprList")
+        print(self.env)
         return self.visitChildren(ctx)
 
 
     # Visit a parse tree produced by ReaffirmParser#forloop.
     def visitForloop(self, ctx:ReaffirmParser.ForloopContext):
         print("visitForloop")
-        return self.visitChildren(ctx)
+        print(self.env)
+        self.visit(ctx.children[1]) #get the local loop assignment
+
+        # loop variable is assigned to each element per iteration
+        loop_var = ctx.children[1].children[0].getText()
+        arr = self.env[loop_var]
+        if len(arr) < 1:
+            print("Error: cannot loop over empty variable")
+
+        for val in arr:
+            self.env[loop_var] = val
+            _ = [self.visit(c) for c in ctx.children[2:]]
+
+        #once loop is finished local variable is cleared
+        self.env.pop(loop_var)
+        return
 
 
     # Visit a parse tree produced by ReaffirmParser#ifstat.
     def visitIfstat(self, ctx:ReaffirmParser.IfstatContext):
         print("visitIfstat")
+        print(self.env)
         return self.visitChildren(ctx)
-
 
     # Visit a parse tree produced by ReaffirmParser#funcall.
     def visitFuncall(self, ctx:ReaffirmParser.FuncallContext):
         print("visitFuncall")
+        print(self.env)
         return self.visitChildren(ctx)
 
     # Visit a parse tree produced by ReaffirmParser#objref.
     def visitObjref(self, ctx:ReaffirmParser.ObjrefContext):
         print("visitObjref")
+        print(self.env)
         return self.visitChildren(ctx)
 
 
     # Visit a parse tree produced by ReaffirmParser#varDecl.
     def visitVarDecl(self, ctx:ReaffirmParser.VarDeclContext):
         print("visitVarDecl")
+        print(self.env)
         return self.visitChildren(ctx)
 
 
     # Visit a parse tree produced by ReaffirmParser#types.
     def visitTypes(self, ctx:ReaffirmParser.TypesContext):
         print("visitTypes")
+        print(self.env)
         return self.visitChildren(ctx)
 
 
     # Visit a parse tree produced by ReaffirmParser#bexpr.
     def visitBexpr(self, ctx:ReaffirmParser.BexprContext):
         print("visitBexpr")
+        print(self.env)
         return self.visitChildren(ctx)
 
 
