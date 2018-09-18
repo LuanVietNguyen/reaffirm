@@ -28,14 +28,19 @@ class Model:
                       for m in engine.find(matlab_var,'-isa','Stateflow.State')}
         self.transitions = 2 #TODO create this
 
-    def addMode():
+    def addMode(self):
         pass
 
-    def addTransition():
+    def addTransition(self):
         pass
 
-    #todo: should we add dimensionality to the variable or should
-    #that be calculated on the fly?
+    def addParam(self,param):
+        #TODO - what kind of error checking would we need here?
+        print("TO IMPLEMENT: ADD PARAMETER: ", param)
+
+    def duplicate(self):
+        print("TO IMPLEMENT: DUPLICATE MODEL")
+        return None
 
 class Mode:
     def __init__(self, matlab_var, engine):
@@ -45,7 +50,6 @@ class Mode:
         self.incoming = 2
 
     def replace(self,old_var,new_var):
-        pdb.set_trace()
         old_flow = self.engine.get(self.matlab_var,'LabelString')
         new_flow = old_flow.replace(old_var,new_var)
         self.engine.set(self.matlab_var,'LabelString',new_flow,nargout=0)
@@ -68,10 +72,6 @@ class Transition:
     def extend():
         pass
 
-# class Flow:
-#     def __init__(self, matlab_var, engine):
-#         self.matlab_var = matlab_var
-
 class MATLABVisitor(ReaffirmVisitor):
     def __init__(self):
         print("Initializing!")
@@ -90,7 +90,13 @@ class MATLABVisitor(ReaffirmVisitor):
         e = self.eng
         m = e.find(e.find(e.sfroot(),'-isa','Simulink.BlockDiagram')
                             ,'-isa','Stateflow.Chart')
-        self.env['initial_model'] = Model(m, e)
+        self.env['model'] = Model(m, e)
+
+    def lookup(self, var):
+        try:
+            return self.env[var]
+        except KeyError:
+            print("Error: unknown reference to '", var, "'")
 
     # visit a parse tree produced by ReaffirmParser#prog.
     def visitProg(self, ctx:ReaffirmParser.ProgContext):
@@ -98,6 +104,7 @@ class MATLABVisitor(ReaffirmVisitor):
         print(self.env)
         self.visitChildren(ctx)
 
+        print("Script Successful - saving model")
         self.eng.sfsave('test_model','test_model_resilient',nargout=0)
 
         return
@@ -169,7 +176,7 @@ class MATLABVisitor(ReaffirmVisitor):
         if ident not in self.env:
             #throw an error here
             pass
-        obj = self.env[ident]
+        obj = self.lookup(ident)
         for ref in refs:
             attr = None
             #find the attr name. methods have junk after '(' that we
@@ -241,7 +248,7 @@ class MATLABVisitor(ReaffirmVisitor):
 
         # loop variable is assigned to each element per iteration
         loop_var = ctx.children[1].children[0].getText()
-        arr = self.env[loop_var]
+        arr = self.lookup(loop_var)
         if len(arr) < 1:
             print("Error: cannot loop over empty variable")
 
@@ -264,6 +271,7 @@ class MATLABVisitor(ReaffirmVisitor):
     def visitFuncall(self, ctx:ReaffirmParser.FuncallContext):
         print("visitFuncall")
         print(self.env)
+        pdb.set_trace()
         return self.visitChildren(ctx)
 
     # Visit a parse tree produced by ReaffirmParser#objref.
