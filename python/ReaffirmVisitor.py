@@ -44,8 +44,8 @@ class ReaffirmVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by ReaffirmParser#method.
-    def visitMethod(self, ctx:ReaffirmParser.MethodContext):
+    # Visit a parse tree produced by ReaffirmParser#function.
+    def visitFunction(self, ctx:ReaffirmParser.FunctionContext):
         return self.visitChildren(ctx)
 
 

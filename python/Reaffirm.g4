@@ -5,7 +5,7 @@ grammar Reaffirm;
 prog		: 	stat+	;
 
 
-stat   		:	expr NEWLINE        # printExpr
+stat   		:	expr NEWLINE?     # printExpr
     		|   assign				# assignment
     		|   forloop				# loop
     		|	ifstat				# condtion
@@ -24,7 +24,7 @@ expr   		:	funcall 			# function
 assign		: 	ID '=' expr;
 exprList 	: 	expr (',' expr)* ; // arg list
 forloop		:	('formode' |'fortran') assign block ; // forloop over modes or transitions
-ifstat		:	'if' bexpr 'then' stat ('else' stat)? ;
+ifstat		:	'if' ( expr | bexpr ) 'then' stat ('else' stat)? ;
 
 funcall		:	ID '(' exprList? ')' ; // funtion call
 

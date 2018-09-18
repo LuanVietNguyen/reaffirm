@@ -1,0 +1,6 @@
+addParam(model,"theta")
+formode m = model.modes {
+    replace(m.flow,"ngps", "2*theta*ngps")
+    replace(m.flow,"nenc", "2*(1-theta)*nenc")
+}
+
