@@ -13,7 +13,9 @@ class MatlabEmitter(ReaffirmListener):
     def __init__(self):
         self.matlab = {}
         # declare a dictionay of equivalent functions
-        self.funcMap = {'replace':'strrep', 'addTransition':'addTransition', 'copyMode': 'copy_state', 'addState': 'addState', 'copyModel':'copyModel', 'getCopyState':'getCopyState', 'notDefaultTransition':'notDefaultTransition','copyTransition':'copyTransition','addParam':'addParam'}
+        self.funcMap = {'replace':'strrep', 'addTransition':'addTransition', 'copyMode': 'copy_state', 'addState': 'addState', 'copyModel':'copyModel', 
+        'getCopyState':'getCopyState', 'notDefaultTransition':'notDefaultTransition','copyTransition':'copyTransition','addParam':'addParam',
+        'addLocalVar':'addLocalVar', 'addFlow':'addFlow', 'addGuardLabel':'addGuardLabel','addResetLabel':'addResetLabel','getChartByName':'getChartByName'}
         self.fieldMap = {'flow':'Label', 'guard':'LabelString','modes':'modes','trans':'trans', 'source':'Source', 'destination':'Destination'}
 
 
@@ -177,7 +179,7 @@ class MatlabEmitter(ReaffirmListener):
 
     # Print inital set up for stateflow conversion
     def printHeader(self, modelName):
-        header = "load_system('" + modelName+"');\n"
+        header =  "load_system('" + modelName+"');\n"
         header += "root = sfroot;\ndiagram = root.find('-isa','Simulink.BlockDiagram');\nmodel = diagram.find('-isa', 'Stateflow.Chart');\n"
         return header
 
