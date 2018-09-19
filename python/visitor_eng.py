@@ -15,11 +15,6 @@ from ReaffirmVisitor import ReaffirmVisitor
 from matlab import engine
 import io
 
-class Variable():
-    def __init__(self, vartype, matlab_var):
-        self.vartype = vartype
-        self.matlab = matlab_var
-
 class Model:
     def __init__(self, matlab_var, engine):
         self.engine = engine
@@ -38,9 +33,36 @@ class Model:
         #TODO - what kind of error checking would we need here?
         print("TO IMPLEMENT: ADD PARAMETER: ", param)
 
-    def duplicate(self):
-        print("TO IMPLEMENT: DUPLICATE MODEL")
-        return None
+    def copyModel(self):
+        mvar = self.engine.copyModel(self.matlab_var, "chart")
+        return CopyModel(mvar, self.engine)
+
+
+class CopyModel:
+    def __init__(self, matlab_var, engine, copy=None):
+        self.engine = engine
+        self.matlab_var = matlab_var
+        self.modes = {Mode(m[0],engine)
+                          for m in engine.find(matlab_var,'states')}
+        self.transitions = {Transition(t[0],engine)
+                          for t in engine.find(matlab_var,'trans')}
+        pdb.set_trace()
+
+
+    def addMode(self):
+        pass
+
+    def addTransition(self):
+        pass
+
+    def addParam(self,param):
+        #TODO - what kind of error checking would we need here?
+        print("TO IMPLEMENT: ADD PARAMETER: ", param)
+
+    def copyModel(self):
+        return CopyModel(self, self.engine.copyModel(self.matlab_var,"copyModel"),
+                         engine, "copy")
+
 
 class Mode:
     def __init__(self, matlab_var, engine):
@@ -72,6 +94,7 @@ class Transition:
     def extend():
         pass
 
+
 class MATLABVisitor(ReaffirmVisitor):
     def __init__(self):
         print("Initializing!")
@@ -86,7 +109,7 @@ class MATLABVisitor(ReaffirmVisitor):
             self.eng = engine.connect_matlab(sessions[0])
 
         print("Loading Initial Model")
-        self.eng.load_system('test_model')
+        self.eng.load_system('acc_model_new')
         e = self.eng
         m = e.find(e.find(e.sfroot(),'-isa','Simulink.BlockDiagram')
                             ,'-isa','Stateflow.Chart')
@@ -105,7 +128,7 @@ class MATLABVisitor(ReaffirmVisitor):
         self.visitChildren(ctx)
 
         print("Script Successful - saving model")
-        self.eng.sfsave('test_model','test_model_resilient',nargout=0)
+        self.eng.sfsave('acc_model_new','acc_model_new_resilient',nargout=0)
 
         return
 
@@ -153,8 +176,9 @@ class MATLABVisitor(ReaffirmVisitor):
 
 
     # Visit a parse tree produced by ReaffirmParser#method.
-    def visitMethod(self, ctx:ReaffirmParser.MethodContext):
-        print("visitMethod")
+        # Visit a parse tree produced by ReaffirmParser#function.
+    def visitFunction(self, ctx:ReaffirmParser.FunctionContext):
+        print("visitFunction")
         print(self.env)
         return self.visitChildren(ctx)
 
@@ -194,9 +218,21 @@ class MATLABVisitor(ReaffirmVisitor):
             else:
                 # if attr is methodref, find args, eval them, and apply
                 # the method
-                args = [ct for ct in ref.children[1].children[2].children
-                        if not type(ct).__name__ == 'TerminalNodeImpl']
-                obj = attr(*[self.visit(arg) for arg in args])
+
+                # if attr is methodref, find args (if any), eval them
+                # and pass to the method. Evaluation is therefore eager
+                getNonTerminals = \
+                lambda children : [ctx for ctx in children
+                                   if not type(ctx).__name__ == 'TerminalNodeImpl']
+
+                arglist = getNonTerminals(ref.children[1].children)
+                assert(len(arglist) <= 1)
+                if arglist:
+                    args = getNonTerminals(arglist[0].children)
+                    obj = attr(*[self.visit(arg) for arg in args])
+                    pdb.set_trace()
+                else:
+                    obj = attr()
 
         return obj
 

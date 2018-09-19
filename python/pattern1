@@ -1,15 +1,15 @@
-duplicate_model = copyModel(model)
-addParam(model,"theta")
+duplicate_model = model.copyModel()
+model.addParam("theta")
 formode m = model.modes {
-    m_copy = addState(model, m)
-    replace(m_copy.flow,"ngps","nenc")
-    addTransition(model,m,m_copy,"abs(ngps-nenc) > theta")
+    m_copy = model.addState(m)
+    m_copy.replace("ngps","nenc")
+    model.addTransition(m,m_copy,"abs(ngps-nenc) > theta")
 }
 
 fortran t = duplicate_model.trans {
     src = t.source
     dst = t.destination
-    copy_src = getCopyState(model,src)
-    copy_dst = getCopyState(model,dst) 
-    addTransition(model, copy_src, copy_dst,t.guard)
+    copy_src = model.getCopyState(src)
+    copy_dst = model.getCopyState(dst)
+    model.addTransition(copy_src, copy_dst,t.guard)
 }
