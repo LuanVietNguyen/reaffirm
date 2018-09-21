@@ -21,21 +21,44 @@ class Model:
         self.matlab_var = matlab_var
         self.modes = {Mode(m[0],engine)
                       for m in engine.find(matlab_var,'-isa','Stateflow.State')}
-        self.transitions = 2 #TODO create this
+        self.transitions = {Transition(t[0],engine)
+                      for t in engine.find(matlab_var,'-isa','Stateflow.Transition')}
+        for t in self.transitions.copy():
+             if t.source.matlab_var.size == (0,0):
+                 self.transitions.remove(t)
+        pdb.set_trace()
+        self.param = None
 
-    def addMode(self):
-        pass
+    def addMode(self, mode):
+        raw_mode = self.engine.addState(self.matlab_var, mode.matlab_var)
+        newmode = Mode(raw_mode, self.engine)
+        self.modes.add(newmode)
+        return newmode
 
-    def addTransition(self):
-        pass
+    def addTransition(self, src, dest, eqn):
+        pdb.set_trace()
+        raw_trans = self.engine.addTransition(self.matlab_var,
+                                             src.matlab_var, dest.matlab_var, eqn)
+        newtrans = Transition(raw_trans, self.engine)
+        self.transitions.add(newtrans)
+        return newtrans
 
     def addParam(self,param):
-        #TODO - what kind of error checking would we need here?
-        print("TO IMPLEMENT: ADD PARAMETER: ", param)
+        self.param = self.engine.addParam(self.matlab_var,param)
 
     def copyModel(self):
         mvar = self.engine.copyModel(self.matlab_var, "chart")
         return CopyModel(mvar, self.engine)
+
+    def getCopy(self, mode):
+        copymodes = [m for m in self.modes if m.name == (mode.name + '_copy')]
+        if copymodes == []:
+            raise(Exception("Cannot find copy of mode"))
+        elif len(copymodes) > 1:
+            raise(Exception("Returned multiple modes...is this bad?"))
+
+        return copymodes[0]
+
 
 
 class CopyModel:
@@ -46,18 +69,9 @@ class CopyModel:
                           for m in engine.find(matlab_var,'states')}
         self.transitions = {Transition(t[0],engine)
                           for t in engine.find(matlab_var,'trans')}
-        pdb.set_trace()
-
-
-    def addMode(self):
-        pass
-
-    def addTransition(self):
-        pass
-
-    def addParam(self,param):
-        #TODO - what kind of error checking would we need here?
-        print("TO IMPLEMENT: ADD PARAMETER: ", param)
+        for t in self.transitions.copy():
+            if t.source.matlab_var.size == (0,0):
+                self.transitions.remove(t)
 
     def copyModel(self):
         return CopyModel(self, self.engine.copyModel(self.matlab_var,"copyModel"),
@@ -82,18 +96,27 @@ class Mode:
     def flow(self):
         return self.engine.get(self.matlab_var,'LabelString')
 
+    @property
+    def name(self):
+        return self.engine.get(self.matlab_var,'Name')
 
+
+
+#TODO
 class Transition:
     def __init__(self, matlab_var, engine):
         self.matlab_var = matlab_var
-        self.source = 2
-        self.dest = 2
-        self.guard = 2
-        self.guard = 2
+        self.engine = engine
 
-    def extend():
-        pass
-
+        getField = lambda f : engine.get(matlab_var, f)
+        #TODO: note, this might be really bad, since we are creating
+        #multiple Python mode wrappers that point to the same
+        #underlying MATLAB object. I don't know if this will be a
+        #problem or not.
+        self.source = Mode(getField('Source'),engine)
+        self.destination = Mode(getField('Destination'),engine)
+        self.guard = getField('LabelString')
+        self.start = False
 
 class MATLABVisitor(ReaffirmVisitor):
     def __init__(self):
@@ -109,10 +132,15 @@ class MATLABVisitor(ReaffirmVisitor):
             self.eng = engine.connect_matlab(sessions[0])
 
         print("Loading Initial Model")
+        self.eng.clear('all',nargout=0)
+        self.eng.bdclose('all',nargout=0)
         self.eng.load_system('acc_model_new')
         e = self.eng
         m = e.find(e.find(e.sfroot(),'-isa','Simulink.BlockDiagram')
                             ,'-isa','Stateflow.Chart')
+
+        if m.size == (0,1):
+            raise Exception("Unable to Initialize Model")
         self.env['model'] = Model(m, e)
 
     def lookup(self, var):
@@ -120,6 +148,7 @@ class MATLABVisitor(ReaffirmVisitor):
             return self.env[var]
         except KeyError:
             print("Error: unknown reference to '", var, "'")
+            raise
 
     # visit a parse tree produced by ReaffirmParser#prog.
     def visitProg(self, ctx:ReaffirmParser.ProgContext):
@@ -187,8 +216,7 @@ class MATLABVisitor(ReaffirmVisitor):
     def visitId(self, ctx:ReaffirmParser.IdContext):
         print("visitId")
         print(self.env)
-        return self.visitChildren(ctx)
-
+        return self.lookup(ctx.getText())
 
     # Visit a parse tree produced by ReaffirmParser#objectRef.
     def visitObjectRef(self, ctx:ReaffirmParser.ObjectRefContext):
@@ -209,7 +237,7 @@ class MATLABVisitor(ReaffirmVisitor):
             try:
                 attr = getattr(obj,refname)
             except AttributeError:
-                print("Unknown field/method ", refname)
+                raise
 
             #if attr is a fieldref, resolve it.
 
@@ -230,7 +258,6 @@ class MATLABVisitor(ReaffirmVisitor):
                 if arglist:
                     args = getNonTerminals(arglist[0].children)
                     obj = attr(*[self.visit(arg) for arg in args])
-                    pdb.set_trace()
                 else:
                     obj = attr()
 
@@ -286,9 +313,9 @@ class MATLABVisitor(ReaffirmVisitor):
         loop_var = ctx.children[1].children[0].getText()
         arr = self.lookup(loop_var)
         if len(arr) < 1:
-            print("Error: cannot loop over empty variable")
+            raise Exception("Cannot loop over empty variable")
 
-        for val in arr:
+        for val in arr.copy():
             self.env[loop_var] = val
             _ = [self.visit(c) for c in ctx.children[2:]]
 
@@ -307,7 +334,6 @@ class MATLABVisitor(ReaffirmVisitor):
     def visitFuncall(self, ctx:ReaffirmParser.FuncallContext):
         print("visitFuncall")
         print(self.env)
-        pdb.set_trace()
         return self.visitChildren(ctx)
 
     # Visit a parse tree produced by ReaffirmParser#objref.
