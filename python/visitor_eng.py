@@ -15,6 +15,29 @@ from ReaffirmVisitor import ReaffirmVisitor
 from matlab import engine
 import io
 
+def doCleanup():
+    print("TODO: cleanup MATLAB engine / Stateflow edits properly")
+
+def errorClose(ctx, msg):
+    print("At line " + repr(ctx.start.line) + ", column " +
+          repr(ctx.start.column) + " in " + scriptFile + ":", file=sys.stderr)
+    print("\t" + msg, file=sys.stderr)
+    doCleanup()
+    exit()
+
+class ContextError(Exception):
+    def __init__(self, ctx):
+        self.line = ctx.start.line
+        self.col = ctx.start.column
+
+class RefError(ContextError):
+    def __init__(self, ctx, message):
+        super().__init__(ctx)
+        self.message = message
+
+    def __str__(self):
+        return "Line: " + str(self.line) + ", Column: " + str(self.col) + " " + self.message
+
 class Model:
     def __init__(self, matlab_var, engine):
         self.engine = engine
@@ -35,6 +58,8 @@ class Model:
         return newmode
 
     def addTransition(self, src, dest, eqn):
+        pdb.set_trace()
+
         raw_trans = self.engine.addTransition(self.matlab_var,
                                              src.matlab_var, dest.matlab_var, eqn)
         newtrans = Transition(raw_trans, self.engine)
@@ -114,7 +139,7 @@ class Transition:
         self.start = False
 
 
-        class MATLABVisitor(ReaffirmVisitor):
+class MATLABVisitor(ReaffirmVisitor):
     def __init__(self):
         print("Initializing!")
         self.env = {}
@@ -199,17 +224,22 @@ class Transition:
     # Visit a parse tree produced by ReaffirmParser#id.
     def visitId(self, ctx:ReaffirmParser.IdContext):
         print("visitId")
-        return self.lookup(ctx.getText())
+        try:
+            return self.env[ctx.getText()]
+        except KeyError:
+            raise(RefError(ctx,"Unknown reference to '" + ctx.getText() + "'"))
 
     # Visit a parse tree produced by ReaffirmParser#objectRef.
     def visitObjectRef(self, ctx:ReaffirmParser.ObjectRefContext):
         refs = ctx.children[0].children[:]
         ident = refs.pop(0).getText() #must be Terminal
         #need to check that ident is in env
-        if ident not in self.env:
-            #throw an error here
-            pass
-        obj = self.lookup(ident)
+
+        try:
+            obj = self.env[ident]
+        except KeyError:
+            raise(RefError(ctx,"Unknown reference to '" + ident + "'"))
+
         for ref in refs:
             attr = None
             #find the attr name. methods have junk after '(' that we
@@ -218,7 +248,7 @@ class Transition:
             try:
                 attr = getattr(obj,refname)
             except AttributeError:
-                raise
+                raise(RefError(ref,"Unknown reference to " + refname))
 
             #if attr is a fieldref, resolve it.
 
@@ -286,7 +316,10 @@ class Transition:
 
         # loop variable is assigned to each element per iteration
         loop_var = ctx.children[1].children[0].getText()
-        arr = self.lookup(loop_var)
+        try:
+            arr = self.env[loop_var]
+        except KeyError:
+            raise(RefError(ctx,"Unknown reference to '" + loop_var + "'"))
         if len(arr) < 1:
             raise Exception("Cannot loop over empty variable")
 
