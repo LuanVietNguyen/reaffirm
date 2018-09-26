@@ -13,6 +13,7 @@ from ReaffirmParser import ReaffirmParser
 from ReaffirmVisitor import ReaffirmVisitor
 
 from matlab import engine
+from matlab.engine import MatlabExecutionError
 import io
 
 def doCleanup():
@@ -26,17 +27,29 @@ def errorClose(ctx, msg):
     exit()
 
 class ContextError(Exception):
-    def __init__(self, ctx):
+    def __init__(self, ctx, message):
         self.line = ctx.start.line
         self.col = ctx.start.column
+        self.message = "Line: " + str(self.line) + ", Column: " + str(self.col) + " " + message
 
 class RefError(ContextError):
-    def __init__(self, ctx, message):
-        super().__init__(ctx)
-        self.message = message
-
     def __str__(self):
-        return "Line: " + str(self.line) + ", Column: " + str(self.col) + " " + self.message
+        return self.message
+
+class SizeError(ContextError):
+    def __str__(self):
+        return self.message
+
+def issingle(ctx, arg):
+    single = None
+    if hasattr(arg,'size'): #arg is a matlab object
+        single = arg.size == (1,1)
+    else:
+        single = len(arg) == 1
+
+    if not single:
+        raise(SizeError(ctx, "error: Argument in expression '" +
+                        ctx.getText() + "' must be a single value"))
 
 class Model:
     def __init__(self, matlab_var, engine):
@@ -51,14 +64,16 @@ class Model:
                  self.transitions.remove(t)
         self.param = None
 
-    def addMode(self, mode):
+    def addMode(self,ctx,  mode):
+        pdb.set_trace()
+        issingle(ctx, mode)
+
         raw_mode = self.engine.addState(self.matlab_var, mode.matlab_var)
         newmode = Mode(raw_mode, self.engine)
         self.modes.add(newmode)
         return newmode
 
     def addTransition(self, src, dest, eqn):
-        pdb.set_trace()
 
         raw_trans = self.engine.addTransition(self.matlab_var,
                                              src.matlab_var, dest.matlab_var, eqn)
@@ -68,6 +83,9 @@ class Model:
 
     def addParam(self,param):
         self.param = self.engine.addParam(self.matlab_var,param)
+
+    def addLocalVar(self, localvar):
+        self.localVar = self.engine.addVariable(self.matlab_var,localvar,'Local')
 
     def copyModel(self):
         mvar = self.engine.copyModel(self.matlab_var, "chart")
@@ -119,8 +137,16 @@ class Mode:
         return self.engine.get(self.matlab_var,'LabelString')
 
     @property
+    def size(self):
+        return self.matlab_var.size
+
+    @property
     def name(self):
         return self.engine.get(self.matlab_var,'Name')
+
+    def addFlow(self, eqn):
+        self.engine.addFlow(self.matlab_var, eqn,nargout=0)
+
 
 
 class Transition:
@@ -138,38 +164,30 @@ class Transition:
         self.guard = getField('LabelString')
         self.start = False
 
+    def addGuardLabel(self, relation, label):
+        self.engine.addGuardLabel(self.matlab_var,relation,label,nargout=0)
+
+    def addResetLabel(self, label):
+        self.engine.addResetLabel(self.matlab_var,label,nargout=0)
+
 
 class MATLABVisitor(ReaffirmVisitor):
-    def __init__(self):
-        print("Initializing!")
+    def __init__(self, e, modelfile, modelname=None):
         self.env = {}
-
-        sessions = engine.find_matlab()
-        if sessions == ():
-            print("Starting MATLAB engine")
-            self.eng = engine.start_matlab()
+        print("Initializing!")
+        self.modelfile = modelfile
+        self.eng = e
+        m = None
+        if modelname:
+            m = e.find(e.find(e.sfroot(),'-isa','Simulink.BlockDiagram')
+                            ,'-isa','Stateflow.Chart','-and','Name',modelname)
         else:
-            print("Connecting to MATLAB engine")
-            self.eng = engine.connect_matlab(sessions[0])
-
-        print("Loading Initial Model")
-        self.eng.clear('all',nargout=0)
-        self.eng.bdclose('all',nargout=0)
-        self.eng.load_system('acc_model_new')
-        e = self.eng
-        m = e.find(e.find(e.sfroot(),'-isa','Simulink.BlockDiagram')
+            m = e.find(e.find(e.sfroot(),'-isa','Simulink.BlockDiagram')
                             ,'-isa','Stateflow.Chart')
-
-        if m.size == (0,1):
+        if not m.size == (1,1):
             raise Exception("Unable to Initialize Model")
-        self.env['model'] = Model(m, e)
 
-    def lookup(self, var):
-        try:
-            return self.env[var]
-        except KeyError:
-            print("Error: unknown reference to '", var, "'")
-            raise
+        self.env['model'] = Model(m, e)
 
     # visit a parse tree produced by ReaffirmParser#prog.
     def visitProg(self, ctx:ReaffirmParser.ProgContext):
@@ -177,7 +195,8 @@ class MATLABVisitor(ReaffirmVisitor):
         self.visitChildren(ctx)
 
         print("Script Successful - saving model")
-        self.eng.sfsave('acc_model_new','acc_model_new_resilient',nargout=0)
+
+        self.eng.sfsave(self.modelfile, self.modelfile + '_resilient',nargout=0)
         return
 
     # Visit a parse tree produced by ReaffirmParser#printExpr.
@@ -200,7 +219,6 @@ class MATLABVisitor(ReaffirmVisitor):
     def visitCondtion(self, ctx:ReaffirmParser.CondtionContext):
         print("visitCondtion")
         return self.visitChildren(ctx)
-
 
     # Visit a parse tree produced by ReaffirmParser#blank.
     def visitBlank(self, ctx:ReaffirmParser.BlankContext):
@@ -226,8 +244,8 @@ class MATLABVisitor(ReaffirmVisitor):
         print("visitId")
         try:
             return self.env[ctx.getText()]
-        except KeyError:
-            raise(RefError(ctx,"Unknown reference to '" + ctx.getText() + "'"))
+        except KeyError as e:
+            raise(RefError(ctx,"Unknown reference to '" + ctx.getText() + "'")) from e
 
     # Visit a parse tree produced by ReaffirmParser#objectRef.
     def visitObjectRef(self, ctx:ReaffirmParser.ObjectRefContext):
@@ -237,8 +255,8 @@ class MATLABVisitor(ReaffirmVisitor):
 
         try:
             obj = self.env[ident]
-        except KeyError:
-            raise(RefError(ctx,"Unknown reference to '" + ident + "'"))
+        except KeyError as e:
+            raise(RefError(ctx,"Unknown reference to '" + ident + "'")) from e
 
         for ref in refs:
             attr = None
@@ -247,8 +265,8 @@ class MATLABVisitor(ReaffirmVisitor):
             refname = ref.getText().split('(')[0][1:]
             try:
                 attr = getattr(obj,refname)
-            except AttributeError:
-                raise(RefError(ref,"Unknown reference to " + refname))
+            except AttributeError as e:
+                raise(RefError(ref,"Unknown reference to " + refname)) from e
 
             #if attr is a fieldref, resolve it.
 
@@ -268,7 +286,7 @@ class MATLABVisitor(ReaffirmVisitor):
                 assert(len(arglist) <= 1)
                 if arglist:
                     args = getNonTerminals(arglist[0].children)
-                    obj = attr(*[self.visit(arg) for arg in args])
+                    obj = attr(ref, *[self.visit(arg) for arg in args])
                 else:
                     obj = attr()
 
@@ -363,15 +381,35 @@ class MATLABVisitor(ReaffirmVisitor):
         return self.visitChildren(ctx)
 
 
-def parse_script(script, args):
+def parse_script(script, modelfile,modelname=None):
 
     s = FileStream(script)
     parser = ReaffirmParser(CommonTokenStream(ReaffirmLexer(s)))
-
     tree = parser.prog()
     print(tree.toStringTree(recog=parser))
 
-    v = MATLABVisitor()
+    print("Initializing!")
+
+    sessions = engine.find_matlab()
+    eng = None
+    if sessions == ():
+        print("Starting MATLAB engine")
+        eng = engine.start_matlab()
+    else:
+        print("Connecting to MATLAB engine")
+        eng = engine.connect_matlab(sessions[0])
+
+    print("Loading Initial Model")
+    eng.clear('all',nargout=0)
+    eng.bdclose('all',nargout=0)
+
+    try:
+        eng.load_system(modelfile)
+    except MatlabExecutionError as e:
+        print("Unable to open model '" + modelfile + "'", file=sys.stderr)
+        exit()
+
+    v = MATLABVisitor(eng,modelfile, modelname)
     v.visit(tree)
     print(v)
 
@@ -379,4 +417,4 @@ def parse_script(script, args):
 
 
 if __name__ == '__main__':
-    args = {'modelName' : 'test_model'}; l = parse_script('toy',args)
+    pass
