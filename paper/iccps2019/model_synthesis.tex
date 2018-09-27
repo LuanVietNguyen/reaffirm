@@ -1,0 +1,54 @@
+\section{Model Synthesis}
+\seclabel{synthesis}
+%
+In this section, we present the model synthesizer incorporated in \toolreaffirm which takes a parameterized model produced by the model transformation, and a correctness requirement as inputs, and then generates a completed model with parameter values instantiated so as to satisfy the correctness requirements. Since the structure of the completed model already determined after the model transformation, the model synthesis problem then reduces to the \emph{parameter synthesis problem}. Given a safety specification $\varphi$, let $\P_s$ be a set of parameters of a transformed hybrid automaton $\tilde{\AutomatonH}$, find the best instance values of $\P_s$ over its domain $\bar{\P_s}$ so that $\tilde{\AutomatonH} \models\varphi$.  
+%
+For example, the transformation of the ACC model shown in \figref{updated} introduces a new parameter $\theta$ whose value needed to be determined so that the completed model will satisfy the safety requirement with respect to the same initial condition of the state variables and parameters domains of the original model.
+%
+%
+\subsection{Overview of Breach}
+%
+%The model synthesizer of Reaffirm adapts the falsification mechanism implemented within Breach to conduct a parameter synthesis for a transformed model.
+%
+In our proposed methodology, we incorporated Breach into the model synthesizer of \toolreaffirm as an analysis mechanism to perform the falsification and parameter synthesis for hybrid systems. Given a hybrid system modeled as a Simulink/Stateflow diagram, an STL specification represented the safety property, and specific parameter ranges, Breach~\cite{donze2010breach} can perform an optimized search over parameter domains to find parameter values that cause the system violating the given STL specification. 
+%
+%
+The parameter mining procedure is guided by the counterexample obtained from the falsification, and it terminates if there is no counterexample found by the falsifier or the maximum number of iterations specified by a user is reached.
+%
+On the other hand, Breach can compute the sensitivity of execution traces to the initial conditions, which can be used to obtain completeness results by performing systematic simulations. Moreover, Breach provides an input generator for engineers to specify different testing input patterns such as step, pulse width, sinusoid, and ramp signals. This input generator is designed to be extensible, so users can write a specific input pattern to test their model against particular attack scenarios.
+
+
+We note that although Breach cannot completely prove the system correctness, it can efficiently find bugs existing in the initial design of CPS that are too complex to be formally verified~\cite{kapinski2015simulation}. These bugs are essential for an engineer to specify resilient patterns to repair the model. 
+%
+Moreover, the general problem of verifying a CPS modeled as a hybrid system is proved to be \emph{undecidable}~\cite{henzinger1995s}. 
+%
+Instead, the falsification algorithms embedded within Breach are scalable and work properly for black-box hybrid systems with different classes of dynamics.
+%
+Thus, in practice, engineers prefer to use counterexamples obtained by a falsification tool to refine their design. Our prototype \toolreaffirm utilizes the advantages of Simulink/Stateflow modeling framework and the falsification tool Breach to design a resilient pattern and perform the model synthesis for a resilient CPS.
+%
+\subsection{Model Synthesis using Breach}
+Next, we describe how to use Breach to synthesize parameters values for the parametrized model returned from the model transformation tool. The parameter synthesis procedure include following steps.
+
+\begin{enumerate}[leftmargin= 2 em]
+\item We specify the initial conditions of state variables and parameters, the set of parameters $\P_s$ that need to be mined, their certain ranges of values $\bar{\P_s}$, and the maximum time (or number of iterations) for the optimization solver of Breach.
+\item Next, we call the falsifier loop within Breach to search for a counterexample. For each iteration, if the counterexample is exposed, the unsafe values of $\P_s$ will be returned. Based on these values, the tool will automatically update the parameter domain $\bar{\P_s}$ to the new domain $\bar{\P'_s} \subset \bar{\P_s}$, and then continue the falsification loop.
+\item The process repeats until the property is satisfied which means that the falsifier cannot find the counterexample until the user-specified limit on the number of iterations for the solver is reached. 
+\item As a result, the tool returns the best (and safe) values of $\P_s$, updates the parametrized model with these values, and then exports the completed model.   
+\end{enumerate}
+
+\vspace{0.5em}
+\noindent
+{\bf Monotonic Parameters.} The search over the parameter space of the synthesis procedure can be significantly reduced if the satisfaction value of a given property is monotonic w.r.t to a parameter value. Intuitively, the satisfaction of the formula monotonically increases (respectively decreases) w.r.t to a parameter $p$ that means the system is more likely to satisfy the formula if the value of $p$ is increased (respectively decreased). In the case of monotonicity, the parameter space can be efficiently truncated to find the \emph{tightest} parameter values such that a given formula is satisfied. In Breach, the check of monotonicity of a given formula w.r.t specific parameter is encoded as an STM query and then is determined using an STM solver. However, the result may be \emph{undecidable} due to the undecidability of STL~\cite{jin2015mining}. 
+%
+In this paper, the synthesis procedure is based on the assumption of satisfaction monotonicity. If the check of monotonicity is undecidable over a certain parameter range, a user can manually enforce the solver with decided monotonicity (increasing or decreasing) or perform a search over a different parameter range. 
+
+%Given a transformed PHIOA automaton $\tilde{\AutomatonH}$ with a set of parameter $\P'= \P \cup \P_s$
+%
+ %and a safety specification $\varphi$, find a tight set of parameter values $P_0$ of $\P_s$ such that $\tilde{\AutomatonH} \models\varphi$. 
+
+%\begin{definition}[Parameter Synthesis Problem]
+%Given a transformed PHIOA automaton $\tilde{\AutomatonH}$ with set of parameter $\P'$ and a safety specification $\varphi$, the parameter synthesis problem is to find a tight set of parameter values $P$ of $\P'$ such that $\tilde{\AutomatonH} \models\varphi$.
+%\end{definition} 
+
+
+%

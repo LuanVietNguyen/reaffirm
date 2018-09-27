@@ -1,0 +1,19 @@
+\begin{abstract}
+\label{sec:abstract}
+%%
+Model-based design offers a promising approach for assisting developers to build a reliable and secure cyber-physical systems (CPSs) in a systematic manner. In this methodologies, a designer first constructs a model, with mathematically precise semantics, of the system under design, and performs extensive analysis with respect to correctness requirements before generating the implementation from the model.
+%
+However, as new vulnerabilities are discovered, requirements evolve aimed at ensuring resiliency. Current methodology demands an expensive, and at times infeasible, redesign and reimplementation of the system from scratch.
+%
+In this paper, we propose a new methodology, which we call \toolreaffirm to facilitate the integration of evolving resiliency requirements in model-based design and verification for CPSs.
+%
+\toolreaffirm contains two main modules, a model transformation, and a model synthesizer. 
+%
+The first module applies a given resilience pattern specified as a model transformation script to a partial behavior model and produces a candidate resilient model that contains parameters for which the values need to be synthesized to ensure that the safety requirement is satisfied. 
+%
+The second module takes a parametrized model as an input and performs the synthesis of parameter values that makes the requirement, expressed as a formula in the Signal Temporal Logic, satisfied. It internally uses the falsification tool Breach properly to search over the space of parameter values and find values for which the input safety property is violated. Based on the counterexample produced by Breach, parameter ranges are tightened and the process repeats until the property is satisfied.
+%
+%
+To evaluate the proposed approach, we use \toolreaffirm to automatically synthesize resilient models for an adaptive cruise control (ACC) system under GPS sensor spoofing attacks, and for a single machine infinite bus (SMIB) system under sliding-mode switching attacks.
+%
+\end{abstract} 	

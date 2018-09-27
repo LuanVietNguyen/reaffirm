@@ -1,0 +1,53 @@
+\section{Related Works}
+\seclabel{rw}
+%
+The idea of our methodologies proposed in this paper is inspired from the concept of \emph{program sketching}~\cite{solar2013program,solar2005programming}, and the recent works on completion of distributed protocols~\cite{alur2017automatic, alur2015automatic, alur2014synthesizing}. Given a model of the \emph{incomplete} distributed protocol, which is a set of communicating finite-state processes with incomplete transition relations, a model of the environment, and its correctness requirements specified in temporal logic~\cite{clarke2000model}, determine a \emph{completion} of the finite state machines (FSMs) for the processes such that the composition satisfies all the requirements. This approach can be viewed as a fruitful collaboration between the designer and the synthesis tool where a programmer needs to provide a \emph{skeleton} of the desired protocol, and some details that the programmer is unsure about, for instance, regarding corner cases and handling of unexpected messages, and the synthesizer will automatically complete it with adding transitions.
+%
+%
+Instead of synthesizing a \emph{complete} FSM, we address the problem of automatic repair of CPSs modeled as hybrid automata, which is an extended FSM with a set of real-valued variables evolving continuously over intervals of real-time.  
+%
+%
+%
+In our approach, a designer needs to provide a model transformation script that transforms an initial model to a new version whose parameters values will be determined by the synthesizer to provide resilience. 
+%
+
+In the context of the model transformation, GREAT is a metamodel-based graph transformation language that can be used to perform different transformations on domain-specific models~\cite{agrawal2003graph, agrawal2003end}. GREAT has been used to translate Simulink/Stateflow models to Hybrid Systems Interchange Format (HSIF)~\cite{agrawal2004semantic}. Such a translation scheme is accomplished by executing a sequence of translation rules described using UML Class Diagram in a specific order. %
+% 
+Other approaches that also perform a translation from Simulink diagrams to hybrid systems formalisms such as Timed Interval Calculus~\cite{chen2009formal}, Hybrid Communicating Sequential Processes~\cite{liu2010calculus}, Lustre~\cite{tripakis2005translating}, and SpaceEx~\cite{minopoli2016sl2sx}.  
+%
+HYST~\cite{bak2015hyst} is a conversion tool for hybrid automata which allows the same model to be analyzed simultaneously in several hybrid systems analysis tools. HYST takes a source input model in SpaceEx XML format~\cite{frehse2011spaceex}, parses it to an intermediate representation, and then prints a resulting output to some desired formats. HYST can automatically translate hybrid automata to \emph{trajectory-equivalent} Simulink/Stateflow models, which enables a \emph{correct-by-construction} compositional design for CPS with embedding hybrid automata into large-scale SLSF models~\cite{bak2017hybrid}.  
+%
+Unlike these approaches that focuses on the translation between different hybrid system modeling frameworks, our goal is to provide a lightweight programmable model transformation language for hybrid systems in which a designer only needs to write a simple script to repair the model.  
+ 
+%
+
+
+
+
+%Given an \emph{incomplete} hybrid automata contains missing variables, transition relations and operation modes, a \emph{transformation script} that repair the \emph{incomplete} model to the model with unknown parameters, and a set of correctness requirements specified in STL, search
+
+%Our proposed model synthesis tool of \toolreaffirm keeps the given architectural model unchanged, but modifies the behavioral model to make sure the new model always satisfies a set of requirements. The overall strategy is inspired by the protocol completion tool mentioned above.
+
+
+%in which the programmer need to specify an \emph{incomplete} protocol to be completed by the synthesizer so as to satisfy all the correctness requirements. This methodology for protocol specification can be viewed as a fruitful collaboration between the designer and the synthesis tool: the programmer has to describe the structure of the desired protocol, but some details that the programmer is unsure about, for instance, regarding corner cases and handling of unexpected messages, are filled in automatically by the tool.
+
+
+%An alternative and potentially more feasible approach inspired by \emph{program sketching} \cite{solar2013program,solar2005programming}, is to ask the programmer to specify an \emph{incomplete} protocol to be completed by the synthesizer so as to satisfy all the correctness requirements. This methodology for protocol specification can be viewed as a fruitful collaboration between the designer and the synthesis tool: the programmer has to describe the structure of the desired protocol, but some details that the programmer is unsure about, for instance, regarding corner cases and handling of unexpected messages, are filled in automatically by the tool.
+
+
+%
+%Given an \emph{incomplete} hybrid automata contains missing variables, transition relations and operation modes, a transformation script that specifies the potential \emph{transformation}  of the \emph{incomplete} model to the model with unknown parameters, and a set of correctness requirements specified in STL, search
+%
+%
+%A distributed protocol traditionally is modeled as a set of communicating finite-state processes, and both safety and liveness requirements specify its correctness. 
+
+
+%given a set of finite state machines (FSMs) for communicating processes with incomplete transition functions, a model of the environment, and a set of safety and liveness requirements, find a completion of the Finite State Machines for the processes such that the composition satisfies all the requirements. 
+
+%Next, we will describe some recent works on completion of distributed protocols that will be the basis of our approach proposed in this paper~\cite{alur2017automatic, alur2015automatic, alur2014synthesizing}. A
+%
+%A distributed protocol traditionally is modeled as a set of communicating finite-state processes, and both safety and liveness requirements specify its correctness. 
+%
+%In \emph{model checking}, a given a model of the distributed protocol is checked against its correctness requirements specified in temporal logic~\cite{clarke2000model}. In \emph{reactive synthesis}, the goal is to automatically derive a protocol from the given logical requirements, but this turns out to be computationally intractable~\cite{finkbeiner2016synthesis}. An alternative and potentially more feasible approach inspired by \emph{program sketching} \cite{solar2013program,solar2005programming}, is to ask the programmer to specify an \emph{incomplete} protocol to be completed by the synthesizer so as to satisfy all the correctness requirements. This methodology for protocol specification can be viewed as a fruitful collaboration between the designer and the synthesis tool: the programmer has to describe the structure of the desired protocol, but some details that the programmer is unsure about, for instance, regarding corner cases and handling of unexpected messages, are filled in automatically by the tool.
+
+%The \emph{protocol synthesis problem} then reduces to the following \emph{protocol completion problem}: given a set of finite state machines (FSMs) for communicating processes with incomplete transition functions, a model of the environment, and a set of safety and liveness requirements, find a completion of the Finite State Machines for the processes such that the composition satisfies all the requirements. The computational complexity of this problem is the same as that of model checking of distributed protocols. However, now we need to cope with a search with two nested exponentials: the number of possible completions of the incomplete input model is exponential and so is the number of states of the product of all the component processes for any given completion. Advances in model checking offer a way of dealing with the latter, while \emph{counterexample-guided inductive synthesis} (CEGIS) is a new technology that is a potential solution for the former~\cite{alur2013syntax,seshia2015combining,solar2005programming}.
