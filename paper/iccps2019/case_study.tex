@@ -3,15 +3,15 @@
 %\vspace{-0.5em}
 %
 %
-In this section, we demonstrate the capability of \toolreaffirm to repair CPSs models under unanticipated attacks. We first revisit the ACC model and evaluate more resilient patterns that can be applied to repair the model under the GPS sensor attack. Second, we investigate a sliding-mode switching attack that causes instability for a smart grid system, and how \toolreaffirm can be applied to automatically repair the model under this attack.
+In this section, we demonstrate the capability of \toolreaffirm\footnote{\toolreaffirm was tested on Windows 10 64-bit using Matlab 2016b, 2017a, and 2018a executed on an x86-64 laptop with a 2.3 GHz dual-core Intel i5-6200U processor and 12 GB RAM. All performance metrics reported were recorded on this system using Matlab 2017a. For Breach, we choose the CMAES, which is stochastic optimization solver that can address non-linear or non-convex continuous optimization problem, with the maximum optimization time is specified as 30 seconds for each iteration of the falsification loop.} to repair CPSs models under unanticipated attacks. We first revisit the ACC model and evaluate more resilient patterns that can be applied to repair the model under the GPS sensor spoofing attack. Second, we investigate a sliding-mode switching attack that causes instability for a smart grid system, and how \toolreaffirm can be utilized to automatically repair the model under this attack.
 
 \subsection{Adaptive Cruise Control System}
-{\bf GPS Sensor Attack Construction.} To perform a spoofing attack on the GPS sensor of the ACC model, we continuously inject a false data to manipulate its measurement value. In this case, we omit the original assumption $|\ngps| \leq 0.05$, and employ the new assumption as $|\ngps| \leq 50$. Using the input generator in Breach, we specify the GPS spoofing attack as a standard input test signal such as a constant, ramp, step, sinusoid or random signal whose amplitude varies over the range of [-50, 50]. 
+{\bf GPS Sensor Attack Construction.} To perform a spoofing attack on the GPS sensor of the ACC model, we continuously inject false data to manipulate its measurement value. In this case, we omit the original assumption $|\ngps| \leq 0.05$, and employ the new assumption as $|\ngps| \leq 50$. Using the input generator in Breach, we specify the GPS spoofing attack as a standard input test signal such as a constant, ramp, step, sinusoid or random signal whose amplitude varies over the range of [-50, 50]. 
 
 
 \vspace{0.5em}
 \noindent
-{\bf Additional Resilient Patterns for ACC model.} Under the GPS spoofing  attack, the original ACC model does not satisfy its safety requirement and a designer needs to apply a certain resilient pattern to repair the model. The first example of such a resilient pattern for the ACC model have been introduced in~\secref{overview}, which makes a resilient copy of the original model where the controller simple ignores the GPS reading as it can no longer be trusted. However, we need to determine the best switching condition from the original model to the resilient copy.~\figref{acc_model_pat1} shows the completed, resilient model in which the switching condition is determined by synthesizing the value of $\theta$ using Breach. In the attack scenario, we assume that the GPS spoofing occurs at every time point, specified as a random constant signal over the range of [-50, 50].   
+{\bf Additional Resilient Patterns for ACC model.} Under the GPS sensor spoofing  attack, the original ACC model does not satisfy its safety requirement and a designer needs to apply a certain resilient pattern to repair the model. The first example of such a resilient pattern for the ACC model has been introduced in~\secref{overview}, which makes a resilient copy of the original model where the controller simple ignores the GPS reading as it can no longer be trusted. However, we need to determine the best switching condition from the original model to the resilient copy.~\figref{acc_model_pat1} shows the completed, resilient model, where \emph{ed} \emph{ev} respectively represent for the estimated distance $\hat{d}$ and the estimated velocity $\hat{v}$, and the switching condition is determined by synthesizing the value of $\theta$ using Breach. In the attack scenario, we assume that the GPS spoofing occurs at every time point, specified as a random constant signal over the range of [-50, 50]. For the first pattern, the model transformation takes about 2.94 seconds, and the synthesis procedure takes approximately 140.56 seconds over 7 iterations of the falsification loop.  
 
 \begin{figure}[t!]%
 	\centering%
@@ -21,13 +21,15 @@ In this section, we demonstrate the capability of \toolreaffirm to repair CPSs m
 	\figlabel{acc_model_pat1}%
 \end{figure}% 
 
-The second resilient pattern is an extended version of the first one by specifying a switching-back condition from the resilient copy to the original model when the GPS sensor is detected and mitigated. An example of such a switching-back condition is when the difference between the $\nenc$ and $\ngps$ are getting smaller, \ie $|\ngps -\nenc| < \theta - \epsilon$, where $\epsilon$ is a positive user-defined tolerant. For this pattern, the model transformation script can be written similar to the one shown in~\figref{examplecode} with adding the \emph{addTransition} function from the copy mode to the original mode with the guard condition labeled as $|\ngps -\nenc| < \theta - \epsilon$ in the \emph{formode} loop.
-
-
-
-Alternatively, another resilient pattern, which we do not need to modify the structure of the original model, is to model the redundancy in the sensory information as a linear combination of different sensor measurements. For example, instead of taking the average of $\ngps$ and $\nenc$, we can model their relationship as $\theta\ngps + (1-\theta)\nenc$, and then synthesize the value of $\theta$ so that the safety property is satisfied. The transformation script of this resilient pattern is given in~\figref{acc_code_3}. For this pattern, we assume that a designer still wants to use all sensor measurements even some of them are under spoofing attacks and would like to search for the value of $\theta$ over the range of [0.2, 0.8] (instead of [0, 1]). Given the same attack model for the other patterns, the synthesizer in \toolreaffirm fails to find the value of $\theta$ within the given range to ensure the safety property holds. However, if we enlarge the range of $\theta$ to [0.1, 0.9], the synthesizer successfully find the safe value $\theta = 0.1543$, and the resilient model shown in~\figref{acc_model_pat3}. 
+The second resilient pattern for the ACC model is an extended version of the first one where it includes a switching-back condition from the resilient copy to the original model when the GPS sensor is detected and mitigated. An example of such a switching-back condition is when the difference between the $\nenc$ and $\ngps$ are getting smaller, \ie $|\ngps -\nenc| < \theta - \epsilon$, where $\epsilon$ is a positive user-defined tolerant. For this pattern, the model transformation script can be written similar to the one shown in~\figref{examplecode} with adding the \emph{addTransition} function from the copy mode to the original mode with the guard condition labeled as $|\ngps -\nenc| < \theta - \epsilon$ in the \emph{formode} loop.
 %
-This result indicates that the pattern can repair the model if the GPS spoofing attack specified over a small range, but will fail for a larger range (\eg $|\nenc| \leq 100$).           
+The performance of \toolreaffirm for the second pattern is similar to the first pattern with the same synthesized value of $\theta = 7.18316$.
+
+
+
+Alternatively, another resilient pattern, which we do not need to modify the structure of the original model, is to model the redundancy in the sensory information as a linear combination of different sensor measurements. For example, instead of taking the average of $\ngps$ and $\nenc$, we can model their relationship as $\theta\ngps + (1-\theta)\nenc$, and then synthesize the value of $\theta$ so that the safety property is satisfied. The transformation script of this resilient pattern is given in~\figref{acc_code_3}. For this pattern, we assume that a designer still wants to use all sensor measurements even some of them are under spoofing attacks and would like to search for the value of $\theta$ over the range of [0.2, 0.8] (instead of [0, 1]). Given the same attack model for the other patterns, the synthesizer in \toolreaffirm fails to find the value of $\theta$ within the given range to ensure the safety property holds. However, if we enlarge the range of $\theta$ to [0.1, 0.9], the synthesizer successfully find the safe value $\theta = 0.1543$, and the resilient model shown in~\figref{acc_model_pat3}. In this scenario, the model transformation takes about 2.42 seconds, and the synthesis procedure takes approximately 68 seconds over 5 iterations of the falsification loop.    
+%
+The result indicates that the pattern can repair the model if the GPS spoofing attack specified over a small range, but will fail for a larger range (\eg $|\nenc| \leq 100$).           
 
 \begin{figure}[!t]%frame=none,
 \begin{lstlisting}[basicstyle=\ttfamily\footnotesize, numbers=none]
@@ -96,12 +98,12 @@ where, $\delta_1$, $\omega_1$ are the deviation of the rotor angle and speed of 
 
 The swing equation of the SMIB system shown above has an interesting property known as a \emph{sliding mode} behavior. This behavior occurs when the state of the system is attracted and subsequently stays within the \emph{sliding surface} defined by a state-dependent switching signal $s(x)\in\Real$~\cite{decarlo1988variable, liu2014coordinated}. An example of a sliding surface is $s(x) = 0$. When the system is confined on a sliding mode surface, its dynamics exhibit high-frequency oscillations behaviors, so-called a \emph{chattering} phenomenon, which is well-known in the power system design~\cite{sabanovic2004variable}.
 %
-At this moment, if the attacker conducts the fast switchings between two  operation modes, the system will be steered out of its desirable equilibrium position. As a result, the power system becomes unstable even if each individual subsystem is stable~\cite{liu2014coordinated}.  
+At this moment, if the attacker conducts the fast switchings between two  operation modes, the system will be steered out of its desirable equilibrium position. As a result, the power system becomes unstable even if each individual subsystem is  stand-alone stable~\cite{liu2014coordinated}.  
 % 
 
 \vspace{0.5em}
 \noindent
-{\bf Sliding-mode Attack Construction.} To successfully perform sliding-mode attack to a power grid system, we assume that the attack can a) gain some knowledge about the state information to mathematically construct an unstable sliding surface that can destabilize the system, and b) access to the communication channel to control the circuit breaker position. We note that a sliding-mode attack can be considered as a cyber-physical attack as it manipulate on both physical and cyber parts of the system. For the SMIB model with the swing equation defined previously, an attacker can use a sliding surface $s(x) = \delta_1 + \omega_1$ to calculate the value of the switching signal based on the following equation.
+{\bf Sliding-mode Attack Construction.} To successfully perform a sliding-mode attack to a power grid system, we assume that the attack can a) gain some knowledge about the state information to mathematically construct an unstable sliding surface that can destabilize the system, and b) access to the communication channel to control the circuit breaker position. We note that a sliding-mode attack can be considered as a cyber-physical attack as it requires the attacker to manipulate both physical and cyber parts of the system. For the SMIB model with the swing equation defined previously, an attacker can use a sliding surface $s(x) = \delta_1 + \omega_1$ to calculate the value of the switching signal based on the following equation.
 %
 \begin{align}
 \dot{\delta_1} & = \omega \nonumber \\
@@ -114,7 +116,7 @@ At this moment, if the attacker conducts the fast switchings between two  operat
 where $\epsilon$ represents switching delays and hysteresis~\cite{liu2011class}.
 %
 
-The stages of sliding-mode attack can summarized as follows.
+The stages of sliding-mode attack can be summarized as follows.
 \begin{enumerate}
 	\item The attacker switches the circuit breaker to connect the load to the grid,
 	\item when $\delta_1 + \omega_1 < -\epsilon$, the attacker switches the circuit breaker to disconnect the load, 
@@ -208,6 +210,6 @@ fortran t = model.Trans {
 \noindent
 {\bf Resilient SMIB Model.} Given a resilient pattern shown in ~\figref{smib_code}, the model transformation of \toolreaffirm will convert the model to a new version that integrates the dwell-time pattern with the unknown parameter $\theta$.
 %
-Then, the model synthesis of \toolreaffirm calls Breach to search for the best (\ie minimum) value of $\theta$ over and the range of $[0, 1]$ that ensures the final model satisfies the STL \formref{smib_stl} under the sliding-mode attack. The final (resilient) model is shown in~\figref{smib_plant_model_res}, where the synthesized value of $\theta$ equals to $0.12$. As a result, the resilient model is stable, and its simulation trajectories contain within a red box, similar to the most left subfigure shown in \figref{smib_result}.
+Then, the model synthesis of \toolreaffirm calls Breach to search for the best (\ie minimum) value of $\theta$ over and the range of $[0, 0.3]$ that ensures the final model satisfies the STL \formref{smib_stl} under the sliding-mode attack. The final (resilient) model, which is stable, and its simulation trajectories contain within a red box similar to the most left subfigure shown in \figref{smib_result}, is displayed in~\figref{smib_plant_model_res}, where the synthesized value of $\theta$ equals to $0.12$. Overall, the model transformation takes about 2 seconds, and the synthesis procedure takes approximately 45 seconds over 8 iterations of the falsification loop.
 
 

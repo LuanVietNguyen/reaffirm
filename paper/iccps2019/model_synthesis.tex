@@ -1,7 +1,7 @@
 \section{Model Synthesis}
 \seclabel{synthesis}
 %
-In this section, we present the model synthesizer incorporated in \toolreaffirm which takes a parameterized model produced by the model transformation, and a correctness requirement as inputs, and then generates a completed model with parameter values instantiated so as to satisfy the correctness requirements. Since the structure of the completed model already determined after the model transformation, the model synthesis problem then reduces to the \emph{parameter synthesis problem}. Given a safety specification $\varphi$, let $\P_s$ be a set of parameters of a transformed hybrid automaton $\tilde{\AutomatonH}$, find the best instance values of $\P_s$ over its domain $\bar{\P_s}$ so that $\tilde{\AutomatonH} \models\varphi$.  
+In this section, we present the model synthesizer incorporated in \toolreaffirm which takes a parameterized model produced by the model transformation, and a correctness requirement as inputs, and then generates a completed model with parameter values instantiated to satisfy the correctness requirements. Since the structure of the completed model already determined after the model transformation, the model synthesis problem then reduces to the \emph{parameter synthesis problem}. Given a safety specification $\varphi$, let $\P_s$ be a set of new parameters of the transformed model $\tilde{\AutomatonH}$, find the best instance values of $\P_s$ over its domain $\bar{\P_s}$ so that $\tilde{\AutomatonH} \models\varphi$.  
 %
 For example, the transformation of the ACC model shown in \figref{updated} introduces a new parameter $\theta$ whose value needed to be determined so that the completed model will satisfy the safety requirement with respect to the same initial condition of the state variables and parameters domains of the original model.
 %
@@ -10,7 +10,7 @@ For example, the transformation of the ACC model shown in \figref{updated} intro
 %
 %The model synthesizer of Reaffirm adapts the falsification mechanism implemented within Breach to conduct a parameter synthesis for a transformed model.
 %
-In our proposed methodology, we incorporated Breach into the model synthesizer of \toolreaffirm as an analysis mechanism to perform the falsification and parameter synthesis for hybrid systems. Given a hybrid system modeled as a Simulink/Stateflow diagram, an STL specification represented the safety property, and specific parameter ranges, Breach~\cite{donze2010breach} can perform an optimized search over parameter domains to find parameter values that cause the system violating the given STL specification. 
+In our proposed methodology, we incorporated Breach into the model synthesizer of \toolreaffirm as an analysis mechanism to perform the falsification and parameter synthesis for hybrid systems. Given a hybrid system modeled as a Simulink/Stateflow diagram, an STL specification represented the safety property, and specific parameter domains, Breach~\cite{donze2010breach} can perform an optimized search over the parameter ranges to find parameter values that cause the system violating the given STL specification. 
 %
 %
 The parameter mining procedure is guided by the counterexample obtained from the falsification, and it terminates if there is no counterexample found by the falsifier or the maximum number of iterations specified by a user is reached.

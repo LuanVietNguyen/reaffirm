@@ -47,7 +47,7 @@ Each transition is a tuple $\tau \deq \tuple{\src, \dst, \guard, \reset}$, where
 %
 We use the dot (.) notation to refer to different components of tuples \eg $\AutomatonH.\Transset$ refers to the transitions of automaton $\AutomatonH$ and $\tau.\guard$ refers to the guard of a transition $\tau$. %Such notation is also abused in the proposed transformation language.
 %
-We note that the \emph{model transformation language} proposed in this paper transforms a hybrid automaton based on modifying these components in a generic manner. The transformation tool of \toolreaffirm can this transformation script and translate it into an equivalent script that performs a model transformation for different modeling framework of hybrid automata such as a continuous-time Stateflow chart.
+We note that the \emph{model transformation language} proposed in this paper transforms a hybrid automaton based on modifying these components in a generic manner. The transformation tool of \toolreaffirm can take a HATL transformation script and translate it into an equivalent script that performs a model transformation for different modeling framework of hybrid automata including a continuous-time Stateflow chart.
 %
 
 \vspace{0.5em}
@@ -69,11 +69,9 @@ Intuitively, a transition in a Stateflow chart is triggered as soon as the trans
 %{\bf Hybrid Automata.}
 
 \subsection{Hybrid Automata Transformation Language}
-In our approach, the partial model of the system, which satisfies functional but not necessarily resiliency requirements is originally modeled in the form of hybrid automata. The model transformation that is at the core of \toolreaffirm tool will then attempt to add resilience modules to the system and modify switching logic between modes of the automata, by applying resilience patterns. 
+In our approach, the partial model of the system, which satisfies functional but not necessarily resiliency requirements is originally modeled in the form of hybrid automata. The model transformation that is at the core of \toolreaffirm tool will then attempt to add resilient modules to the system and modify switching logic between modes of the automata, by applying resilient patterns. 
 %
-%The resilience patterns can be either model-specific or generic, and need to be specified over strucuture of 
 %
-%We treat modes of hybrid automata as legacy components that the synthesizer will not modify. 
 %
 In order to specify resilient patterns for hybrid automata, we introduce a new transformation language called HATL (Hybrid Automata Transformation Language). The goal of HATL is to allow a designer to repair an original model in a programmable fashion. A script written in HATL is a sequence of \emph{statements} that specify the changes over the structure of given hybrid automata. There are three types of statements in HATL including
 \begin{inparaenum}[(a)]
