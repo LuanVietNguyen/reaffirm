@@ -20,7 +20,7 @@ bdclose all; clc; clear all; close all;
 modelName = 'smib_attack_v2';
 patternName = 'pattern_time';
 resModelName = [modelName,'_resilient'];
-tStart = tic;
+tStartT = tic;
 pythonPath = ['..', filesep,'..', filesep,'python',filesep];
 python2matlab(pythonPath, patternName, modelName, [patternName,'_resilient']);
 %systemCommand = ['python ' [pythonPath, 'tomatlab.py '], patternName, ' ',modelName, ' ', [patternName,'_resilient']];
@@ -29,7 +29,8 @@ eval([patternName,'_resilient']);
 %newModelName = [modelName,'_resilient'];
 sfsave(modelName, [resModelName,'.mdl']);
 
-
+tTransform=toc(tStartT);
+tStartE = tic;
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -66,7 +67,7 @@ falsify_obj.PrintSignals();
 
 % specify a safety property
 % dsafe == 5 + ev[t], %dref = 10 + 2*ev[t]
-safe_distance = STL_Formula('safe_region', 'alw(omega[t] <= 3)');
+safe_distance = STL_Formula('safe_region', 'alw((omega[t] >= -2) and (omega[t] <= 3) and (delta[t] >= 0) and (delta[t] <= 3.5))');
 %safe_distance = STL_Formula('safe_region', 'alw(omega[t] <= 2.5 && delta[t] <= 2.5)');
 %falsify_obj.PlotRobustMap(safe_distance, 'theta', [100 200])
 
@@ -75,7 +76,7 @@ safe_distance = STL_Formula('safe_region', 'alw(omega[t] <= 3)');
 % Falsification and resilient model synthesis
 
 param.names = {'theta'};
-param.values = {[0 0.15]};
+param.values = {[0 0.3]};
 %param.values = {[0 0.1]};
 %param.values = {[0.1 1]};
 numParams = length(param.names);
@@ -83,8 +84,9 @@ numParams = length(param.names);
 tol = 0.02;
 %tol = 0.005;
 option_plot = 0;
-option_check_mono = 1;
+option_check_mono = 0;
 mono = zeros(1, numParams); % store mononicity check results
+guess_mono = ones(1,numParams); % if mononicity check returns uncetain results, set mono based on guessing 
 robustness  = -1;
 %theta_lb = 0;%theta_ub = 60;
 nLoop = 1;
@@ -95,7 +97,7 @@ falsify_obj.PrintParams();
 while robustness < 0 && nLoop < maxLoop && termination == false
     
     [falsify_obj, robustness, best_value, param.values, mono, nLoop, termination] = falsification(falsify_obj, param.names, param.values, safe_distance ...
-                                                                   , best_value, tol, mono, nLoop,termination, option_check_mono, option_plot);
+                                                                   , best_value, tol, mono, guess_mono, nLoop,termination, option_check_mono, option_plot);
     
 %     falsify_obj.SetParamRanges('theta',[theta_lb theta_ub]);
 %     falsify_pb = FalsificationProblem(falsify_obj, safe_distance);
@@ -127,8 +129,9 @@ end
 % synth_pb.solve();
 %theta_best = synth_pb.x_best;
 
-tElapsed=toc(tStart);
-fprintf('Total execution time: time %f\n',tElapsed);
+tElapsed=toc(tStartE);
+fprintf('Total transformation time %f\n',tTransform);
+fprintf('Total synthesize time: time %f\n',tElapsed);
 %open_system([modelName,'.mdl'])
 
 %save model file

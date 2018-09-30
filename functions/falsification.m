@@ -1,10 +1,10 @@
-function [obj, robustness, best_value, inputValues, mono, nLoop, termination] = falsification(obj, inputName,inputValues, spec, best_value, tol, mono, nLoop, termination, option_check_mono, option_plot)
+function [obj, robustness, best_value, inputValues, mono, nLoop, termination] = falsification(obj, inputName,inputValues, spec, best_value, tol, mono, guess_mono, nLoop, termination, option_check_mono, option_plot)
     numIn = length(inputName);
     % Create falsification object
     for i = 1:numIn
         obj.SetParamRanges({inputName{i}},inputValues{i})
     end
-    obj.PrintParams();
+    %obj.PrintParams();
     falsify_pb = FalsificationProblem(obj, spec);
     % chose optimization solver, see falsify_pb.list_solvers()
     falsify_pb.setup_solver('cmaes');
@@ -27,6 +27,9 @@ function [obj, robustness, best_value, inputValues, mono, nLoop, termination] = 
         end
     end
     for i = 1:numIn
+        if mono(i) == 0
+            mono(i)= guess_mono(i);
+        end
         if mono(i) > 0 
             inputValues{i}(1) = best_value(i) + tol;
             %inputValues{i}(1) = ceil(best_value(i) + tol);
