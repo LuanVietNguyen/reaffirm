@@ -4,7 +4,7 @@ classdef sinusoid_signal_gen < signal_gen
     % sinusoid_signal_gen Methods
     %   pulse_signal_gen -  constructor, takes signal names, and an optional p0.
     %                       Each signal 'x' gets a 'x_sin_amp' and 'x_sin_offset' parameter, with default
-    %                       to 1, and 0, respectively.
+    %                       to 1, 0, and 0, respectively.
     %
     %  See also signal_gen.
     methods
@@ -12,13 +12,12 @@ classdef sinusoid_signal_gen < signal_gen
         function this = sinusoid_signal_gen(signals, p0)
             this.signals = signals;
             this.params = {};
-            this.p0 = zeros(3*numel(signals), 1);
+            this.p0 = zeros(2*numel(signals), 1);
             
            for i_s = 1:numel(this.signals)
                this.params = { this.params{:} [this.signals{i_s} '_sin_amp'] ...
-                              [this.signals{i_s} '_sin_freq'] ...
                               [this.signals{i_s} '_sin_offset']};
-               this.p0(3*(i_s-1)+1:3*i_s,1) = [1 1 0];
+               this.p0(2*(i_s-1)+1:2*i_s,1) = [1 0];
            end     
            
            if nargin == 2
@@ -30,25 +29,21 @@ classdef sinusoid_signal_gen < signal_gen
         end
         % The class must implement a method with the signature below
         function [X, time] = computeSignals(this, p, time)
-            if numel(p) ~= 3*numel(this.signals)
+            if numel(p) ~= numel(this.signals)
                 error('Wrong number of parameters for computing sinusoid signal.' )
             end
             if size(p,1) ==1
                 p = p';
             end
-            X = zeros(numel(this.signals),numel(time));
+            X = zeros(numel(this.signalls),numel(time));
             
             for i_s = 0:numel(this.signals)-1 
-                pi_s = p(3*i_s+1:3*i_s+3);
+                pi_s = p(2*i_s+1:2*i_s+2);
                 amplitude = pi_s(1);
-                frequency = pi_s(2);
-                offset = pi_s(3);
-                X(i_s+1,:) = amplitude*cos(2*pi*frequency*time)+ offset;          
+                offset = pi_s(2);
+                X(i_s+1,:) = amplitude*cos(time)+ offset;          
             end
 
-        end
-        function type = getType(this)
-            type = 'sinusoid';
         end
     end
 end

@@ -191,8 +191,8 @@ classdef BreachSet < BreachStatus
                     nparam = params;
                 end
                 if ~exist('is_spec_param','var')||isequal(is_spec_param,false)
-                    warning('SetParam:param_not_in_list',['Parameter ' nparam ' was set but is not a system parameter.' ...
-                        ' If this is intended to be a spec. parameter, consider using SetParamSpec instead.']);
+                    %warning('SetParam:param_not_in_list',['Parameter ' nparam ' was set but is not a system parameter.' ...
+                        %' If this is intended to be a spec. parameter, consider using SetParamSpec instead.']);
                 end
             end
             

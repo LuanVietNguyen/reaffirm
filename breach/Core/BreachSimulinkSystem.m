@@ -121,12 +121,12 @@ classdef BreachSimulinkSystem < BreachOpenSystem
             mdl_breach = [mdl '_breach'];
             load_system(mdl);
 
-            % Get checksum of the model
-            try
-            this.mdl_checksum = Simulink.BlockDiagram.getChecksum(mdl);
-            catch
-                warning('BreachSimulinkSystem:get_checksum_failed', 'Simulink couldn''t compute a checksum for the model.');
-            end
+%             % Get checksum of the model
+%             try
+%             this.mdl_checksum = Simulink.BlockDiagram.getChecksum(mdl);
+%             catch
+%                 warning('BreachSimulinkSystem:get_checksum_failed', 'Simulink couldn''t compute a checksum for the model.');
+%             end
             close_system(mdl_breach,0);
             save_system(mdl,[breach_data_dir filesep mdl_breach]);
             close_system(mdl,0);

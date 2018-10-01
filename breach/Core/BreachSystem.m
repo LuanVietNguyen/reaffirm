@@ -299,6 +299,7 @@ classdef BreachSystem < BreachSet
             end
             
             gca;
+            %SplotSat(this.Sys,this.P, phi, depth, tau, ipts);
             SplotSat(this.Sys,this.P, phi, depth, tau, ipts);
         end
         
@@ -404,9 +405,8 @@ classdef BreachSystem < BreachSet
             opt.ubound = ranges(:,2)';
             opt.plot = 2;
             P0 = Sselect(this.P,1);
-            
+           
             [~, ~, ~, Pr, EE]= SPropSensi(this.Sys, P0, phi, opt);
-            EE
             monotonicity = all(EE'>=0)-all(EE'<=0); % 1 if all positive, -1 if all negative, 0 otherwise
         end
         
