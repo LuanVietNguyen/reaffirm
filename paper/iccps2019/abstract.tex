@@ -8,20 +8,22 @@ However, as new vulnerabilities are discovered, requirements evolve aimed at ens
 There is currently a shortage of an inexpensive, automated mechanism that can effectively repair the initial design, and a model-based system developer regularly needs to redesign and reimplement the system from scratch.
 %
 %Current methodology demands an expensive, and at times infeasible, redesign and reimplementation of the system from scratch.
-\JW{Fixed:This is a very strong statement -- maybe weaken it a bit to avoid angering reviewers.}
+%\JW{Fixed:This is a very strong statement -- maybe weaken it a bit to avoid angering reviewers.}
 %
-In this paper, we propose a new methodology along with a Matlab toolkit called \toolreaffirm to facilitate the integration of evolving cyber-physical resiliency  requirements \JW{Fixed: resiliency requirements is very vague -- can we be more specific?  Maybe cyber-physical resiliency requirements?} in model-based design for CPSs.
+In this paper, we propose a new methodology along with a Matlab toolkit called \toolreaffirm to facilitate the model-based repair for improving the resiliency of CPSs.  
 %
-\toolreaffirm contains two main modules, a model transformation, and a model synthesizer. 
+%the integration of evolving cyber-physical resiliency  requirements in model-based design for CPSs.
+% \JW{Fixed: resiliency requirements is very vague -- can we be more specific?  Maybe cyber-physical resiliency requirements?} 
+\toolreaffirm takes an original hybrid system modeled as Simulink/Stateflow diagram, a given resiliency pattern specified as a \emph{model transformation script}, and a safety requirement expressed as a Signal Temporal Logic formula as inputs, and then synthesizes (outputs) a repaired model which satisfies the requirement. 
 %
-The first module applies a given resiliency pattern specified as a model transformation script to an original model and produces a candidate resilient model that contains parameters for which the values need to be synthesized. 
+The overall structure of \toolreaffirm contains two main modules, a model transformation, and a model synthesizer built on top of the falsification tool Breach.  
 %
-The second module built on top of the falsification tool Breach takes a parametrized model as an input and performs a search over the space of parameter domains to find the best values for which the input safety requirement, expressed as a Signal Temporal Logic formula, satisfied.
+We introduce a new model transformation language for hybrid systems, which we call HATL to allow the designer to specify resiliency patterns. 
 %
-%synthesis of parameter values that makes the requirement, expressed as a formula in the Signal Temporal Logic, satisfied. %It internally uses the falsification tool Breach properly to search over the space of parameter values and find the best values for which the input safety property is violated. %Based on the counterexample produced by Breach, parameter ranges are tightened, and the process repeats until the property is satisfied. 
-\JW{Fixed: The discussion of the second module seems a bit long -- we have the whole paper to describe the specifics of the tool.}
+%The first module applies a given resiliency pattern specified as a model transformation script to an original model and produces a candidate resilient model that contains parameters for which the values need to be synthesized. 
 %
+%The second module built on top of the falsification tool Breach takes a parametrized model as an input and performs a search over the space of parameter domains to find the best values for which the input safety requirement, expressed as a Signal Temporal Logic formula, satisfied.
 %
-To evaluate the proposed approach, we use \toolreaffirm to automatically synthesize resilient models for an adaptive cruise control (ACC) system under GPS sensor spoofing attacks, and for a single-machine infinite-bus (SMIB) system under a sliding-mode switching attack.
+To evaluate the proposed approach, we use \toolreaffirm to automatically synthesize repaired models for an adaptive cruise control (ACC) system under GPS sensor spoofing attacks, and for a single-machine infinite-bus (SMIB) system under a sliding-mode switching attack.
 %
 \end{abstract} 	
