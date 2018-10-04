@@ -18,22 +18,22 @@ The parameter mining procedure is guided by the counterexample obtained from the
 On the other hand, Breach can compute the sensitivity of execution traces to the initial conditions, which can be used to obtain completeness results by performing systematic simulations. Moreover, Breach provides an input generator for engineers to specify different testing input patterns such as step, pulse width, sinusoid, and ramp signals. This input generator is designed to be extensible, so users can write a specific input pattern to test their model against particular attack scenarios.
 
 
-We note that although Breach cannot completely prove the system correctness, it can efficiently find bugs existing in the initial design of CPS that are too complex to be formally verified~\cite{kapinski2015simulation}. These bugs are essential for an engineer to specify resilient patterns to repair the model. 
+We note that although Breach cannot completely prove the system correctness, it can efficiently find bugs existing in the initial design of CPS that are too complex to be formally verified~\cite{kapinski2015simulation}. These bugs are essential for an engineer to specify resiliency patterns to repair the model. 
 %
 Moreover, the general problem of verifying a CPS modeled as a hybrid system is proved to be \emph{undecidable}~\cite{henzinger1995s}. 
 %
 Instead, the falsification algorithms embedded within Breach are scalable and work properly for black-box hybrid systems with different classes of dynamics.
 %
-Thus, in practice, engineers prefer to use counterexamples obtained by a falsification tool to refine their design. Our prototype \toolreaffirm utilizes the advantages of Simulink/Stateflow modeling framework and the falsification tool Breach to design a resilient pattern and perform the model synthesis for a resilient CPS.
+Thus, in practice, engineers prefer to use counterexamples obtained by a falsification tool to refine their design. Our prototype \toolreaffirm utilizes the advantages of Simulink/Stateflow modeling framework and the falsification tool Breach to design a resiliency pattern and perform the model synthesis for a resilient CPS.
 %
 \subsection{Model Synthesis using Breach}
 Next, we describe how to use Breach to synthesize parameters values for the parametrized model returned from the model transformation tool. The parameter synthesis procedure include following steps.
 
 \begin{enumerate}[leftmargin= 2 em]
-\item We specify the initial conditions of state variables and parameters, the set of parameters $\P_s$ that need to be mined, their certain ranges of values $\bar{\P_s}$, and the maximum time (or number of iterations) for the optimization solver of Breach.
-\item Next, we call the falsifier loop within Breach to search for a counterexample. For each iteration, if the counterexample is exposed, the unsafe values of $\P_s$ will be returned. Based on these values, the tool will automatically update the parameter domain $\bar{\P_s}$ to the new domain $\bar{\P'_s} \subset \bar{\P_s}$, and then continue the falsification loop.
-\item The process repeats until the property is satisfied which means that the falsifier cannot find the counterexample until the user-specified limit on the number of iterations for the solver is reached. 
-\item As a result, the tool returns the best (and safe) values of $\P_s$, updates the parametrized model with these values, and then exports the completed model.   
+\item We first specify the initial conditions of state variables and parameters, the set of parameters $\P_s$ that need to be mined, their certain ranges of values $\bar{\P_s}$, and the maximum time (or number of iterations) for the optimization solver of Breach.
+\item Next, we call the falsification loop within Breach to search for a counterexample. For each iteration, if the counterexample is exposed, the unsafe values of $\P_s$ will be returned. Based on these values, the tool will automatically update the parameter domain $\bar{\P_s}$ to the new domain $\bar{\P'_s} \subset \bar{\P_s}$, and then continue the falsification loop.
+\item The process repeats until the property is satisfied that means the falsifier cannot find a counterexample and the user-specified limit on the number of optimized iterations (or time) for the solver expires.  
+\item Finally, the tool returns the best (and safe) values of $\P_s$, updates the parametrized model with these values, and then exports the completed model. If the synthesizer fails to find the values of $\P_s$ over the given range $\bar{\P_s}$ so that the safety requirement is satisfied, it will recommend a designer to either search over different parameter ranges or attempt another resiliency pattern.
 \end{enumerate}
 
 \vspace{0.5em}

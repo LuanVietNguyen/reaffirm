@@ -8,7 +8,7 @@
 %\vspace{-0.5em}
 % 
 \subsection{Representation of Hybrid System}
-Hybrid automata~\cite{alur1995algorithmic} are a modeling formalism popularly used to model hybrid systems which include both continuous dynamics and discrete state transitions. A hybrid automaton is essentially a finite state machine extended with a set of real-valued variables evolving continuously over intervals of real-time~\cite{alur1995algorithmic}.\footnote{In this paper, we only consider \emph{deterministic} systems, where the system produces the same output for a given input. Note the contrast with {\em stochastic} systems in which one or more elements of the system have randomness associated with them; for example, the value of some system parameter may be extracted from a probability distribution. As a result, the stochastic system may yield different outputs for a given input.} 
+Hybrid automata~\cite{alur1995algorithmic} are a modeling formalism popularly used to model hybrid systems which include both continuous dynamics and discrete state transitions. A hybrid automaton is essentially a finite state machine extended with a set of real-valued variables evolving continuously over intervals of real-time~\cite{alur1995algorithmic}\footnote{In this paper, we only consider \emph{deterministic} systems, where the system produces the same output for a given input. Note the contrast with {\em stochastic} systems in which one or more elements of the system have randomness associated with them; for example, the value of some system parameter may be extracted from a probability distribution. As a result, the stochastic system may yield different outputs for a given input.}. 
 %
 %%
 The main structure of a hybrid automaton $\AutomatonH$ includes the following components.
@@ -69,11 +69,11 @@ Intuitively, a transition in a Stateflow chart is triggered as soon as the trans
 %{\bf Hybrid Automata.}
 
 \subsection{Hybrid Automata Transformation Language}
-In our approach, the partial model of the system, which satisfies functional but not necessarily resiliency requirements is originally modeled in the form of hybrid automata. The model transformation that is at the core of \toolreaffirm tool will then attempt to add resilient modules to the system and modify switching logic between modes of the automata, by applying resilient patterns. 
+In our approach, the partial model of the system, which satisfies functional but not necessarily resiliency requirements is originally modeled in the form of hybrid automata. The model transformation that is at the core of \toolreaffirm tool will then attempt to add resilient modules to the system and modify switching logic between modes of the automata, by applying resiliency patterns. 
 %
 %
 %
-In order to specify resilient patterns for hybrid automata, we introduce a new transformation language called HATL (Hybrid Automata Transformation Language). The goal of HATL is to allow a designer to repair an original model in a programmable fashion. A script written in HATL is a sequence of \emph{statements} that specify the changes over the structure of given hybrid automata. There are three types of statements in HATL including
+In order to specify resiliency patterns for hybrid automata, we introduce a new transformation language called HATL (Hybrid Automata Transformation Language). The goal of HATL is to allow a designer to repair an original model in a programmable fashion. A script written in HATL is a sequence of \emph{statements} that specify the changes over the structure of given hybrid automata. There are three types of statements in HATL including
 \begin{inparaenum}[(a)]
 \item the \emph{loop} statement that iterates over the modes and transitions of a hybrid automaton,
 \item the \emph{function call} statement that represents basic \emph{transformation rule} implemented as in a standard library for HATL. A function call statement may or may not have arguments. Several examples of such a basic function call is \emph{addMode}() (\ie generating a new empty mode), or \emph{addTransition}($m$, $m'$, $g$) (\ie creating a transition from mode $m$ to $m'$ with a guard condition $g$).
@@ -125,7 +125,7 @@ In order to specify resilient patterns for hybrid automata, we introduce a new t
 %\end{figure}
 %
 
-The model transformation tool built in \toolreaffirm takes a resilient pattern written as HATL script, parses it to an intermediate representation, which is a set of data structures encoding the syntax of a hybrid automaton in Python. As we represent hybrid automata as continuous-time Stateflow charts,
+The model transformation tool built in \toolreaffirm takes a resiliency pattern written as HATL script, parses it to an intermediate representation, which is a set of data structures encoding the syntax of a hybrid automaton in Python. As we represent hybrid automata as continuous-time Stateflow charts,
 %
 The HATL script then will be translated to a MATLAB script that performs a modification to the Stateflow chart through its API (Application Programming Interface). As an example, \figref{translatecode} describes the translated MATLAB script of the HATL script shown in \figref{examplecode}. The translation to MATLAB is straightforward except that the iteration over each transition in MATLAB should neglect the \emph{default transition}\footnote{While Stateflow chart requires that the default transitions should be explicitly specified for exclusive (OR) states at every level of a hierarchy, other modeling frameworks of hybrid automata often describe it separately in a configuration file.}.  
 %

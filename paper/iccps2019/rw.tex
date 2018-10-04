@@ -4,11 +4,11 @@
 The idea of our methodologies proposed in this paper is inspired from the concept of \emph{program sketching}~\cite{solar2013program,solar2005programming}, and the recent works on completion of distributed protocols~\cite{alur2017automatic, alur2015automatic, alur2014synthesizing}. Given a model of the \emph{incomplete} distributed protocol, which is a set of communicating finite-state processes with incomplete transition relations, a model of the environment, and its correctness requirements specified in temporal logic~\cite{clarke2000model}, determine a \emph{completion} of the finite state machines (FSMs) for the processes such that the composition satisfies all the requirements. This approach can be viewed as a fruitful collaboration between the designer and the synthesis tool where a programmer needs to provide a \emph{skeleton} of the desired protocol, and some details that the programmer is unsure about, for instance, regarding corner cases and handling of unexpected messages, and the synthesizer will automatically complete it with adding transitions.
 %
 %
-Instead of synthesizing a \emph{complete} FSM, we address the problem of automatic repair of CPSs modeled as hybrid automata%, which is an extended FSM with a set of real-valued variables evolving continuously over intervals of real-time.  
+Instead of synthesizing a \emph{complete} FSM, we address the problem of automatic repair of CPSs modeled as hybrid automata.%, which is an extended FSM with a set of real-valued variables evolving continuously over intervals of real-time.  
 %
 %
 %
-In our approach, a designer needs to provide a model transformation script that transforms an initial model to a new version whose parameters values will be determined by the synthesizer to provide resilience. 
+ In our approach, a designer needs to provide a model transformation script that transforms an initial model to a new version whose parameters values will be determined by the synthesizer to provide resilience. 
 %
 
 In the context of the model transformation, GREAT is a metamodel-based graph transformation language that can be used to perform different transformations on domain-specific models~\cite{agrawal2003graph, agrawal2003end}. GREAT has been used to translate Simulink/Stateflow models to Hybrid Systems Interchange Format (HSIF)~\cite{agrawal2004semantic}. Such a translation scheme is accomplished by executing a sequence of translation rules described using UML Class Diagram in a specific order. %
