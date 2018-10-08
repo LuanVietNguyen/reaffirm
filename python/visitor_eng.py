@@ -16,6 +16,8 @@ from matlab import engine
 from matlab.engine import MatlabExecutionError
 import io
 
+scriptFile = None
+
 def doCleanup():
     print("TODO: cleanup MATLAB engine / Stateflow edits properly")
 
@@ -26,30 +28,28 @@ def errorClose(ctx, msg):
     doCleanup()
     exit()
 
-class ContextError(Exception):
-    def __init__(self, ctx, message):
-        self.line = ctx.start.line
-        self.col = ctx.start.column
-        self.message = "Line: " + str(self.line) + ", Column: " + str(self.col) + " " + message
-
-class RefError(ContextError):
-    def __str__(self):
-        return self.message
-
-class SizeError(ContextError):
-    def __str__(self):
-        return self.message
-
 def issingle(ctx, arg):
     single = None
     if hasattr(arg,'size'): #arg is a matlab object
         single = arg.size == (1,1)
     else:
         single = len(arg) == 1
-
     if not single:
-        raise(SizeError(ctx, "error: Argument in expression '" +
-                        ctx.getText() + "' must be a single value"))
+        errorClose(ctx, "error: Argument in expression '" +
+                        ctx.getText() + "' must be a single value")
+
+def istype(ctx, arg, ty):
+    if not isinstance(arg,ty):
+        errorClose(ctx, "error: In '" + ctx.getText() +
+                   "', argument is a '" + type(arg).__name__ +
+                   "', must be a '" + ty.__name__ + "'")
+
+def ismode(ctx, arg): istype(ctx, arg, Mode)
+def istrans(ctx, arg): istype(ctx, arg, Transition)
+def ismodel(ctx, arg): istype(ctx, arg, Model)
+def istext(ctx, arg): istype(ctx, arg, str)
+
+def check(ctx,arg, predicates): [p(ctx, arg) for p in predicates]
 
 class Model:
     def __init__(self, matlab_var, engine):
@@ -64,16 +64,18 @@ class Model:
                  self.transitions.remove(t)
         self.param = None
 
-    def addMode(self,ctx,  mode):
-        pdb.set_trace()
-        issingle(ctx, mode)
+    def addMode(self, ctx, mode):
+        check(ctx,mode,[ismode, issingle])
 
         raw_mode = self.engine.addState(self.matlab_var, mode.matlab_var)
         newmode = Mode(raw_mode, self.engine)
         self.modes.add(newmode)
         return newmode
 
-    def addTransition(self, src, dest, eqn):
+    def addTransition(self, ctx, src, dest, eqn):
+        check(ctx, src, [ismode, issingle])
+        check(ctx, dest,[ismode, issingle])
+        istext(ctx, eqn)
 
         raw_trans = self.engine.addTransition(self.matlab_var,
                                              src.matlab_var, dest.matlab_var, eqn)
@@ -81,22 +83,24 @@ class Model:
         self.transitions.add(newtrans)
         return newtrans
 
-    def addParam(self,param):
+    def addParam(self, ctx, param):
+        istext(ctx, param)
         self.param = self.engine.addParam(self.matlab_var,param)
 
-    def addLocalVar(self, localvar):
+    def addLocalVar(self, ctx, localvar):
+        istext(ctx, param)
         self.localVar = self.engine.addVariable(self.matlab_var,localvar,'Local')
 
-    def copyModel(self):
+    def copyModel(self, ctx):
         mvar = self.engine.copyModel(self.matlab_var, "chart")
         return CopyModel(mvar, self.engine)
 
-    def getCopy(self, mode):
+    def getCopy(self, ctx, mode):
         copymodes = [m for m in self.modes if m.name == (mode.name + '_copy')]
         if copymodes == []:
-            raise(Exception("Cannot find copy of mode"))
+            errorClose(ctx, "In '" + ctx.getText() + "', did not find a copy of the mode ")
         elif len(copymodes) > 1:
-            raise(Exception("Returned multiple modes...is this bad?"))
+            errorClose(ctx, "Error: In '" + ctx.getText() + "', multiple copies found.")
 
         return copymodes[0]
 
@@ -125,7 +129,9 @@ class Mode:
         self.outgoing = 2
         self.incoming = 2
 
-    def replace(self,old_var,new_var):
+    def replace(self,ctx, old_var,new_var):
+        istext(ctx, old_var)
+        istext(ctx, new_var)
         old_flow = self.engine.get(self.matlab_var,'LabelString')
         new_flow = old_flow.replace(old_var,new_var)
         self.engine.set(self.matlab_var,'LabelString',new_flow,nargout=0)
@@ -133,20 +139,20 @@ class Mode:
     #Flow is read-only, since updates must happen per-mode otherwise
     #changes will not be propagated to MATLAB
     @property
-    def flow(self):
+    def flow(self, ctx):
         return self.engine.get(self.matlab_var,'LabelString')
 
     @property
-    def size(self):
+    def size(self, ctx):
         return self.matlab_var.size
 
     @property
-    def name(self):
+    def name(self, ctx):
         return self.engine.get(self.matlab_var,'Name')
 
-    def addFlow(self, eqn):
+    def addFlow(self, ctx, eqn):
+        istext(ctx, eqn)
         self.engine.addFlow(self.matlab_var, eqn,nargout=0)
-
 
 
 class Transition:
@@ -164,11 +170,20 @@ class Transition:
         self.guard = getField('LabelString')
         self.start = False
 
-    def addGuardLabel(self, relation, label):
+    def addGuardLabel(self, ctx, relation, label):
+        istext(ctx, relation)
+        istext(ctx, label)
+
         self.engine.addGuardLabel(self.matlab_var,relation,label,nargout=0)
 
-    def addResetLabel(self, label):
+    def addResetLabel(self, ctx, label):
+        istext(ctx, label)
+
         self.engine.addResetLabel(self.matlab_var,label,nargout=0)
+
+    @property
+    def size(self, ctx):
+        return self.matlab_var.size
 
 
 class MATLABVisitor(ReaffirmVisitor):
@@ -208,7 +223,6 @@ class MATLABVisitor(ReaffirmVisitor):
     def visitAssignment(self, ctx:ReaffirmParser.AssignmentContext):
         return self.visitChildren(ctx)
 
-
     # Visit a parse tree produced by ReaffirmParser#loop.
     def visitLoop(self, ctx:ReaffirmParser.LoopContext):
         print("visitLoop")
@@ -245,7 +259,7 @@ class MATLABVisitor(ReaffirmVisitor):
         try:
             return self.env[ctx.getText()]
         except KeyError as e:
-            raise(RefError(ctx,"Unknown reference to '" + ctx.getText() + "'")) from e
+            errorClose(ctx,"Unknown reference to '" + ctx.getText() + "'")
 
     # Visit a parse tree produced by ReaffirmParser#objectRef.
     def visitObjectRef(self, ctx:ReaffirmParser.ObjectRefContext):
@@ -256,7 +270,7 @@ class MATLABVisitor(ReaffirmVisitor):
         try:
             obj = self.env[ident]
         except KeyError as e:
-            raise(RefError(ctx,"Unknown reference to '" + ident + "'")) from e
+            errorClose(ctx,"Unknown reference to '" + ident + "'")
 
         for ref in refs:
             attr = None
@@ -266,7 +280,7 @@ class MATLABVisitor(ReaffirmVisitor):
             try:
                 attr = getattr(obj,refname)
             except AttributeError as e:
-                raise(RefError(ref,"Unknown reference to " + refname)) from e
+                errorClose(ref,"Unknown reference to " + refname)
 
             #if attr is a fieldref, resolve it.
 
@@ -286,7 +300,12 @@ class MATLABVisitor(ReaffirmVisitor):
                 assert(len(arglist) <= 1)
                 if arglist:
                     args = getNonTerminals(arglist[0].children)
-                    obj = attr(ref, *[self.visit(arg) for arg in args])
+                    try:
+                        obj = attr(ref, *[self.visit(arg) for arg in args])
+                    except TypeError:
+                        raise
+                        errorClose(ctx,"Incorrect number of arguments in '"
+                                   + ctx.getText() + "'")
                 else:
                     obj = attr()
 
@@ -337,9 +356,9 @@ class MATLABVisitor(ReaffirmVisitor):
         try:
             arr = self.env[loop_var]
         except KeyError:
-            raise(RefError(ctx,"Unknown reference to '" + loop_var + "'"))
+            errorClose(ctx,"Unknown reference to '" + loop_var + "'")
         if len(arr) < 1:
-            raise Exception("Cannot loop over empty variable")
+            errorClose(ctx,"Error: '" + loop_var +"' is empty, unable to loop")
 
         for val in arr.copy():
             self.env[loop_var] = val
@@ -382,6 +401,9 @@ class MATLABVisitor(ReaffirmVisitor):
 
 
 def parse_script(script, modelfile,modelname=None):
+
+    global scriptFile
+    scriptFile = script
 
     s = FileStream(script)
     parser = ReaffirmParser(CommonTokenStream(ReaffirmLexer(s)))
