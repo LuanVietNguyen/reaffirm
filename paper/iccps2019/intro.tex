@@ -1,3 +1,4 @@
+%!TEX root = main.tex
 \section{Introduction}
 \label{sec:intro}
 %
@@ -34,14 +35,17 @@ The rapidly expanding field of CPSs precipitated a corresponding growth in secur
 %
 \begin{figure}[t!]%
 	\centering%
-    \includegraphics[width=0.48\textwidth]{image/overview}%
+    %\includegraphics[width=0.48\textwidth]{image/acc_abstract_model}%
+		\includegraphics[width=0.48\textwidth]{image/overview}%
 		%\includegraphics[trim = 17mm 85mm 17mm 0mm, clip, width=0.95\textwidth]{image/spectral_signal}%
 		%\vspace{-1em}
 	\caption{\toolreaffirm Overview.}%
 	\figlabel{overview}%
 	%\vspace{-1em}
 \end{figure}%
-Traditionally a model of a CPS consists of block diagrams describing the system architecture and a combination of state machines and differential equations describing the system dynamics~\cite{alur1995algorithmic}. Suppose the designer has initially constructed a model of a CPS that satisfies correctness requirements, but at a later stage, this correctness guarantee is invalidated, possibly due adversarial attacks on sensors, or violation of environment assumptions. Current techniques for secure-by-design systems engineering do not provide a formal way for a designer to specify a resiliency pattern to automatically repair system models based on evolving resiliency requirements under unanticipated attacks. In this paper, we propose a new methodology and an associated toolkit, which we call \toolreaffirm, to assist a designer in repairing the original behavior model to generate the completed behavior model with resilience. %\JW{Fixed: We haven't introduced the notion of a partial model yet -- this will be confusing to the reviewers.}
+Traditionally a model of a CPS consists of block diagrams describing the system architecture and a combination of state machines and differential equations describing the system dynamics~\cite{alur1995algorithmic}. Suppose the designer has initially constructed a model of a CPS that satisfies correctness requirements, but at a later stage, this correctness guarantee is invalidated, possibly due adversarial attacks on sensors, or violation of environment assumptions. Current techniques for secure-by-design systems engineering do not provide a formal way for a designer to specify a resiliency pattern to automatically repair system models based on evolving resiliency requirements under unanticipated attacks. 
+
+In this paper, we propose a new methodology and an associated toolkit, which we call \toolreaffirm, to assist a designer in repairing the original behavior model to generate the completed behavior model with resilience. %\JW{Fixed: We haven't introduced the notion of a partial model yet -- this will be confusing to the reviewers.}
 %
 The proposed technique relies on designing a collection of \emph{potential edits} (or \emph{resiliency patterns}) to the original model to generate the new model whose parameters values can be determined by solving the \emph{parameter synthesis problem}. 
 %\JW{Fixed: does designing a collection of resiliency patterns solve the model synthesis problem?  I don't think it does -- perhaps we can re-word this.}
@@ -49,8 +53,8 @@ The proposed technique relies on designing a collection of \emph{potential edits
 %\JW{Fixed: This seems trivial -- why do we need a tool to do this?  Perhaps you can change "conservative" to "trivial" -- and move this sentence to after the next sentence.}
 %
 %
-\figref{overview} shows an overview of \toolreaffirm, which contains two mains modules including a \emph{model transformation} and a \emph{model synthesizer}.
-\toolreaffirm takes an original design modeled as Simulink/Stateflow (SLSF) diagram, a resiliency pattern specified by the designer and the safety requirement expressed as an Signal Temporal Logic (STL)~\cite{maler2004monitoring} formula as inputs, and then utilizes the falsification tool Breach to synthesize the repaired SLSF model that satisfies the safety requirement.
+\figref{overview} shows an overview of \toolreaffirm, which contains two mains modules including a \emph{model transformation} and a \emph{model synthesizer} built on top of the falsification tool Breach~\cite{donze2010breach}.
+\toolreaffirm takes the inputs including the original system modeled as a Simulink/Stateflow (SLSF) diagram, the resiliency pattern specified by the designer and the safety requirement expressed as a Signal Temporal Logic (STL)~\cite{maler2004monitoring} formula, and then utilizes the falsification tool Breach to synthesize the repaired SLSF model that satisfies the safety requirement.
 
 %There is currently lack of an automated mechanism that can efficiently repair the initial design and provide resilience.  
 %
@@ -84,20 +88,25 @@ The proposed technique relies on designing a collection of \emph{potential edits
 %
 To allow the designer to specify resiliency patterns we have developed a new \emph{model transformation language} for hybrid systems, called HATL.
 %
-Such a transformation language allows a designer to specify a resiliency pattern in a generic manner, without knowing the internal structures of a system. To the best of our knowledge, this transformation language is the first effort to design a programmable pattern for the modeling and repairing of resilient CPSs. 
+A HATL script is a sequence of statements that describe the modifications over the structure of hybrid systems molded as hybrid automata~\cite{alur1995algorithmic}.  An example of such a modification is adding new modes of operation as well as new transitions between different modes into the initial model to create the new one. 
+%
+The proposed language allows a designer to specify a resiliency pattern in a generic manner, programmatically modify the initial design without knowing the internal structures of a system. The interpreter of HATL is implemented in Python with the backend is extensible for the translations to different modeling frameworks of hybrid systems. The current implementation of HATL supports the translation of a HATL script to an equivalent MATLAB script that can perform the model transformation for Stateflow models.
+%
+To the best of our knowledge, this transformation language is the first effort to design a programmable pattern to repair CPSs models for improving resiliency.
 %
 %\OS{Fixed: I would rephrase this to make the connection with the earlier statement that a pattern needs to be specified as input. Consider "to allow the designer to specify a resilience pattern, we have developed..."}
 %For example, a conservative way ensuring safety upon encountering an unexpected or hazardous situation is to hand over control to a baseline safety controller.
 
-For evaluation, we apply \toolreaffirm to automatically synthesize the repaired models for two proof-of-concept case studies in the domains of automotive control and smart power systems. The first case study is a simplified model of an adaptive cruise control (ACC) system under the GPS sensor spoofing attacks, and the potential pattern to fix the model is to use the wheel encoders, which are additional (redundant) sensors for estimating a vehicle's velocity. The second case study is a single-machine infinite-bus model (SMIB), which is an approximation of a smart power grid, under a sliding-mode attack. In this case, the mitigation strategy is to increase the minimal dwell-time to avoid rapid changes between different operation modes. 
-
-
+For evaluation, we apply \toolreaffirm to automatically synthesize the repaired models for two proof-of-concept case studies in the domains of automotive control and smart power systems. The first case study is a simplified model of an adaptive cruise control (ACC) system under the GPS sensor spoofing attacks, and the resiliency pattern to fix the model is to use the wheel encoders, which are additional (redundant) sensors for estimating a vehicle's velocity. The second case study is a single-machine infinite-bus model (SMIB), which is an approximation of a smart power grid, under a sliding-mode attack. In this case, the mitigation strategy is to increase the minimal dwell-time to avoid rapid changes between different operation modes. 
+%
+%
+%
 Overall, the main contributions of the paper are summarized as follows.
 %
 \begin{enumerate}[leftmargin= 2 em]
 \item the methodology to facilitate the model-based repair for improving the resiliency of CPSs against unanticipated attacks and failures,
 \item the design and implementation of an extensible model transformation language for specifying resiliency patterns used to repair CPS models,
-\item the end-to-end design and implementation of the tool-chain, which integrates the model transformation and the model synthesis tools to automatically repair CPS models,
+\item the end-to-end design and implementation of the toolkit, which integrates the model transformation and the model synthesis tools to automatically repair CPS models,
 \item the applicability of our approach on two proof-of-concept case studies where the resilient CPS models can be automatically constructed to mitigate practical attacks.
 \end{enumerate}
 %\JW{Fxied: an extensible?}

@@ -1,21 +1,35 @@
+%!TEX root = main.tex
 \section{Related Works}
 \seclabel{rw}
 %
-The idea of our methodologies proposed in this paper is inspired from the concept of \emph{program sketching}~\cite{solar2013program,solar2005programming}, and the recent works on completion of distributed protocols~\cite{alur2017automatic, alur2015automatic, alur2014synthesizing}. Given a model of the \emph{incomplete} distributed protocol, which is a set of communicating finite-state processes with incomplete transition relations, a model of the environment, and its correctness requirements specified in temporal logic~\cite{clarke2000model}, determine a \emph{completion} of the finite state machines (FSMs) for the processes such that the composition satisfies all the requirements. This approach can be viewed as a fruitful collaboration between the designer and the synthesis tool where a programmer needs to provide a \emph{skeleton} of the desired protocol, and some details that the programmer is unsure about, for instance, regarding corner cases and handling of unexpected messages, and the synthesizer will automatically complete it with adding transitions.
+%The idea of our methodologies proposed in this paper is inspired from the concept of \emph{program sketching}~\cite{solar2013program,solar2005programming}, and the recent works on completion of distributed protocols~\cite{alur2017automatic, alur2015automatic, alur2014synthesizing}. Given a model of the \emph{incomplete} distributed protocol, which is a set of communicating finite-state processes with incomplete transition relations, a model of the environment, and its correctness requirements specified in temporal logic~\cite{clarke2000model}, determine a \emph{completion} of the finite state machines (FSMs) for the processes such that the composition satisfies all the requirements. This approach can be viewed as a fruitful collaboration between the designer and the synthesis tool where a programmer needs to provide a \emph{skeleton} of the desired protocol, and some details that the programmer is unsure about, for instance, regarding corner cases and handling of unexpected messages, and the synthesizer will automatically complete it with adding transitions.
+%%
+%%
+%Instead of synthesizing a \emph{complete} FSM, we address the problem of automatic repair of CPSs modeled as hybrid automata.%, which is an extended FSM with a set of real-valued variables evolving continuously over intervals of real-time.  
 %
 %
-Instead of synthesizing a \emph{complete} FSM, we address the problem of automatic repair of CPSs modeled as hybrid automata.%, which is an extended FSM with a set of real-valued variables evolving continuously over intervals of real-time.  
 %
-%
-%
- In our approach, a designer needs to provide a model transformation script that transforms an initial model to a new version whose parameters values will be determined by the synthesizer to provide resilience. 
+%In our approach, a designer needs to provide a model transformation script that transforms an initial model to a new version whose parameters values will be determined by the synthesizer to provide resilience. 
 %
 
-In the context of the model transformation, GREAT is a metamodel-based graph transformation language that can be used to perform different transformations on domain-specific models~\cite{agrawal2003graph, agrawal2003end}. GREAT has been used to translate Simulink/Stateflow models to Hybrid Systems Interchange Format (HSIF)~\cite{agrawal2004semantic}. Such a translation scheme is accomplished by executing a sequence of translation rules described using UML Class Diagram in a specific order. %
+\vspace{0.5em}
+\noindent
+{\bf Model-based design of resilient CPSs.} Many significant research have been introduced to build resilient CPSs such as the approach proposed in~\cite{fitzgerald2012rigorous} that can be used to design a resilient CPS through co-simulation of discrete-event models, a modeling and simulation integration platform for secure and resilient CPS based on attacker-defender games proposed in~\cite{koutsoukos2018sure} with the corresponding testbed introduced in~\cite{neema2018integrated}, and the resilience profiling of CPSs presented in~\cite{jackson28resilience}. Although these approaches can leverage the modeling and testing for a resilient CPS, they do not offer a model repair mechanism as well as a generic approach to design a resiliency pattern when vulnerabilities are discovered. Our proposed method is complementary to those works as we provide a generic, programmable way for a designer to specify a potential edit that can effectively repair the model for improving resiliency.
+
+\vspace{0.5em}
+\noindent
+{\bf Formal analysis of hybrid systems.} Our approach utilizes Breach to synthesize an SLSF model due to its advantages in performing a falsification, systematic testing and parameter synthesis for hybrid systems. However, Breach cannot give a formal proof of the system correctness. Depending on the types of hybrid systems, other automatic verification tools can be considered to perform a reachability analysis or formally prove whether the system satisfy the given safety property. For examples, d/dt~\cite{asarin2002d} and SpaceEx~\cite{frehse2011cav} and  are well-known verification tool for linear/affine hybrid systems; Flow*\cite{chen2013flow} and dReach\cite{kong2015dreach} can be used to compute a reachable set of nonlinear hybrid automata; and C2E2 is a verification tool for Stateflow models~\cite{duggirala2015c2e2}. 
+%
+However, scalability is the main factor that limits the applications of those verification approaches to the formal analysis of hybrid systems. 
+
+  
+\vspace{0.5em}
+\noindent
+{\bf Model transformation languages of hybrid system.} In the context of the model transformation, GREAT is a metamodel-based graph transformation language that can be used to perform different transformations on domain-specific models~\cite{agrawal2003graph, agrawal2003end}. GREAT has been used to translate Simulink/Stateflow models to Hybrid Systems Interchange Format (HSIF)~\cite{agrawal2004semantic}. Such a translation scheme is accomplished by executing a sequence of translation rules described using UML Class Diagram in a specific order. %
 % 
 Other approaches that also perform a translation from Simulink diagrams to hybrid systems formalisms such as Timed Interval Calculus~\cite{chen2009formal}, Hybrid Communicating Sequential Processes~\cite{liu2010calculus}, Lustre~\cite{tripakis2005translating}, and SpaceEx~\cite{minopoli2016sl2sx}.  
 %
-HYST~\cite{bak2015hyst} is a conversion tool for hybrid automata which allows the same model to be analyzed simultaneously in several hybrid systems analysis tools. HYST takes a source input model in SpaceEx XML format~\cite{frehse2011spaceex}, parses it to an intermediate representation, and then prints a resulting output to some desired formats. HYST can automatically translate hybrid automata to \emph{trajectory-equivalent} Simulink/Stateflow models, which enables a \emph{correct-by-construction} compositional design for CPS with embedding hybrid automata into large-scale SLSF models~\cite{bak2017hybrid}.  
+HYST~\cite{bak2015hyst} is a conversion tool for hybrid automata which allows the same model to be analyzed simultaneously in several hybrid systems analysis tools. HYST takes a source input model in SpaceEx XML format~\cite{frehse2011spaceex}, parses it to an intermediate representation, and then prints a resulting output to some desired formats. HYST can automatically translate hybrid automata to \emph{trajectory-equivalent} SLSF models, which enables a \emph{correct-by-construction} compositional design for CPS with embedding hybrid automata into large-scale SLSF models~\cite{bak2017hybrid}.  
 %
 Unlike these approaches that focuses on the translation between different hybrid system modeling frameworks, our goal is to provide a lightweight programmable model transformation language for hybrid systems in which a designer only needs to write a simple script to repair the model.  
  

@@ -10,11 +10,12 @@ There is currently a shortage of an inexpensive, automated mechanism that can ef
 %Current methodology demands an expensive, and at times infeasible, redesign and reimplementation of the system from scratch.
 %\JW{Fixed:This is a very strong statement -- maybe weaken it a bit to avoid angering reviewers.}
 %
+%
 In this paper, we propose a new methodology along with a Matlab toolkit called \toolreaffirm to facilitate the model-based repair for improving the resiliency of CPSs.  
 %
 %the integration of evolving cyber-physical resiliency  requirements in model-based design for CPSs.
 % \JW{Fixed: resiliency requirements is very vague -- can we be more specific?  Maybe cyber-physical resiliency requirements?} 
-\toolreaffirm takes an original hybrid system modeled as Simulink/Stateflow diagram, a given resiliency pattern specified as a \emph{model transformation script}, and a safety requirement expressed as a Signal Temporal Logic formula as inputs, and then synthesizes (outputs) a repaired model which satisfies the requirement. 
+\toolreaffirm takes the inputs including an original hybrid system modeled as a Simulink/Stateflow diagram, a given resiliency pattern specified as a model transformation script, and a safety requirement expressed as a Signal Temporal Logic formula, and then synthesizes (outputs) a repaired model which satisfies the requirement. 
 %
 The overall structure of \toolreaffirm contains two main modules, a model transformation, and a model synthesizer built on top of the falsification tool Breach.  
 %
