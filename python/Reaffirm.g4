@@ -14,8 +14,7 @@ stat   		:	expr NEWLINE?     # printExpr
 
 block		: 	'{' stat* '}' ; // possibly empty statement block
 
-expr   		:	funcall 			# function
-    		|   ID					# id
+expr   		:   ID					# id
     		|   objref				# objectRef
     		|	STRING				# string
     		|   varDecl	            # varDec

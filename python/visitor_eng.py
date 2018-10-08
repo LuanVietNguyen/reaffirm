@@ -245,14 +245,6 @@ class MATLABVisitor(ReaffirmVisitor):
         print("visitBlock")
         return self.visitChildren(ctx)
 
-
-    # Visit a parse tree produced by ReaffirmParser#method.
-        # Visit a parse tree produced by ReaffirmParser#function.
-    def visitFunction(self, ctx:ReaffirmParser.FunctionContext):
-        print("visitFunction")
-        return self.visitChildren(ctx)
-
-
     # Visit a parse tree produced by ReaffirmParser#id.
     def visitId(self, ctx:ReaffirmParser.IdContext):
         print("visitId")
