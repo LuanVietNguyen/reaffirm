@@ -119,7 +119,7 @@ class CopyModel:
             if t.source.matlab_var.size == (0,0):
                 self.transitions.remove(t)
 
-    def copyModel(self):
+    def copyModel(self, ctx):
         return CopyModel(self, self.engine.copyModel(self.matlab_var,"copyModel"),
                          engine, "copy")
 
@@ -145,11 +145,11 @@ class Mode:
         return self.engine.get(self.matlab_var,'LabelString')
 
     @property
-    def size(self, ctx):
+    def size(self):
         return self.matlab_var.size
 
     @property
-    def name(self, ctx):
+    def name(self):
         return self.engine.get(self.matlab_var,'Name')
 
     def addFlow(self, ctx, eqn):
@@ -184,7 +184,7 @@ class Transition:
         self.engine.addResetLabel(self.matlab_var,label,nargout=0)
 
     @property
-    def size(self, ctx):
+    def size(self):
         return self.matlab_var.size
 
 
@@ -301,7 +301,7 @@ class MATLABVisitor(ReaffirmVisitor):
                         errorClose(ctx,"Incorrect number of arguments in '"
                                    + ctx.getText() + "'")
                 else:
-                    obj = attr()
+                    obj = attr(ref)
 
         return obj
 
