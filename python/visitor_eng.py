@@ -2,11 +2,13 @@ import sys
 from antlr4 import *
 from antlr4.InputStream import InputStream
 import pdb
+import os
+import argparse
 
 from enum import Enum
 
 sys.path.append("/Users/gautam/research/CASE/reaffirm/python")
-os.chdir("python")
+#os.chdir("python")
 
 from ReaffirmLexer import ReaffirmLexer
 from ReaffirmParser import ReaffirmParser
@@ -392,7 +394,7 @@ class MATLABVisitor(ReaffirmVisitor):
         return self.visitChildren(ctx)
 
 
-def parse_script(script, modelfile,modelname=None):
+def runHATL(script, modelfile,modelname=None):
 
     global scriptFile
     scriptFile = script
@@ -431,4 +433,16 @@ def parse_script(script, modelfile,modelname=None):
 
 
 if __name__ == '__main__':
-    pass
+
+    parser = argparse.ArgumentParser(description='Run the HATL interpreter on an input script and model file')
+    parser.add_argument('script',nargs=1,type=str)
+    parser.add_argument('model',nargs=1,type=str,metavar='modelFile')
+    parser.add_argument('--name',nargs=1,type=str,metavar='modelName',
+                        help='If the model file contains multiple models, '
+                        'specify a single model by name as the script target')
+
+    args = vars(parser.parse_args())
+    name = None
+    if args['name']:
+        name = args['name'].pop()
+    runHATL(args['script'].pop(),args['model'].pop(),args['name'])
