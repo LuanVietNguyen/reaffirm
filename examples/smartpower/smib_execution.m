@@ -21,13 +21,8 @@ modelName = 'smib_attack_v2';
 patternName = 'pattern_time';
 resModelName = [modelName,'_resilient'];
 tStartT = tic;
-pythonPath = ['..', filesep,'..', filesep,'python',filesep];
-python2matlab(pythonPath, patternName, modelName, [patternName,'_resilient']);
-%systemCommand = ['python ' [pythonPath, 'tomatlab.py '], patternName, ' ',modelName, ' ', [patternName,'_resilient']];
-%system(systemCommand);
-eval([patternName,'_resilient']);
-%newModelName = [modelName,'_resilient'];
-sfsave(modelName, [resModelName,'.mdl']);
+
+runHATL(patternName,modelName,"SMIB")
 
 tTransform=toc(tStartT);
 tStartE = tic;

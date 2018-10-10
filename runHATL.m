@@ -1,9 +1,18 @@
 function runHATL(hatlScript,modelFile,varargin)
-%UNTITLED2 Summary of this function goes here
-%   Detailed explanation goes here
+%RUNHATL run the HATL interpreter given a script and model file
+%   Run HATL on a model transformation script. Also input the
+%   modelfile of the SLSF model desired to be transformed. If the
+%   model file contains multiple models, please specify the name of
+%   a single model to be transformed
 
-if ~matlab.engine.isEngineShared
-    matlab.engine.shareEngine
+[~, output] = system("python -V");
+
+if ~contains(output,"Python 3.6")
+    error("Invalid python version, must run Python 3.6 or greater")
+end
+
+if matlab.engine.isEngineShared
+   error("Do not share the engine when running HATL from inside MATLAB")
 end
 
 args = hatlScript + " " + modelFile;
@@ -13,10 +22,13 @@ elseif nargin ~= 2
     error("Improper arguments to HATL interpreter")
 end
 
-%hatlPath = ".." + filesep + ".." + filesep + "python" + filesep;
-hatlPath = "python" + filesep;
-hatlProg = hatlPath + "hatl.py";
+hatlPath = ".." + filesep + ".." + filesep + "python" + filesep;
+%hatlPath = "python" + filesep;
+hatlInterpreter = hatlPath + "hatl.py";
 
-system("python" + " " + hatlProg + " " + args)
+err = system("python" + " " + hatlInterpreter + " " + args);
+if err
+    error("HATL failed")
+end
 
 end

@@ -445,4 +445,4 @@ if __name__ == '__main__':
     name = None
     if args['name']:
         name = args['name'].pop()
-    runHATL(args['script'].pop(),args['model'].pop(),args['name'])
+    runHATL(args['script'].pop(),args['model'].pop(),modelname=name)
