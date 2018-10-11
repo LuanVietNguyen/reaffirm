@@ -1,4 +1,3 @@
-model = getChartByName(diagram,"SMIB")
 addParam(model,"theta")
 addLocalVar(model,"clock")
 formode m = model.modes {
@@ -9,7 +8,3 @@ fortran t = model.trans {
     addGuardLabel(t,"&&","clock > theta")
     addResetLabel(t,"clock = 0")
 }
-
-
-
-
