@@ -18,7 +18,7 @@
 % Model Transformation
 bdclose all; clc; clear all; close all;
 modelName = 'acc_model_new';
-patternName = 'pattern3';
+patternName = 'pattern1';
 resModelName = [modelName,'_resilient'];
 tStartT = tic;
 pythonPath = ['..', filesep,'..', filesep,'python',filesep];
@@ -130,12 +130,12 @@ safe_distance = STL_Formula('safe_distance', 'alw(d[t] >= 5 + v[t])');
 % Falsification and resilient model synthesis
 
 param.names = {'theta'};
-%param.values = {[0 60]};
-param.values = {[0.1 0.9]};
+param.values = {[0 50]};
+%param.values = {[0.1 0.9]};
 numParams = length(param.names);
 % guard tolerance
-tol = 0.02;
-%tol = 1;
+%tol = 0.02;
+tol = 1;
 option_plot = 0;
 option_check_mono = 0;
 mono = zeros(1, numParams); % store mononicity check results

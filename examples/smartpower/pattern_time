@@ -6,8 +6,8 @@ formode m = model.modes {
 }
 
 fortran t = model.trans {
-    addGuardLabel(t,"&&","clock > theta");
-    addResetLabel(t,"clock = 0");
+    addGuardLabel(t,"&&","clock > theta")
+    addResetLabel(t,"clock = 0")
 }
 
 

@@ -77,7 +77,7 @@ safe_distance = STL_Formula('safe_region', 'alw((omega[t] >= -2) and (omega[t] <
 
 param.names = {'theta'};
 param.values = {[0 0.3]};
-%param.values = {[0 0.1]};
+%param.values = {[0.15 1]};
 %param.values = {[0.1 1]};
 numParams = length(param.names);
 % guard tolerance

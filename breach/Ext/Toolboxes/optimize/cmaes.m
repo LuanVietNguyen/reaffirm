@@ -567,7 +567,7 @@ else % flgresume
     end
     [xmean ti] = xintobounds(xmean, lbounds, ubounds); % just in case
     if any(ti)
-      warning('Initial point was out of bounds, corrected');
+      %warning('Initial point was out of bounds, corrected');
     end
     bnd.weights = zeros(N,1);         % weights for bound penalty
     % scaling is better in axis-parallel case, worse in rotated

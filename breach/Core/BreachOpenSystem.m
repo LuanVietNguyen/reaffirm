@@ -314,8 +314,8 @@ classdef BreachOpenSystem < BreachSystem
                 other.P.traj{1}.param(i_trace_id) = numel(this.P.traj)+1;
                 this.P = SConcat(this.P, other.P);
             else
-                this.InputGenerator.P= SConcat(this.InputGenerator.P, other.InputGenerator.P);
-                this.P = SConcat(this.P,other.P);
+                %this.InputGenerator.P= SConcat(this.InputGenerator.P, other.InputGenerator.P);
+                %this.P = SConcat(this.P,other.P);
             end
             
         end

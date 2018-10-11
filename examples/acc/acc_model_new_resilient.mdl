@@ -1,6 +1,6 @@
 Model {
   Name			  "acc_model_new_resilient"
-  Version		  8.9
+  Version		  9.1
   SavedCharacterEncoding  "windows-1252"
   GraphicalInterface {
     NumRootInports	    2
@@ -8,12 +8,14 @@ Model {
       Name		      "ngps"
       BusObject		      ""
       OutputFunctionCall      "off"
+      SampleTime	      "-1"
       UnitExpr		      "inherit"
     }
     Inport {
       Name		      "nenc"
       BusObject		      ""
       OutputFunctionCall      "off"
+      SampleTime	      "-1"
       UnitExpr		      "inherit"
     }
     NumRootOutports	    4
@@ -46,7 +48,7 @@ Model {
       UnitExpr		      "inherit"
     }
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.35"
+    ComputedModelVersion    "1.34"
     NumModelReferences	    0
     NumTestPointedSignals   0
     NumProvidedFunctions    0
@@ -56,13 +58,17 @@ Model {
     HasTerminateEvent	    0
     IsExportFunctionModel   0
     NumParameterArguments   0
+    NumExternalFileReferences 0
     OrderedModelArguments   1
   }
+  DiagnosticSuppressor	  "on"
+  SuppressorTable	  "22 serialization::archive 11 0 6 0 0 0 8 0"
+  Notes			  ""
+  NotesPlugin		  "on"
   LogicAnalyzerGraphicalSettings ""
   LogicAnalyzerPlugin	  "on"
   LogicAnalyzerSignalOrdering ""
-  DiagnosticSuppressor	  "on"
-  SuppressorTable	  "22 serialization::archive 11 0 6 0 0 0 8 0"
+  CustomCodeFunctionData  ""
   SLCCPlugin		  "on"
   ScopeRefreshTime	  0.035000
   OverrideScopeRefreshTime on
@@ -159,10 +165,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "LuanNguyen"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Wed Aug 15 00:40:16 2018"
-  RTWModifiedTimeStamp	  456194415
-  ModelVersionFormat	  "1.%<AutoIncrement:35>"
-  ConfigurationManager	  "none"
+  LastModifiedDate	  "Wed Oct 03 12:00:52 2018"
+  RTWModifiedTimeStamp	  460468851
+  ModelVersionFormat	  "1.%<AutoIncrement:34>"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
   LibraryLinkDisplay	  "disabled"
@@ -183,6 +188,7 @@ Model {
   ShowViewerIcons	  on
   SortedOrder		  off
   VariantCondition	  off
+  ShowSubsystemDomainSpec off
   ExecutionContextIcon	  off
   ShowLinearizationAnnotations on
   ShowVisualizeInsertedRTB on
@@ -190,11 +196,13 @@ Model {
   BlockNameDataTip	  off
   BlockParametersDataTip  off
   BlockDescriptionStringDataTip	off
+  BlockVariantConditionDataTip off
   ToolBar		  on
   StatusBar		  on
   BrowserShowLibraryLinks off
   FunctionConnectors	  off
   BrowserLookUnderMasks	  off
+  MultiThreadCoSim	  on
   SimulationMode	  "normal"
   VisualizeLoggedSignalsWhenLoggingToFile off
   PauseTimes		  "5"
@@ -202,6 +210,8 @@ Model {
   SnapshotBufferSize	  10
   SnapshotInterval	  10
   NumberOfLastSnapshots	  0
+  EnablePacing		  off
+  PacingRate		  1
   LinearizationMsg	  "none"
   Profile		  off
   ParamWorkspaceSource	  "MATLABWorkspace"
@@ -257,7 +267,7 @@ Model {
     Dimension		    1
     Simulink.ConfigSet {
       $ObjectID		      9
-      Version		      "1.17.0"
+      Version		      "1.18.0"
       DisabledProps	      []
       Description	      ""
       Array {
@@ -265,15 +275,15 @@ Model {
 	Dimension		10
 	Simulink.SolverCC {
 	  $ObjectID		  10
-	  Version		  "1.17.0"
+	  Version		  "1.18.0"
 	  DisabledProps		  []
 	  Description		  ""
 	  StartTime		  "0.0"
 	  StopTime		  "Tsim"
 	  AbsTol		  "auto"
+	  AutoScaleAbsTol	  "on"
 	  FixedStep		  "auto"
 	  InitialStep		  "auto"
-	  MaxNumMinSteps	  "-1"
 	  MaxOrder		  5
 	  ZcThreshold		  "auto"
 	  ConsecutiveZCsStepRelTol "10*128*eps"
@@ -285,7 +295,6 @@ Model {
 	  MaxConsecutiveMinStep	  "1"
 	  RelTol		  "1e-3"
 	  EnableMultiTasking	  off
-	  EnableConcurrentExecution off
 	  ConcurrentTasks	  off
 	  Solver		  "VariableStepAuto"
 	  SolverName		  "VariableStepAuto"
@@ -302,10 +311,12 @@ Model {
 	  SampleTimeConstraint	  "Unconstrained"
 	  InsertRTBMode		  "Whenever possible"
 	  SampleTimeProperty	  []
+	  DecoupledContinuousIntegration off
+	  MinimalZcImpactIntegration off
 	}
 	Simulink.DataIOCC {
 	  $ObjectID		  11
-	  Version		  "1.17.0"
+	  Version		  "1.18.0"
 	  DisabledProps		  []
 	  Description		  ""
 	  Decimation		  "1"
@@ -346,7 +357,7 @@ Model {
 	}
 	Simulink.OptimizationCC {
 	  $ObjectID		  12
-	  Version		  "1.17.0"
+	  Version		  "1.18.0"
 	  Array {
 	    Type		    "Cell"
 	    Dimension		    8
@@ -404,10 +415,16 @@ Model {
 	  OptimizeBlockOrder	  "off"
 	  OptimizeDataStoreBuffers on
 	  BusAssignmentInplaceUpdate on
+	  DifferentSizesBufferReuse off
+	  OptimizationLevel	  "level2"
+	  OptimizationPriority	  "Balanced"
+	  OptimizationCustomize	  on
+	  UseRowMajorAlgorithm	  off
+	  LabelGuidedReuse	  off
 	}
 	Simulink.DebuggingCC {
 	  $ObjectID		  13
-	  Version		  "1.17.0"
+	  Version		  "1.18.0"
 	  Array {
 	    Type		    "Cell"
 	    Dimension		    1
@@ -419,6 +436,7 @@ Model {
 	  ConsistencyChecking	  "none"
 	  ArrayBoundsChecking	  "none"
 	  SignalInfNanChecking	  "none"
+	  StringTruncationChecking "error"
 	  SignalRangeChecking	  "none"
 	  ReadBeforeWriteMsg	  "UseLocalSettings"
 	  WriteAfterWriteMsg	  "UseLocalSettings"
@@ -446,6 +464,7 @@ Model {
 	  MultiTaskRateTransMsg	  "error"
 	  SingleTaskRateTransMsg  "none"
 	  TasksWithSamePriorityMsg "warning"
+	  ExportedTasksRateTransMsg "none"
 	  SigSpecEnsureSampleTimeMsg "warning"
 	  CheckMatrixSingularityMsg "none"
 	  IntegerOverflowMsg	  "warning"
@@ -487,6 +506,8 @@ Model {
 	  StateNameClashWarn	  "none"
 	  SimStateInterfaceChecksumMismatchMsg "warning"
 	  SimStateOlderReleaseMsg "error"
+	  ChecksumConsistencyForSSReuse	"none"
+	  LibraryContextMissingDiagnostic "none"
 	  InitInArrayFormatMsg	  "warning"
 	  StrictBusMsg		  "ErrorLevel1"
 	  BusNameAdapt		  "WarnAndRepair"
@@ -513,11 +534,14 @@ Model {
 	  AllowedUnitSystems	  "all"
 	  UnitsInconsistencyMsg	  "warning"
 	  AllowAutomaticUnitConversions	on
+	  RCSCRenamedMsg	  "warning"
+	  RCSCObservableMsg	  "warning"
+	  ForceCombineOutputUpdateInSim	off
 	  UnitDatabase		  ""
 	}
 	Simulink.HardwareCC {
 	  $ObjectID		  14
-	  Version		  "1.17.0"
+	  Version		  "1.18.0"
 	  DisabledProps		  []
 	  Description		  ""
 	  ProdBitPerChar	  8
@@ -565,7 +589,7 @@ Model {
 	}
 	Simulink.ModelReferenceCC {
 	  $ObjectID		  15
-	  Version		  "1.17.0"
+	  Version		  "1.18.0"
 	  DisabledProps		  []
 	  Description		  ""
 	  UpdateModelReferenceTargets "IfOutOfDateOrStructuralChange"
@@ -584,7 +608,7 @@ Model {
 	}
 	Simulink.SFSimCC {
 	  $ObjectID		  16
-	  Version		  "1.17.0"
+	  Version		  "1.18.0"
 	  DisabledProps		  []
 	  Description		  ""
 	  SimCustomSourceCode	  ""
@@ -614,10 +638,10 @@ Model {
 	Simulink.RTWCC {
 	  $BackupClass		  "Simulink.RTWCC"
 	  $ObjectID		  17
-	  Version		  "1.17.0"
+	  Version		  "1.18.0"
 	  Array {
 	    Type		    "Cell"
-	    Dimension		    13
+	    Dimension		    16
 	    Cell		    "IncludeHyperlinkInReport"
 	    Cell		    "GenerateTraceInfo"
 	    Cell		    "GenerateTraceReport"
@@ -631,6 +655,9 @@ Model {
 	    Cell		    "GenerateMissedCodeReplacementReport"
 	    Cell		    "GenerateErtSFunction"
 	    Cell		    "CreateSILPILBlock"
+	    Cell		    "CodeExecutionProfiling"
+	    Cell		    "CodeProfilingSaveOptions"
+	    Cell		    "CodeProfilingInstrumentation"
 	    PropName		    "DisabledProps"
 	  }
 	  SystemTargetFile	  "grt.tlc"
@@ -662,6 +689,7 @@ Model {
 	  CustomLibrary		  ""
 	  CustomDefine		  ""
 	  CustomLAPACKCallback	  ""
+	  CustomFFTCallback	  ""
 	  CustomInitializer	  ""
 	  CustomTerminator	  ""
 	  Toolchain		  "Automatically locate an installed toolchain"
@@ -697,10 +725,10 @@ Model {
 	    Dimension		    2
 	    Simulink.CodeAppCC {
 	      $ObjectID		      18
-	      Version		      "1.17.0"
+	      Version		      "1.18.0"
 	      Array {
 		Type			"Cell"
-		Dimension		27
+		Dimension		28
 		Cell			"IgnoreCustomStorageClasses"
 		Cell			"IgnoreTestpoints"
 		Cell			"InsertBlockDesc"
@@ -728,6 +756,7 @@ Model {
 		Cell			"CustomSymbolStrEmxFcn"
 		Cell			"CustomUserTokenString"
 		Cell			"ReqsInCode"
+		Cell			"BlockCommentType"
 		PropName		"DisabledProps"
 	      }
 	      Description	      ""
@@ -737,18 +766,16 @@ Model {
 	      CommentStyle	      "Auto"
 	      IgnoreCustomStorageClasses on
 	      IgnoreTestpoints	      off
-	      IncHierarchyInIds	      off
 	      MaxIdLength	      31
 	      PreserveName	      off
 	      PreserveNameWithParent  off
 	      ShowEliminatedStatement off
 	      OperatorAnnotations     off
-	      IncAutoGenComments      off
 	      SimulinkDataObjDesc     off
 	      SFDataObjDesc	      off
 	      MATLABFcnDesc	      off
-	      IncDataTypeInIds	      off
 	      MangleLength	      1
+	      SharedChecksumLength    8
 	      CustomSymbolStrGlobalVar "$R$N$M"
 	      CustomSymbolStrType     "$N$R$M_T"
 	      CustomSymbolStrField    "$N$M"
@@ -772,6 +799,8 @@ Model {
 	      InsertBlockDesc	      off
 	      InsertPolySpaceComments off
 	      SimulinkBlockComments   on
+	      BlockCommentType	      "BlockPathComment"
+	      StateflowObjectComments on
 	      MATLABSourceComments    off
 	      EnableCustomComments    off
 	      InternalIdentifierFile  ""
@@ -784,7 +813,7 @@ Model {
 	    Simulink.GRTTargetCC {
 	      $BackupClass	      "Simulink.TargetCC"
 	      $ObjectID		      19
-	      Version		      "1.17.0"
+	      Version		      "1.18.0"
 	      Array {
 		Type			"Cell"
 		Dimension		15
@@ -815,6 +844,7 @@ Model {
 	      UtilityFuncGeneration   "Auto"
 	      MultiwordTypeDef	      "System defined"
 	      MultiwordLength	      2048
+	      DynamicStringBufferSize 256
 	      GenerateFullHeader      on
 	      InferredTypesCompatibility off
 	      ExistingSharedCode      ""
@@ -829,7 +859,6 @@ Model {
 	      CombineOutputUpdateFcns on
 	      CombineSignalStateStructs	off
 	      SuppressErrorStatus     off
-	      ERTFirstTimeCompliant   off
 	      IncludeFileDelimiter    "Auto"
 	      ERTCustomFileBanners    off
 	      SupportAbsoluteTime     on
@@ -859,6 +888,12 @@ Model {
 	      CoderGroups	      []
 	      AccessMethods	      []
 	      LookupTableObjectStructAxisOrder "1,2,3,4,..."
+	      LUTObjectStructOrderExplicitValues "Size,Breakpoints,Table"
+	      LUTObjectStructOrderEvenSpacing "Size,Breakpoints,Table"
+	      ArrayLayout	      "Column-major"
+	      ERTHeaderFileRootName   "$R$E"
+	      ERTSourceFileRootName   "$R$E"
+	      ERTDataFileRootName     "$R_data"
 	      UseMalloc		      off
 	      ExtMode		      off
 	      ExtModeStaticAlloc      off
@@ -880,7 +915,7 @@ Model {
 	}
 	SlCovCC.ConfigComp {
 	  $ObjectID		  20
-	  Version		  "1.17.0"
+	  Version		  "1.18.0"
 	  DisabledProps		  []
 	  Description		  "Simulink Coverage Configuration Component"
 	  Name			  "Simulink Coverage"
@@ -920,7 +955,7 @@ Model {
 	}
 	hdlcoderui.hdlcc {
 	  $ObjectID		  21
-	  Version		  "1.17.0"
+	  Version		  "1.18.0"
 	  DisabledProps		  []
 	  Description		  "HDL Coder custom configuration component"
 	  Name			  "HDL Coder"
@@ -980,7 +1015,12 @@ Model {
     FontSize		    10
     FontWeight		    "normal"
     FontAngle		    "normal"
+    MarkupType		    "model"
     UseDisplayTextAsClickCallback off
+    AnnotationType	    "note_annotation"
+    FixedHeight		    off
+    FixedWidth		    off
+    Interpreter		    "off"
   }
   LineDefaults {
     FontName		    "Helvetica"
@@ -1065,12 +1105,16 @@ Model {
       OutputWhenDisabled      "held"
       InitialOutput	      "[]"
       MustResolveToSignalObject	off
+      OutputWhenUnConnected   off
+      OutputWhenUnconnectedValue "0"
+      VectorParamsAs1DForOutWhenUnconnected off
     }
     Block {
       BlockType		      S-Function
       FunctionName	      "system"
       SFunctionModules	      "''"
       PortCounts	      "[]"
+      MultiThreadCoSim	      "auto"
     }
     Block {
       BlockType		      SubSystem
@@ -1098,11 +1142,14 @@ Model {
       Opaque		      off
       MaskHideContents	      off
       SFBlockType	      "NONE"
+      Variant		      off
       GeneratePreprocessorConditionals off
+      AllowZeroVariantControls off
       PropagateVariantConditions off
       TreatAsGroupedWhenPropagatingVariantConditions on
       ContentPreviewEnabled   off
       IsWebBlock	      off
+      IsObserver	      off
     }
     Block {
       BlockType		      Terminator
@@ -1113,6 +1160,8 @@ Model {
     Location		    [8, 8, 1562, 890]
     Open		    off
     PortBlocksUseCompactNotation off
+    SetDomainSpec	    off
+    DomainSpecType	    "Deduce"
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
     ScreenColor		    "white"
@@ -1155,7 +1204,6 @@ Model {
       TreatAsAtomicUnit	      on
       RequestExecContextInheritance off
       SFBlockType	      "Chart"
-      Variant		      off
       Port {
 	PortNumber		1
 	Name			"d"
@@ -1181,6 +1229,8 @@ Model {
 	Location		[762, 0, 1543, 830]
 	Open			off
 	PortBlocksUseCompactNotation off
+	SetDomainSpec		off
+	DomainSpecType		"Deduce"
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
 	ScreenColor		"white"
@@ -1192,7 +1242,7 @@ Model {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
-	SIDHighWatermark	"101"
+	SIDHighWatermark	"104"
 	Block {
 	  BlockType		  Inport
 	  Name			  "d0"
@@ -1249,25 +1299,25 @@ Model {
 	Block {
 	  BlockType		  Demux
 	  Name			  " Demux "
-	  SID			  "1::82"
+	  SID			  "1::103"
 	  Ports			  [1, 1]
 	  Position		  [270, 280, 320, 320]
-	  ZOrder		  62
+	  ZOrder		  83
 	  Outputs		  "1"
 	}
 	Block {
 	  BlockType		  S-Function
 	  Name			  " SFunction "
-	  SID			  "1::81"
+	  SID			  "1::102"
 	  Tag			  "Stateflow S-Function acc_model_new_resilient 3"
 	  Ports			  [6, 5]
-	  Position		  [180, 112, 230, 253]
-	  ZOrder		  61
+	  Position		  [180, 102, 230, 243]
+	  ZOrder		  82
 	  FunctionName		  "sf_sfun"
-	  Parameters		  "nrad,vl"
+	  Parameters		  "nrad,theta,vl"
 	  PortCounts		  "[6 5]"
 	  SFunctionDeploymentMode off
-	  EnableBusSupport	  on
+	  EnableBusSupport	  off
 	  SFcnIsStateOwnerBlock	  off
 	  Port {
 	    PortNumber		    2
@@ -1289,9 +1339,9 @@ Model {
 	Block {
 	  BlockType		  Terminator
 	  Name			  " Terminator "
-	  SID			  "1::83"
+	  SID			  "1::104"
 	  Position		  [460, 291, 480, 309]
-	  ZOrder		  63
+	  ZOrder		  84
 	}
 	Block {
 	  BlockType		  Outport
@@ -1329,42 +1379,42 @@ Model {
 	  IconDisplay		  "Port number"
 	}
 	Line {
-	  ZOrder		  119
+	  ZOrder		  131
 	  SrcBlock		  "d0"
 	  SrcPort		  1
 	  DstBlock		  " SFunction "
 	  DstPort		  1
 	}
 	Line {
-	  ZOrder		  120
+	  ZOrder		  132
 	  SrcBlock		  "v0"
 	  SrcPort		  1
 	  DstBlock		  " SFunction "
 	  DstPort		  2
 	}
 	Line {
-	  ZOrder		  121
+	  ZOrder		  133
 	  SrcBlock		  "ed0"
 	  SrcPort		  1
 	  DstBlock		  " SFunction "
 	  DstPort		  3
 	}
 	Line {
-	  ZOrder		  122
+	  ZOrder		  134
 	  SrcBlock		  "ev0"
 	  SrcPort		  1
 	  DstBlock		  " SFunction "
 	  DstPort		  4
 	}
 	Line {
-	  ZOrder		  123
+	  ZOrder		  135
 	  SrcBlock		  "ngps"
 	  SrcPort		  1
 	  DstBlock		  " SFunction "
 	  DstPort		  5
 	}
 	Line {
-	  ZOrder		  124
+	  ZOrder		  136
 	  SrcBlock		  "nenc"
 	  SrcPort		  1
 	  DstBlock		  " SFunction "
@@ -1372,7 +1422,7 @@ Model {
 	}
 	Line {
 	  Name			  "d_out"
-	  ZOrder		  125
+	  ZOrder		  137
 	  Labels		  [0, 0]
 	  SrcBlock		  " SFunction "
 	  SrcPort		  2
@@ -1381,7 +1431,7 @@ Model {
 	}
 	Line {
 	  Name			  "v_out"
-	  ZOrder		  126
+	  ZOrder		  138
 	  Labels		  [0, 0]
 	  SrcBlock		  " SFunction "
 	  SrcPort		  3
@@ -1390,7 +1440,7 @@ Model {
 	}
 	Line {
 	  Name			  "ed_out"
-	  ZOrder		  127
+	  ZOrder		  139
 	  Labels		  [0, 0]
 	  SrcBlock		  " SFunction "
 	  SrcPort		  4
@@ -1399,7 +1449,7 @@ Model {
 	}
 	Line {
 	  Name			  "ev_out"
-	  ZOrder		  128
+	  ZOrder		  140
 	  Labels		  [0, 0]
 	  SrcBlock		  " SFunction "
 	  SrcPort		  5
@@ -1407,14 +1457,14 @@ Model {
 	  DstPort		  1
 	}
 	Line {
-	  ZOrder		  129
+	  ZOrder		  141
 	  SrcBlock		  " Demux "
 	  SrcPort		  1
 	  DstBlock		  " Terminator "
 	  DstPort		  1
 	}
 	Line {
-	  ZOrder		  130
+	  ZOrder		  142
 	  SrcBlock		  " SFunction "
 	  SrcPort		  1
 	  DstBlock		  " Demux "
@@ -1581,7 +1631,7 @@ Model {
 }
 #Finite State Machines
 #
-#   Stateflow 80000011
+#   Stateflow 80000014
 #
 #
 Stateflow {
@@ -1590,8 +1640,8 @@ Stateflow {
     name		    "acc_model_new_resilient"
     created		    "04-Jun-2018 22:42:50"
     isLibrary		    0
-    sfVersion		    80000011
-    firstTarget		    34
+    sfVersion		    80000014
+    firstTarget		    32
   }
   chart {
     id			    2
@@ -1605,7 +1655,7 @@ Stateflow {
     viewObj		    2
     subviewS {
     }
-    ssIdHighWaterMark	    49
+    ssIdHighWaterMark	    47
     decomposition	    CLUSTER_CHART
     updateMethod	    CONTINUOUS
     chartFileNumber	    3
@@ -1621,7 +1671,7 @@ Stateflow {
     id			    3
     labelString		    "Spacing_Control\ndu:\nd_dot = -v+vl;\nv_dot = 2*vl - v - ev - 0.25*(10 + 2*ev - ed);\ned_dot =  "
     "vl - ev + 10*(d + nrad - ed);\nev_dot = 2*vl + v - 3*ev + 0.5*(ngps + nenc) - 0.25*(10 + 2*ev - ed);\nd_out = d;\n"
-    "v_out = v;\ned_out = ed;\nev_out = ev;\nclock_dot = 1;"
+    "v_out = v;\ned_out = ed;\nev_out = ev;"
     position		    [572.4188 136.8 374.9845 169.2666]
     fontSize		    12
     chart		    2
@@ -1634,8 +1684,7 @@ Stateflow {
   state {
     id			    4
     labelString		    "Speed_Control\ndu:\nd_dot = -v+vl;\nv_dot =  2*vl - v - ev;\ned_dot =  vl - ev + 10*(d + nrad -e"
-    "d);\nev_dot = 2*vl + v - 3*ev + 0.5*(ngps + nenc);\nd_out = d;\nv_out = v;\ned_out = ed;\nev_out = ev;\nclock_dot "
-    "= 1;"
+    "d);\nev_dot = 2*vl + v - 3*ev + 0.5*(ngps + nenc);\nd_out = d;\nv_out = v;\ned_out = ed;\nev_out = ev;"
     position		    [116.0992 137.7333 241.8 167.4]
     fontSize		    12
     chart		    2
@@ -1647,29 +1696,28 @@ Stateflow {
   }
   state {
     id			    5
-    labelString		    "Spacing_Control_Resilient\ndu:\nd_dot = -v+vl;\nv_dot = 2*vl - v - ev - 0.25*(10 + 2*ev - ed);\n"
-    "ed_dot =  vl - ev + 10*(d + nrad - ed);\nev_dot = 2*vl + v - 3*ev + 0.5*(nenc + nenc) - 0.25*(10 + 2*ev - ed);\nd_"
-    "out = d;\nv_out = v;\ned_out = ed;\nev_out = ev;\nclock_dot = 1;"
+    labelString		    "Spacing_Control_copy\ndu:\nd_dot = -v+vl;\nv_dot = 2*vl - v - ev - 0.25*(10 + 2*ev - ed);\ned_do"
+    "t =  vl - ev + 10*(d + nrad - ed);\nev_dot = 2*vl + v - 3*ev + 0.5*(nenc + nenc) - 0.25*(10 + 2*ev - ed);\nd_out ="
+    " d;\nv_out = v;\ned_out = ed;\nev_out = ev;"
     position		    [572.4188 436.8 374.9845 169.2666]
     fontSize		    12
     chart		    2
     treeNode		    [2 0 4 6]
     subviewer		    2
-    ssIdNumber		    41
+    ssIdNumber		    42
     type		    OR_STATE
     decomposition	    CLUSTER_STATE
   }
   state {
     id			    6
-    labelString		    "Speed_Control_Resilient\ndu:\nd_dot = -v+vl;\nv_dot =  2*vl - v - ev;\ned_dot =  vl - ev + 10*(d"
-    " + nrad -ed);\nev_dot = 2*vl + v - 3*ev + 0.5*(nenc + nenc);\nd_out = d;\nv_out = v;\ned_out = ed;\nev_out = ev;\n"
-    "clock_dot = 1;"
+    labelString		    "Speed_Control_copy\ndu:\nd_dot = -v+vl;\nv_dot =  2*vl - v - ev;\ned_dot =  vl - ev + 10*(d + nr"
+    "ad -ed);\nev_dot = 2*vl + v - 3*ev + 0.5*(nenc + nenc);\nd_out = d;\nv_out = v;\ned_out = ed;\nev_out = ev;"
     position		    [116.0992 437.7333 241.8 167.4]
     fontSize		    12
     chart		    2
     treeNode		    [2 0 5 0]
     subviewer		    2
-    ssIdNumber		    42
+    ssIdNumber		    44
     type		    OR_STATE
     decomposition	    CLUSTER_STATE
   }
@@ -1836,9 +1884,10 @@ Stateflow {
     name		    "vl"
     scope		    LOCAL_DATA
     initFromWorkspace	    1
-    paramIndexForInitFromWorkspace 1
+    paramIndexForInitFromWorkspace 2
     machine		    1
     props {
+      initialValue	      "vl"
       type {
 	method			SF_DOUBLE_TYPE
 	primitive		SF_DOUBLE_TYPE
@@ -1861,6 +1910,7 @@ Stateflow {
     initFromWorkspace	    1
     machine		    1
     props {
+      initialValue	      "nrad"
       type {
 	method			SF_DOUBLE_TYPE
 	primitive		SF_DOUBLE_TYPE
@@ -1883,6 +1933,7 @@ Stateflow {
     initFromWorkspace	    1
     machine		    1
     props {
+      initialValue	      "d0"
       type {
 	method			SF_DOUBLE_TYPE
 	primitive		SF_DOUBLE_TYPE
@@ -1905,6 +1956,7 @@ Stateflow {
     initFromWorkspace	    1
     machine		    1
     props {
+      initialValue	      "v0"
       type {
 	method			SF_DOUBLE_TYPE
 	primitive		SF_DOUBLE_TYPE
@@ -1927,6 +1979,7 @@ Stateflow {
     initFromWorkspace	    1
     machine		    1
     props {
+      initialValue	      "ed0"
       type {
 	method			SF_DOUBLE_TYPE
 	primitive		SF_DOUBLE_TYPE
@@ -1949,6 +2002,7 @@ Stateflow {
     initFromWorkspace	    1
     machine		    1
     props {
+      initialValue	      "ev0"
       type {
 	method			SF_DOUBLE_TYPE
 	primitive		SF_DOUBLE_TYPE
@@ -1998,6 +2052,7 @@ Stateflow {
     paramIndexForInitFromWorkspace 3
     machine		    1
     props {
+      initialValue	      "ngps"
       type {
 	method			SF_DOUBLE_TYPE
 	primitive		SF_DOUBLE_TYPE
@@ -2020,6 +2075,7 @@ Stateflow {
     initFromWorkspace	    1
     machine		    1
     props {
+      initialValue	      "nenc"
       type {
 	method			SF_DOUBLE_TYPE
 	primitive		SF_DOUBLE_TYPE
@@ -2036,9 +2092,10 @@ Stateflow {
   }
   data {
     id			    23
-    ssIdNumber		    49
-    name		    "clock"
-    scope		    LOCAL_DATA
+    ssIdNumber		    41
+    name		    "theta"
+    scope		    PARAMETER_DATA
+    paramIndexForInitFromWorkspace 1
     machine		    1
     props {
       updateMethod	      SF_CONTINUOUS_TIME_DATA
@@ -2046,7 +2103,6 @@ Stateflow {
 	size			"-1"
       }
       type {
-	method			SF_INHERITED_TYPE
 	primitive		SF_DOUBLE_TYPE
 	isSigned		1
 	wordLength		"16"
@@ -2057,13 +2113,13 @@ Stateflow {
 	name			"inherit"
       }
     }
-    dataType		    "Inherit: From definition in chart"
+    dataType		    "double"
     linkNode		    [2 22 0]
   }
   transition {
     id			    24
-    labelString		    "{d = d0; v = v0; ed = ed0; ev = ev0;clock = 0;}"
-    labelPosition	    [190.632 90.54 242.969 16]
+    labelString		    "{d = d0; v = v0; ed = ed0; ev = ev0;}"
+    labelPosition	    [190.632 90.54 191.984 16]
     fontSize		    12
     src {
       intersection	      [0 0 1 0 173.5394 93.193 0 0]
@@ -2085,56 +2141,8 @@ Stateflow {
   }
   transition {
     id			    25
-    labelString		    "[abs(ngps-nenc) < 21 && clock > 5]\n{clock = 0;}"
-    labelPosition	    [980.917 263.394 189.297 30]
-    fontSize		    12
-    src {
-      id		      5
-      intersection	      [2 1 0 0.9114 947.4033 591.0666 0 0]
-    }
-    dst {
-      id		      3
-      intersection	      [1 0 -1 0.5 759.9111 136.8 0 0]
-    }
-    midPoint		    [916.0125 297.578]
-    chart		    2
-    dataLimits		    [757.511 991.567 101.143 591.067]
-    subviewer		    2
-    slide {
-      sticky		      BOTH_STICK
-    }
-    executionOrder	    2
-    ssIdNumber		    47
-    linkNode		    [2 24 26]
-  }
-  transition {
-    id			    26
-    labelString		    "[abs(ngps-nenc) < 21 && clock > 5]\n{clock = 0;}"
-    labelPosition	    [413.046 239.428 189.297 30]
-    fontSize		    12
-    src {
-      id		      6
-      intersection	      [2 1 0 0.9104 357.8992 590.1333 0 0]
-    }
-    dst {
-      id		      4
-      intersection	      [1 0 -1 0.5 236.9992 137.7333 0 0]
-    }
-    midPoint		    [356.9504 300.4321]
-    chart		    2
-    dataLimits		    [234.599 406.622 104.241 590.133]
-    subviewer		    2
-    slide {
-      sticky		      BOTH_STICK
-    }
-    executionOrder	    2
-    ssIdNumber		    48
-    linkNode		    [2 25 27]
-  }
-  transition {
-    id			    27
-    labelString		    "[ed < 10 + 2*ev && clock > 5]\n{clock = 0;}"
-    labelPosition	    [404.169 143.759 156.969 30]
+    labelString		    "[ed < 10 + 2*ev]"
+    labelPosition	    [404.169 143.759 86.656 16]
     fontSize		    12
     src {
       id		      4
@@ -2154,12 +2162,12 @@ Stateflow {
     }
     executionOrder	    1
     ssIdNumber		    6
-    linkNode		    [2 26 28]
+    linkNode		    [2 24 26]
   }
   transition {
-    id			    28
-    labelString		    "[ed >= 10 + 2*ev && clock > 5]\n{clock = 0;}"
-    labelPosition	    [413.241 256.342 163.969 30]
+    id			    26
+    labelString		    "[ed >= 10 + 2*ev]"
+    labelPosition	    [413.241 256.342 93.656 16]
     fontSize		    12
     src {
       id		      3
@@ -2179,12 +2187,37 @@ Stateflow {
     }
     executionOrder	    1
     ssIdNumber		    10
-    linkNode		    [2 27 29]
+    linkNode		    [2 25 27]
   }
   transition {
-    id			    29
-    labelString		    "[abs(ngps-nenc) > 22 && clock > 5]\n{clock = 0;}"
-    labelPosition	    [217.438 333.199 189.297 30]
+    id			    27
+    labelString		    "[ed < 10 + 2*ev]"
+    labelPosition	    [505.504 335.419 86.656 16]
+    fontSize		    12
+    src {
+      id		      6
+      intersection	      [1 0 -1 0.2207 169.4736 437.7333 0 0]
+    }
+    dst {
+      id		      5
+      intersection	      [1 0 -1 0.5 759.9111 436.8 0 0]
+    }
+    midPoint		    [464.6923 285.6404]
+    chart		    2
+    dataLimits		    [169.474 762.311 285.628 437.733]
+    subviewer		    2
+    slide {
+      mode		      MIRROR_SLIDE
+      sticky		      BOTH_STICK
+    }
+    executionOrder	    1
+    ssIdNumber		    46
+    linkNode		    [2 26 28]
+  }
+  transition {
+    id			    28
+    labelString		    "[abs(ngps-nenc) > theta]"
+    labelPosition	    [217.438 333.199 132.313 16]
     fontSize		    12
     src {
       id		      4
@@ -2202,13 +2235,13 @@ Stateflow {
       sticky		      BOTH_STICK
     }
     executionOrder	    2
-    ssIdNumber		    46
-    linkNode		    [2 28 30]
+    ssIdNumber		    45
+    linkNode		    [2 27 29]
   }
   transition {
-    id			    30
-    labelString		    "[abs(ngps-nenc) > 22 && clock > 5]\n{clock = 0;}"
-    labelPosition	    [698.624 349.714 189.297 30]
+    id			    29
+    labelString		    "[abs(ngps-nenc) > theta]"
+    labelPosition	    [687.452 343.561 132.313 16]
     fontSize		    12
     src {
       id		      3
@@ -2226,65 +2259,42 @@ Stateflow {
       sticky		      BOTH_STICK
     }
     executionOrder	    2
-    ssIdNumber		    45
-    linkNode		    [2 29 31]
-  }
-  transition {
-    id			    31
-    labelString		    "[ed < 10 + 2*ev && clock > 5]\n{clock = 0;}"
-    labelPosition	    [404 443 156.969 30]
-    fontSize		    12
-    src {
-      id		      6
-      intersection	      [2 1 0 0.2116 357.8992 473.1595 0 0]
-    }
-    dst {
-      id		      5
-      intersection	      [4 -1 0 0.7852 572.4188 473.1595 0 0]
-    }
-    midPoint		    [461.159 473.1595]
-    chart		    2
-    dataLimits		    [357.899 572.419 470.76 475.559]
-    subviewer		    2
-    slide {
-      sticky		      BOTH_STICK
-    }
-    executionOrder	    1
     ssIdNumber		    43
-    linkNode		    [2 30 32]
+    linkNode		    [2 28 30]
   }
   transition {
-    id			    32
-    labelString		    "[ed >= 10 + 2*ev && clock > 5]\n{clock = 0;}"
-    labelPosition	    [413 556 163.969 30]
+    id			    30
+    labelString		    "[ed >= 10 + 2*ev]"
+    labelPosition	    [411.644 390.027 93.656 16]
     fontSize		    12
     src {
       id		      5
-      intersection	      [4 -1 0 0.4071 572.4188 537.1595 0 0]
+      intersection	      [1 0 -1 0.3199 692.3855 436.8 0 0]
     }
     dst {
       id		      6
-      intersection	      [2 1 0 0.5939 357.8992 537.1595 0 0]
+      intersection	      [1 0 -1 0.5 236.9992 437.7333 0 0]
     }
-    midPoint		    [469.159 537.1595]
+    midPoint		    [464.6924 319.4064]
     chart		    2
-    dataLimits		    [357.899 572.419 534.76 539.559]
+    dataLimits		    [234.599 759.911 415.928 778.826]
     subviewer		    2
     slide {
+      mode		      MIRROR_SLIDE
       sticky		      BOTH_STICK
     }
     executionOrder	    1
-    ssIdNumber		    44
-    linkNode		    [2 31 0]
+    ssIdNumber		    47
+    linkNode		    [2 29 0]
   }
   instance {
-    id			    33
+    id			    31
     machine		    1
     name		    "ACC"
     chart		    2
   }
   target {
-    id			    34
+    id			    32
     machine		    1
     name		    "sfun"
     description		    "Default Simulink S-Function Target."

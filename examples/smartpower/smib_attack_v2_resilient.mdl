@@ -1,6 +1,6 @@
 Model {
   Name			  "smib_attack_v2_resilient"
-  Version		  8.9
+  Version		  9.1
   SavedCharacterEncoding  "windows-1252"
   GraphicalInterface {
     NumRootInports	    0
@@ -24,7 +24,7 @@ Model {
       UnitExpr		      "inherit"
     }
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.123"
+    ComputedModelVersion    "1.124"
     NumModelReferences	    0
     NumTestPointedSignals   0
     NumProvidedFunctions    0
@@ -34,13 +34,23 @@ Model {
     HasTerminateEvent	    0
     IsExportFunctionModel   0
     NumParameterArguments   0
+    NumExternalFileReferences 1
+    ExternalFileReference {
+      Reference		      "simulink/Sinks/XY Graph"
+      Path		      "smib_attack_v2_resilient/XY Graph"
+      SID		      "14"
+      Type		      "LIBRARY_BLOCK"
+    }
     OrderedModelArguments   1
   }
+  DiagnosticSuppressor	  "on"
+  SuppressorTable	  "22 serialization::archive 11 0 6 0 0 0 8 0"
+  Notes			  ""
+  NotesPlugin		  "on"
   LogicAnalyzerGraphicalSettings ""
   LogicAnalyzerPlugin	  "on"
   LogicAnalyzerSignalOrdering ""
-  DiagnosticSuppressor	  "on"
-  SuppressorTable	  "22 serialization::archive 11 0 6 0 0 0 8 0"
+  CustomCodeFunctionData  ""
   SLCCPlugin		  "on"
   ScopeRefreshTime	  0.035000
   OverrideScopeRefreshTime on
@@ -61,7 +71,7 @@ Model {
       $ObjectID		      2
       $ClassName	      "Simulink.WindowInfo"
       IsActive		      [1]
-      Location		      [-7.0, -7.0, 1550.0, 838.0]
+      Location		      [1913.0, -7.0, 1934.0, 1054.0]
       Object {
 	$PropName		"ModelBrowserInfo"
 	$ObjectID		3
@@ -84,10 +94,10 @@ Model {
 	$ClassName		"Simulink.EditorInfo"
 	IsActive		[1]
 	ViewObjType		"StateflowChart"
-	LoadSaveID		"1"
-	Extents			[1681.0, 872.0]
-	ZoomFactor		[1.75]
-	Offset			[-172.65810476190444, -5.4823428571430668]
+	LoadSaveID		"18"
+	Extents			[2161.0, 1142.0]
+	ZoomFactor		[1.9990004997501245]
+	Offset			[-264.93, 4.4870000000000232]
       }
       Object {
 	$PropName		"DockComponentsInfo"
@@ -103,11 +113,11 @@ Model {
 	Width			[512]
 	Height			[384]
       }
-      WindowState	      "AAAA/wAAAAD9AAAAAgAAAAAAAAC9AAADhvwCAAAAA/sAAAAWAEQAbwBjAGsAVwBpAGQAZwBlAHQAMwEAAAAxAAAB+AAAA"
+      WindowState	      "AAAA/wAAAAD9AAAAAgAAAAAAAAC9AAAElPwCAAAAA/sAAAAWAEQAbwBjAGsAVwBpAGQAZwBlAHQAMwEAAAAxAAAB+AAAA"
       "AAAAAAA+wAAABYARABvAGMAawBXAGkAZABnAGUAdAA0AAAAAAD/////AAAAAAAAAAD7AAAAUgBHAEwAVQBFADIAIAB0AHIAZQBlACAAYwBvAG0Ac"
-      "ABvAG4AZQBuAHQALwBHAEwAVQBFADIAIAB0AHIAZQBlACAAYwBvAG0AcABvAG4AZQBuAHQBAAAASgAAA4YAAAB4AP///wAAAAEAAAAAAAAAAPwCA"
+      "ABvAG4AZQBuAHQALwBHAEwAVQBFADIAIAB0AHIAZQBlACAAYwBvAG0AcABvAG4AZQBuAHQBAAAASgAABJQAAAB4AP///wAAAAEAAAAAAAAAAPwCA"
       "AAAAfsAAABUAEcATABVAEUAMgA6AFAAcgBvAHAAZQByAHQAeQBJAG4AcwBwAGUAYwB0AG8AcgAvAFAAcgBvAHAAZQByAHQAeQAgAEkAbgBzAHAAZ"
-      "QBjAHQAbwByAAAAAAD/////AAAANAD///8AAAa+AAADhgAAAAEAAAACAAAAAQAAAAL8AAAAAQAAAAIAAAAP/////wAAAAAA/////wAAAAAAAAAA/"
+      "QBjAHQAbwByAAAAAAD/////AAAANAD///8AAAieAAAElAAAAAEAAAACAAAAAQAAAAL8AAAAAQAAAAIAAAAP/////wAAAAAA/////wAAAAAAAAAA/"
       "////wEAAAAA/////wAAAAAAAAAA/////wAAAAAA/////wAAAAAAAAAA/////wAAAAAA/////wAAAAAAAAAA/////wAAAAAA/////wAAAAAAAAAA/"
       "////wEAAACR/////wAAAAAAAAAA/////wEAAAEE/////wAAAAAAAAAA/////wAAAAAA/////wAAAAAAAAAA/////wEAAAGV/////wAAAAAAAAAA/"
       "////wAAAAAA/////wAAAAAAAAAA/////wAAAAAA/////wAAAAAAAAAA/////wAAAAAA/////wAAAAAAAAAA/////wEAAAPG/////wAAAAAAAAAA/"
@@ -121,10 +131,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "LuanNguyen"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Tue Sep 25 18:04:21 2018"
-  RTWModifiedTimeStamp	  459799455
-  ModelVersionFormat	  "1.%<AutoIncrement:123>"
-  ConfigurationManager	  "none"
+  LastModifiedDate	  "Wed Oct 03 10:52:41 2018"
+  RTWModifiedTimeStamp	  460464760
+  ModelVersionFormat	  "1.%<AutoIncrement:124>"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
   LibraryLinkDisplay	  "disabled"
@@ -145,6 +154,7 @@ Model {
   ShowViewerIcons	  on
   SortedOrder		  off
   VariantCondition	  off
+  ShowSubsystemDomainSpec off
   ExecutionContextIcon	  off
   ShowLinearizationAnnotations on
   ShowVisualizeInsertedRTB on
@@ -152,11 +162,13 @@ Model {
   BlockNameDataTip	  off
   BlockParametersDataTip  off
   BlockDescriptionStringDataTip	off
+  BlockVariantConditionDataTip off
   ToolBar		  on
   StatusBar		  on
   BrowserShowLibraryLinks on
   FunctionConnectors	  off
   BrowserLookUnderMasks	  off
+  MultiThreadCoSim	  on
   SimulationMode	  "normal"
   VisualizeLoggedSignalsWhenLoggingToFile off
   PauseTimes		  "5"
@@ -164,6 +176,8 @@ Model {
   SnapshotBufferSize	  10
   SnapshotInterval	  10
   NumberOfLastSnapshots	  0
+  EnablePacing		  off
+  PacingRate		  1
   LinearizationMsg	  "none"
   Profile		  off
   ParamWorkspaceSource	  "MATLABWorkspace"
@@ -219,7 +233,7 @@ Model {
     Dimension		    1
     Simulink.ConfigSet {
       $ObjectID		      8
-      Version		      "1.17.0"
+      Version		      "1.18.0"
       DisabledProps	      []
       Description	      ""
       Array {
@@ -227,15 +241,15 @@ Model {
 	Dimension		9
 	Simulink.SolverCC {
 	  $ObjectID		  9
-	  Version		  "1.17.0"
+	  Version		  "1.18.0"
 	  DisabledProps		  []
 	  Description		  ""
 	  StartTime		  "0.0"
 	  StopTime		  "10"
 	  AbsTol		  "auto"
+	  AutoScaleAbsTol	  "on"
 	  FixedStep		  "auto"
 	  InitialStep		  "auto"
-	  MaxNumMinSteps	  "-1"
 	  MaxOrder		  5
 	  ZcThreshold		  "auto"
 	  ConsecutiveZCsStepRelTol "10*128*eps"
@@ -247,7 +261,6 @@ Model {
 	  MaxConsecutiveMinStep	  "1"
 	  RelTol		  "1e-3"
 	  EnableMultiTasking	  on
-	  EnableConcurrentExecution off
 	  ConcurrentTasks	  off
 	  Solver		  "ode45"
 	  SolverName		  "ode45"
@@ -264,10 +277,12 @@ Model {
 	  SampleTimeConstraint	  "Unconstrained"
 	  InsertRTBMode		  "Whenever possible"
 	  SampleTimeProperty	  []
+	  DecoupledContinuousIntegration off
+	  MinimalZcImpactIntegration off
 	}
 	Simulink.DataIOCC {
 	  $ObjectID		  10
-	  Version		  "1.17.0"
+	  Version		  "1.18.0"
 	  DisabledProps		  []
 	  Description		  ""
 	  Decimation		  "1"
@@ -308,7 +323,7 @@ Model {
 	}
 	Simulink.OptimizationCC {
 	  $ObjectID		  11
-	  Version		  "1.17.0"
+	  Version		  "1.18.0"
 	  Array {
 	    Type		    "Cell"
 	    Dimension		    8
@@ -366,10 +381,16 @@ Model {
 	  OptimizeBlockOrder	  "off"
 	  OptimizeDataStoreBuffers on
 	  BusAssignmentInplaceUpdate on
+	  DifferentSizesBufferReuse off
+	  OptimizationLevel	  "level2"
+	  OptimizationPriority	  "Balanced"
+	  OptimizationCustomize	  on
+	  UseRowMajorAlgorithm	  off
+	  LabelGuidedReuse	  off
 	}
 	Simulink.DebuggingCC {
 	  $ObjectID		  12
-	  Version		  "1.17.0"
+	  Version		  "1.18.0"
 	  Array {
 	    Type		    "Cell"
 	    Dimension		    1
@@ -381,6 +402,7 @@ Model {
 	  ConsistencyChecking	  "none"
 	  ArrayBoundsChecking	  "none"
 	  SignalInfNanChecking	  "none"
+	  StringTruncationChecking "error"
 	  SignalRangeChecking	  "none"
 	  ReadBeforeWriteMsg	  "UseLocalSettings"
 	  WriteAfterWriteMsg	  "UseLocalSettings"
@@ -408,6 +430,7 @@ Model {
 	  MultiTaskRateTransMsg	  "error"
 	  SingleTaskRateTransMsg  "none"
 	  TasksWithSamePriorityMsg "warning"
+	  ExportedTasksRateTransMsg "none"
 	  SigSpecEnsureSampleTimeMsg "warning"
 	  CheckMatrixSingularityMsg "none"
 	  IntegerOverflowMsg	  "warning"
@@ -449,6 +472,8 @@ Model {
 	  StateNameClashWarn	  "warning"
 	  SimStateInterfaceChecksumMismatchMsg "warning"
 	  SimStateOlderReleaseMsg "error"
+	  ChecksumConsistencyForSSReuse	"none"
+	  LibraryContextMissingDiagnostic "none"
 	  InitInArrayFormatMsg	  "warning"
 	  StrictBusMsg		  "ErrorLevel1"
 	  BusNameAdapt		  "WarnAndRepair"
@@ -475,11 +500,14 @@ Model {
 	  AllowedUnitSystems	  "all"
 	  UnitsInconsistencyMsg	  "warning"
 	  AllowAutomaticUnitConversions	on
+	  RCSCRenamedMsg	  "warning"
+	  RCSCObservableMsg	  "warning"
+	  ForceCombineOutputUpdateInSim	off
 	  UnitDatabase		  ""
 	}
 	Simulink.HardwareCC {
 	  $ObjectID		  13
-	  Version		  "1.17.0"
+	  Version		  "1.18.0"
 	  DisabledProps		  []
 	  Description		  ""
 	  ProdBitPerChar	  8
@@ -527,7 +555,7 @@ Model {
 	}
 	Simulink.ModelReferenceCC {
 	  $ObjectID		  14
-	  Version		  "1.17.0"
+	  Version		  "1.18.0"
 	  DisabledProps		  []
 	  Description		  ""
 	  UpdateModelReferenceTargets "IfOutOfDateOrStructuralChange"
@@ -546,7 +574,7 @@ Model {
 	}
 	Simulink.SFSimCC {
 	  $ObjectID		  15
-	  Version		  "1.17.0"
+	  Version		  "1.18.0"
 	  DisabledProps		  []
 	  Description		  ""
 	  SimCustomSourceCode	  ""
@@ -576,7 +604,7 @@ Model {
 	Simulink.RTWCC {
 	  $BackupClass		  "Simulink.RTWCC"
 	  $ObjectID		  16
-	  Version		  "1.17.0"
+	  Version		  "1.18.0"
 	  Array {
 	    Type		    "Cell"
 	    Dimension		    16
@@ -627,6 +655,7 @@ Model {
 	  CustomLibrary		  ""
 	  CustomDefine		  ""
 	  CustomLAPACKCallback	  ""
+	  CustomFFTCallback	  ""
 	  CustomInitializer	  ""
 	  CustomTerminator	  ""
 	  Toolchain		  "Automatically locate an installed toolchain"
@@ -662,10 +691,10 @@ Model {
 	    Dimension		    2
 	    Simulink.CodeAppCC {
 	      $ObjectID		      17
-	      Version		      "1.17.0"
+	      Version		      "1.18.0"
 	      Array {
 		Type			"Cell"
-		Dimension		27
+		Dimension		28
 		Cell			"IgnoreCustomStorageClasses"
 		Cell			"IgnoreTestpoints"
 		Cell			"InsertBlockDesc"
@@ -693,6 +722,7 @@ Model {
 		Cell			"CustomSymbolStrEmxType"
 		Cell			"CustomSymbolStrEmxFcn"
 		Cell			"CustomUserTokenString"
+		Cell			"BlockCommentType"
 		PropName		"DisabledProps"
 	      }
 	      Description	      ""
@@ -702,18 +732,16 @@ Model {
 	      CommentStyle	      "Auto"
 	      IgnoreCustomStorageClasses on
 	      IgnoreTestpoints	      off
-	      IncHierarchyInIds	      off
 	      MaxIdLength	      31
 	      PreserveName	      off
 	      PreserveNameWithParent  off
 	      ShowEliminatedStatement off
 	      OperatorAnnotations     off
-	      IncAutoGenComments      off
 	      SimulinkDataObjDesc     off
 	      SFDataObjDesc	      off
 	      MATLABFcnDesc	      off
-	      IncDataTypeInIds	      off
 	      MangleLength	      1
+	      SharedChecksumLength    8
 	      CustomSymbolStrGlobalVar "$R$N$M"
 	      CustomSymbolStrType     "$N$R$M_T"
 	      CustomSymbolStrField    "$N$M"
@@ -737,6 +765,8 @@ Model {
 	      InsertBlockDesc	      off
 	      InsertPolySpaceComments off
 	      SimulinkBlockComments   on
+	      BlockCommentType	      "BlockPathComment"
+	      StateflowObjectComments on
 	      MATLABSourceComments    off
 	      EnableCustomComments    off
 	      InternalIdentifierFile  ""
@@ -749,7 +779,7 @@ Model {
 	    Simulink.GRTTargetCC {
 	      $BackupClass	      "Simulink.TargetCC"
 	      $ObjectID		      18
-	      Version		      "1.17.0"
+	      Version		      "1.18.0"
 	      Array {
 		Type			"Cell"
 		Dimension		17
@@ -782,6 +812,7 @@ Model {
 	      UtilityFuncGeneration   "Auto"
 	      MultiwordTypeDef	      "System defined"
 	      MultiwordLength	      2048
+	      DynamicStringBufferSize 256
 	      GenerateFullHeader      on
 	      InferredTypesCompatibility off
 	      ExistingSharedCode      ""
@@ -796,7 +827,6 @@ Model {
 	      CombineOutputUpdateFcns on
 	      CombineSignalStateStructs	off
 	      SuppressErrorStatus     off
-	      ERTFirstTimeCompliant   off
 	      IncludeFileDelimiter    "Auto"
 	      ERTCustomFileBanners    off
 	      SupportAbsoluteTime     on
@@ -826,6 +856,12 @@ Model {
 	      CoderGroups	      []
 	      AccessMethods	      []
 	      LookupTableObjectStructAxisOrder "1,2,3,4,..."
+	      LUTObjectStructOrderExplicitValues "Size,Breakpoints,Table"
+	      LUTObjectStructOrderEvenSpacing "Size,Breakpoints,Table"
+	      ArrayLayout	      "Column-major"
+	      ERTHeaderFileRootName   "$R$E"
+	      ERTSourceFileRootName   "$R$E"
+	      ERTDataFileRootName     "$R_data"
 	      UseMalloc		      off
 	      ExtMode		      off
 	      ExtModeStaticAlloc      off
@@ -847,7 +883,7 @@ Model {
 	}
 	SlCovCC.ConfigComp {
 	  $ObjectID		  19
-	  Version		  "1.17.0"
+	  Version		  "1.18.0"
 	  DisabledProps		  []
 	  Description		  "Simulink Coverage Configuration Component"
 	  Name			  "Simulink Coverage"
@@ -933,7 +969,12 @@ Model {
     FontSize		    10
     FontWeight		    "normal"
     FontAngle		    "normal"
+    MarkupType		    "model"
     UseDisplayTextAsClickCallback off
+    AnnotationType	    "note_annotation"
+    FixedHeight		    off
+    FixedWidth		    off
+    Interpreter		    "off"
   }
   LineDefaults {
     FontName		    "Helvetica"
@@ -1005,17 +1046,20 @@ Model {
       OutputWhenDisabled      "held"
       InitialOutput	      "[]"
       MustResolveToSignalObject	off
+      OutputWhenUnConnected   off
+      OutputWhenUnconnectedValue "0"
+      VectorParamsAs1DForOutWhenUnconnected off
     }
     Block {
       BlockType		      S-Function
       FunctionName	      "system"
       SFunctionModules	      "''"
       PortCounts	      "[]"
+      MultiThreadCoSim	      "auto"
     }
     Block {
       BlockType		      Scope
       DefaultConfigurationName "Simulink.scopes.TimeScopeBlockCfg"
-      Floating		      off
     }
     Block {
       BlockType		      SubSystem
@@ -1043,11 +1087,14 @@ Model {
       Opaque		      off
       MaskHideContents	      off
       SFBlockType	      "NONE"
+      Variant		      off
       GeneratePreprocessorConditionals off
+      AllowZeroVariantControls off
       PropagateVariantConditions off
       TreatAsGroupedWhenPropagatingVariantConditions on
       ContentPreviewEnabled   off
       IsWebBlock	      off
+      IsObserver	      off
     }
     Block {
       BlockType		      Terminator
@@ -1064,9 +1111,11 @@ Model {
   }
   System {
     Name		    "smib_attack_v2_resilient"
-    Location		    [-7, -7, 1543, 831]
+    Location		    [1913, -7, 3847, 1047]
     Open		    off
     PortBlocksUseCompactNotation off
+    SetDomainSpec	    off
+    DomainSpecType	    "Deduce"
     ModelBrowserVisibility  on
     ModelBrowserWidth	    200
     ScreenColor		    "white"
@@ -1093,7 +1142,6 @@ Model {
       TreatAsAtomicUnit	      on
       RequestExecContextInheritance off
       SFBlockType	      "Chart"
-      Variant		      off
       Object {
 	$PropName		"MaskObject"
 	$ObjectID		21
@@ -1106,9 +1154,11 @@ Model {
       }
       System {
 	Name			"Attack"
-	Location		[-7, -7, 1543, 831]
+	Location		[1913, -7, 3847, 1047]
 	Open			off
 	PortBlocksUseCompactNotation off
+	SetDomainSpec		off
+	DomainSpecType		"Deduce"
 	ModelBrowserVisibility	on
 	ModelBrowserWidth	200
 	ScreenColor		"white"
@@ -1120,7 +1170,7 @@ Model {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
-	SIDHighWatermark	"70"
+	SIDHighWatermark	"73"
 	Block {
 	  BlockType		  Inport
 	  Name			  "delta"
@@ -1141,24 +1191,24 @@ Model {
 	Block {
 	  BlockType		  Demux
 	  Name			  " Demux "
-	  SID			  "18::65"
+	  SID			  "18::72"
 	  Ports			  [1, 1]
 	  Position		  [270, 230, 320, 270]
-	  ZOrder		  41
+	  ZOrder		  48
 	  Outputs		  "1"
 	}
 	Block {
 	  BlockType		  S-Function
 	  Name			  " SFunction "
-	  SID			  "18::64"
+	  SID			  "18::71"
 	  Tag			  "Stateflow S-Function smib_attack_v2_resilient 2"
 	  Ports			  [2, 2]
-	  Position		  [180, 105, 230, 165]
-	  ZOrder		  40
+	  Position		  [180, 100, 230, 160]
+	  ZOrder		  47
 	  FunctionName		  "sf_sfun"
 	  PortCounts		  "[2 2]"
 	  SFunctionDeploymentMode off
-	  EnableBusSupport	  on
+	  EnableBusSupport	  off
 	  SFcnIsStateOwnerBlock	  off
 	  Port {
 	    PortNumber		    2
@@ -1168,9 +1218,9 @@ Model {
 	Block {
 	  BlockType		  Terminator
 	  Name			  " Terminator "
-	  SID			  "18::66"
+	  SID			  "18::73"
 	  Position		  [460, 241, 480, 259]
-	  ZOrder		  42
+	  ZOrder		  49
 	}
 	Block {
 	  BlockType		  Outport
@@ -1181,14 +1231,15 @@ Model {
 	  IconDisplay		  "Port number"
 	}
 	Line {
-	  ZOrder		  29
+	  ZOrder		  34
 	  SrcBlock		  "delta"
 	  SrcPort		  1
+	  Points		  [120, 0]
 	  DstBlock		  " SFunction "
 	  DstPort		  1
 	}
 	Line {
-	  ZOrder		  30
+	  ZOrder		  35
 	  SrcBlock		  "omega"
 	  SrcPort		  1
 	  DstBlock		  " SFunction "
@@ -1196,7 +1247,7 @@ Model {
 	}
 	Line {
 	  Name			  "load_out"
-	  ZOrder		  31
+	  ZOrder		  36
 	  Labels		  [0, 0]
 	  SrcBlock		  " SFunction "
 	  SrcPort		  2
@@ -1204,14 +1255,14 @@ Model {
 	  DstPort		  1
 	}
 	Line {
-	  ZOrder		  32
+	  ZOrder		  37
 	  SrcBlock		  " Demux "
 	  SrcPort		  1
 	  DstBlock		  " Terminator "
 	  DstPort		  1
 	}
 	Line {
-	  ZOrder		  33
+	  ZOrder		  38
 	  SrcBlock		  " SFunction "
 	  SrcPort		  1
 	  DstBlock		  " Demux "
@@ -1232,7 +1283,6 @@ Model {
       TreatAsAtomicUnit	      on
       RequestExecContextInheritance off
       SFBlockType	      "Chart"
-      Variant		      off
       Object {
 	$PropName		"MaskObject"
 	$ObjectID		22
@@ -1245,9 +1295,11 @@ Model {
       }
       System {
 	Name			"SMIB"
-	Location		[-7, -7, 1543, 831]
-	Open			on
+	Location		[1913, -7, 3847, 1047]
+	Open			off
 	PortBlocksUseCompactNotation off
+	SetDomainSpec		off
+	DomainSpecType		"Deduce"
 	ModelBrowserVisibility	on
 	ModelBrowserWidth	200
 	ScreenColor		"white"
@@ -1259,7 +1311,7 @@ Model {
 	TiledPageScale		1
 	ShowPageBoundaries	off
 	ZoomFactor		"100"
-	SIDHighWatermark	"69"
+	SIDHighWatermark	"72"
 	Block {
 	  BlockType		  Inport
 	  Name			  "load"
@@ -1271,25 +1323,25 @@ Model {
 	Block {
 	  BlockType		  Demux
 	  Name			  " Demux "
-	  SID			  "1::65"
+	  SID			  "1::71"
 	  Ports			  [1, 1]
 	  Position		  [270, 230, 320, 270]
-	  ZOrder		  41
+	  ZOrder		  47
 	  Outputs		  "1"
 	}
 	Block {
 	  BlockType		  S-Function
 	  Name			  " SFunction "
-	  SID			  "1::64"
+	  SID			  "1::70"
 	  Tag			  "Stateflow S-Function smib_attack_v2_resilient 1"
 	  Ports			  [1, 3]
-	  Position		  [180, 105, 230, 185]
-	  ZOrder		  40
+	  Position		  [180, 100, 230, 180]
+	  ZOrder		  46
 	  FunctionName		  "sf_sfun"
 	  Parameters		  "delta0,omega0,theta"
 	  PortCounts		  "[1 3]"
 	  SFunctionDeploymentMode off
-	  EnableBusSupport	  on
+	  EnableBusSupport	  off
 	  SFcnIsStateOwnerBlock	  off
 	  Port {
 	    PortNumber		    2
@@ -1303,9 +1355,9 @@ Model {
 	Block {
 	  BlockType		  Terminator
 	  Name			  " Terminator "
-	  SID			  "1::66"
+	  SID			  "1::72"
 	  Position		  [460, 241, 480, 259]
-	  ZOrder		  42
+	  ZOrder		  48
 	}
 	Block {
 	  BlockType		  Outport
@@ -1325,7 +1377,7 @@ Model {
 	  IconDisplay		  "Port number"
 	}
 	Line {
-	  ZOrder		  276
+	  ZOrder		  281
 	  SrcBlock		  "load"
 	  SrcPort		  1
 	  DstBlock		  " SFunction "
@@ -1333,7 +1385,7 @@ Model {
 	}
 	Line {
 	  Name			  "delta_out"
-	  ZOrder		  277
+	  ZOrder		  282
 	  Labels		  [0, 0]
 	  SrcBlock		  " SFunction "
 	  SrcPort		  2
@@ -1342,7 +1394,7 @@ Model {
 	}
 	Line {
 	  Name			  "omega_out"
-	  ZOrder		  278
+	  ZOrder		  283
 	  Labels		  [0, 0]
 	  SrcBlock		  " SFunction "
 	  SrcPort		  3
@@ -1350,14 +1402,14 @@ Model {
 	  DstPort		  1
 	}
 	Line {
-	  ZOrder		  279
+	  ZOrder		  284
 	  SrcBlock		  " Demux "
 	  SrcPort		  1
 	  DstBlock		  " Terminator "
 	  DstPort		  1
 	}
 	Line {
-	  ZOrder		  280
+	  ZOrder		  285
 	  SrcBlock		  " SFunction "
 	  SrcPort		  1
 	  DstBlock		  " Demux "
@@ -1420,6 +1472,7 @@ Model {
       "ools','Plot Navigation',true,'OnceAtStop',false,'PreviousAutoscale','XY'),extmgr.Configuration('Tools','Measurem"
       "ents',true,'Version','2017a')),'Version','2017a','Location',[2117.8 142.2 3653 891])"
       NumInputPorts	      "3"
+      Floating		      off
     }
     Block {
       BlockType		      UnitDelay
@@ -1448,7 +1501,7 @@ Model {
       Ports		      [2]
       Position		      [955, 162, 1045, 273]
       ZOrder		      14
-      LibraryVersion	      "1.391"
+      LibraryVersion	      "1.441"
       SourceBlock	      "simulink/Sinks/XY Graph"
       SourceType	      "XY scope."
       SourceProductName	      "Simulink"
@@ -1608,7 +1661,7 @@ Model {
 }
 #Finite State Machines
 #
-#   Stateflow 80000011
+#   Stateflow 80000014
 #
 #
 Stateflow {
@@ -1617,7 +1670,7 @@ Stateflow {
     name		    "smib_attack_v2_resilient"
     created		    "14-Feb-2014 14:35:58"
     isLibrary		    0
-    sfVersion		    80000011
+    sfVersion		    80000014
     firstTarget		    30
   }
   chart {
@@ -1625,8 +1678,8 @@ Stateflow {
     machine		    1
     name		    "SMIB"
     windowPosition	    [-8 -8 1936 1056]
-    viewLimits		    [-172.658 595.799 -5.482 393.146]
-    zoomFactor		    0.762
+    viewLimits		    [-42.803 1109.73 -79.593 529.474]
+    zoomFactor		    0.889
     stateColor		    [0.3803921568627451 0.2745098039215687 0.1803921568627451]
     stateLabelColor	    [0.4588235294117647 0.2980392156862745 0.1411764705882353]
     transitionColor	    [0.3215686274509804 0.5450980392156862 0.7725490196078432]
@@ -1636,7 +1689,6 @@ Stateflow {
     screen		    [1 1 1920 1200 1.333333333333333]
     treeNode		    [0 3 0 0]
     viewObj		    2
-    visible		    1
     ssIdHighWaterMark	    87
     decomposition	    CLUSTER_CHART
     updateMethod	    CONTINUOUS
@@ -1649,9 +1701,9 @@ Stateflow {
   }
   state {
     id			    3
-    labelString		    "Plant_1\ndu:\ndelta_dot = omega;\nomega_dot = 9 -10.*sin(delta) - omega;\ndelta_out = delta;\nom"
-    "ega_out = omega;\n\nclock_dot = 1;"
-    position		    [20.4135 66.4537 219.6612 119.255]
+    labelString		    "Plant_1\ndu:\ndelta_dot = omega;\nomega_dot = 9 -10*sin(delta) - omega;\ndelta_out = delta;\nome"
+    "ga_out = omega;\n\nclock_dot = 1;"
+    position		    [8.781 50.3928 219.1267 98.1833]
     fontSize		    12
     chart		    2
     treeNode		    [2 0 0 4]
@@ -1663,9 +1715,9 @@ Stateflow {
   }
   state {
     id			    4
-    labelString		    "Plant_2\ndu:\ndelta_dot = omega;\nomega_dot = -10.*sin(delta) - omega;\ndelta_out = delta;\nomeg"
-    "a_out = omega;\n\nclock_dot = 1;"
-    position		    [380.453 68.1333 210.09 119.095]
+    labelString		    "Plant_2\ndu:\ndelta_dot = omega;\nomega_dot = -10*sin(delta) - omega;\ndelta_out = delta;\nomega"
+    "_out = omega;\n\n\nclock_dot = 1;"
+    position		    [336.2883 50.7391 208.7465 96.9575]
     fontSize		    12
     chart		    2
     treeNode		    [2 0 3 0]
@@ -1764,6 +1816,7 @@ Stateflow {
     machine		    1
     props {
       updateMethod	      SF_CONTINUOUS_TIME_DATA
+      initialValue	      "delta0"
       type {
 	primitive		SF_DOUBLE_TYPE
 	isSigned		1
@@ -1786,6 +1839,7 @@ Stateflow {
     machine		    1
     props {
       updateMethod	      SF_CONTINUOUS_TIME_DATA
+      initialValue	      "omega0"
       type {
 	primitive		SF_DOUBLE_TYPE
 	isSigned		1
@@ -1861,19 +1915,19 @@ Stateflow {
   }
   transition {
     id			    14
-    labelString		    "{ omega= omega0; delta = delta0; }\n"
-    labelPosition	    [46.628 28.793 189.313 30]
+    labelString		    "{ omega = omega0; delta = delta0; }\n"
+    labelPosition	    [55.774 22.598 192.641 30]
     fontSize		    12
     src {
-      intersection	      [0 0 1 0 42.6297 36.4537 0 0]
+      intersection	      [0 -0 1 0 51.2438 20.3928 0 0]
     }
     dst {
       id		      3
-      intersection	      [1 0 -1 0.1011 42.6297 66.4537 0 0]
+      intersection	      [1 0 -1 0.1938 51.2438 50.3928 0 0]
     }
-    midPoint		    [42.6297 51.4537]
+    midPoint		    [51.2438 35.3928]
     chart		    2
-    dataLimits		    [40.23 45.03 36.454 66.454]
+    dataLimits		    [48.844 53.644 20.393 50.393]
     subviewer		    2
     drawStyle		    SMART
     slide {
@@ -1886,19 +1940,19 @@ Stateflow {
   transition {
     id			    15
     labelString		    "[load == 1 && clock > theta]\n{clock = 0;}"
-    labelPosition	    [239.597 45.792 148.969 30]
+    labelPosition	    [252.44 56.391 148.969 30]
     fontSize		    12
     src {
       id		      3
-      intersection	      [2 1 0 0.2465 240.0747 95.8453 0 0]
+      intersection	      [2 1 0 0.2858 227.9076 78.4511 0 0]
     }
     dst {
       id		      4
-      intersection	      [4 -1 0 0.7673 380.453 95.8453 0 0]
+      intersection	      [4 -1 0 0.7142 336.2883 78.4511 0 0]
     }
-    midPoint		    [306.2639 95.8453]
+    midPoint		    [278.098 78.4511]
     chart		    2
-    dataLimits		    [240.075 380.453 93.445 98.245]
+    dataLimits		    [227.908 336.288 76.051 80.851]
     subviewer		    2
     slide {
       sticky		      BOTH_STICK
@@ -1910,19 +1964,19 @@ Stateflow {
   transition {
     id			    16
     labelString		    "[load == 0 && clock > theta]\n{clock = 0;}"
-    labelPosition	    [238.759 186.496 148.969 30]
+    labelPosition	    [251.431 126.1 148.969 30]
     fontSize		    12
     src {
       id		      4
-      intersection	      [4 -1 0 0.3119 380.453 150.0779 0 0]
+      intersection	      [4 -1 0 0.2684 336.2883 121.6737 0 0]
     }
     dst {
       id		      3
-      intersection	      [2 1 -0 0.7012 240.0747 150.0779 0 0]
+      intersection	      [2 1 -0 0.726 227.9076 121.6737 0 0]
     }
-    midPoint		    [314.2639 150.0779]
+    midPoint		    [286.098 121.6737]
     chart		    2
-    dataLimits		    [240.075 380.453 147.678 152.478]
+    dataLimits		    [227.908 336.288 119.274 124.074]
     subviewer		    2
     drawStyle		    SMART
     slide {
@@ -1943,7 +1997,7 @@ Stateflow {
     machine		    1
     name		    "Attack"
     windowPosition	    [-8 -8 1936 1056]
-    viewLimits		    [-264.93 407.47 4.487 353.287]
+    viewLimits		    [-264.93 715.56 4.487 544.757]
     zoomFactor		    0.667
     stateColor		    [0.3803921568627451 0.2745098039215687 0.1803921568627451]
     stateLabelColor	    [0.4588235294117647 0.2980392156862745 0.1411764705882353]
@@ -1952,7 +2006,7 @@ Stateflow {
     junctionColor	    [0.7764705882352941 0.4980392156862745 0]
     chartColor		    [1 0.9882352941176471 0.9254901960784314]
     screen		    [1 1 1920 1200 1.333333333333333]
-    treeNode		    [0 20 0 0]
+    treeNode		    [0 19 0 0]
     viewObj		    18
     ssIdHighWaterMark	    84
     decomposition	    CLUSTER_CHART
@@ -1967,10 +2021,10 @@ Stateflow {
   state {
     id			    19
     labelString		    "Mode1\ndu:\nt_dot = 1;\n\n"
-    position		    [20.0808 131.3416 142.54 95.09]
+    position		    [20.0808 131.3416 63.7006 48.2666]
     fontSize		    12
     chart		    18
-    treeNode		    [18 0 20 0]
+    treeNode		    [18 0 0 20]
     visible		    0
     subviewer		    18
     ssIdNumber		    68
@@ -1980,10 +2034,10 @@ Stateflow {
   state {
     id			    20
     labelString		    "Mode2\ndu:\nt_dot = 1;\n\n"
-    position		    [374.5406 130.3801 132.0028 97.013]
+    position		    [269.288 132.5812 61.9678 45.7874]
     fontSize		    12
     chart		    18
-    treeNode		    [18 0 0 19]
+    treeNode		    [18 0 19 0]
     visible		    0
     subviewer		    18
     ssIdNumber		    70
@@ -2072,22 +2126,23 @@ Stateflow {
   }
   transition {
     id			    25
-    labelString		    "[delta + omega >= 0.2]\n{load_out = 1;}\n\n"
-    labelPosition	    [223.831 66.99 122.313 58]
+    labelString		    "[delta + omega >= 0.2]\n{load_out = 1;}\n"
+    labelPosition	    [137.889 61.757 122.313 44]
     fontSize		    12
     src {
       id		      19
-      intersection	      [1 0 -1 0.8506 141.3226 131.3416 0 0]
+      intersection	      [1 0 -1 0.5141 52.8288 131.3416 0 0]
     }
     dst {
       id		      20
-      intersection	      [1 0 -1 0.1541 394.8774 130.3801 0 0]
+      intersection	      [1 0 -1 0.5195 301.4802 132.5812 0 0]
     }
-    midPoint		    [283.1447 105.4415]
+    midPoint		    [170.8878 94.9322]
     chart		    18
-    dataLimits		    [141.323 397.277 102.049 131.342]
+    dataLimits		    [52.829 303.88 93.835 132.581]
     subviewer		    18
     slide {
+      mode		      MIRROR_SLIDE
       sticky		      BOTH_STICK
     }
     executionOrder	    2
@@ -2097,19 +2152,19 @@ Stateflow {
   transition {
     id			    26
     labelString		    "[delta + omega >= 0.2&&t >=2.5]\n{load_out = 0;}\n\n"
-    labelPosition	    [184.501 134.454 175.641 58]
+    labelPosition	    [93.725 114.553 175.641 58]
     fontSize		    12
     src {
       id		      19
-      intersection	      [2 1 0 0.4514 162.6208 174.2625 0 0]
+      intersection	      [2 1 0 0.3526 83.7814 148.3589 0 0]
     }
     dst {
       id		      20
-      intersection	      [4 -1 0 0.5477 374.5406 174.2625 0 0]
+      intersection	      [4 -1 0 0.6554 269.288 148.3589 0 0]
     }
-    midPoint		    [264.5807 174.2625]
+    midPoint		    [172.5347 148.3589]
     chart		    18
-    dataLimits		    [162.621 374.541 171.862 176.662]
+    dataLimits		    [83.781 269.288 145.959 150.759]
     subviewer		    18
     slide {
       sticky		      BOTH_STICK
@@ -2121,22 +2176,23 @@ Stateflow {
   transition {
     id			    27
     labelString		    "[delta + omega < -0.2]\n{load_out = 0;}\n"
-    labelPosition	    [196.213 227.308 119.297 44]
+    labelPosition	    [89.705 261.162 119.297 44]
     fontSize		    12
     src {
       id		      20
-      intersection	      [4 -1 0 0.1621 374.5406 211.672 0 0]
+      intersection	      [3 0 1 0.4644 302.4807 178.3686 0 0]
     }
     dst {
       id		      19
-      intersection	      [2 1 0 0.8448 162.6208 211.672 0 0]
+      intersection	      [3 0 1 0.5016 51.8283 179.6082 0 0]
     }
-    midPoint		    [272.5807 211.672]
+    midPoint		    [177.1545 245.6941]
     chart		    18
-    dataLimits		    [162.621 374.541 209.272 214.072]
+    dataLimits		    [49.428 302.481 178.369 245.877]
     subviewer		    18
     drawStyle		    SMART
     slide {
+      mode		      MIRROR_SLIDE
       sticky		      BOTH_STICK
     }
     executionOrder	    1
@@ -2146,18 +2202,18 @@ Stateflow {
   transition {
     id			    28
     labelString		    "\n"
-    labelPosition	    [69.969 237.07 2 30]
+    labelPosition	    [31.218 180.659 2 30]
     fontSize		    12
     src {
-      intersection	      [0 0.6134 -0.7898 0 53.67 262.4866 0 0]
+      intersection	      [0 -0 -1 0 31.218 196.583 0 0]
     }
     dst {
       id		      19
-      intersection	      [3 0 1 0.5679 81.67 226.4316 0 0]
+      intersection	      [3 0 1 0.8252 31.218 179.6082 0 0]
     }
-    midPoint		    [67.67 253.4137]
+    midPoint		    [31.218 192.0956]
     chart		    18
-    dataLimits		    [53.67 84.07 226.432 262.487]
+    dataLimits		    [28.818 33.618 179.608 196.583]
     subviewer		    18
     slide {
       sticky		      BOTH_STICK
