@@ -4,7 +4,6 @@ from antlr4.InputStream import InputStream
 import pdb
 import os
 import argparse
-
 from enum import Enum
 
 sys.path.append("/Users/gautam/research/CASE/reaffirm/python")
@@ -57,13 +56,13 @@ class Model:
     def __init__(self, matlab_var, engine):
         self.engine = engine
         self.matlab_var = matlab_var
-        self.modes = {Mode(m[0],engine)
+        self.Mode = {Mode(m[0],engine)
                       for m in engine.find(matlab_var,'-isa','Stateflow.State')}
-        self.transitions = {Transition(t[0],engine)
+        self.Trans = {Transition(t[0],engine)
                       for t in engine.find(matlab_var,'-isa','Stateflow.Transition')}
-        for t in self.transitions.copy():
+        for t in self.Trans.copy():
              if t.source.matlab_var.size == (0,0):
-                 self.transitions.remove(t)
+                 self.Trans.remove(t)
         self.param = None
 
     def addMode(self, ctx, mode):
@@ -82,7 +81,7 @@ class Model:
         raw_trans = self.engine.addTransition(self.matlab_var,
                                              src.matlab_var, dest.matlab_var, eqn)
         newtrans = Transition(raw_trans, self.engine)
-        self.transitions.add(newtrans)
+        self.Trans.add(newtrans)
         return newtrans
 
     def addParam(self, ctx, param):
@@ -90,7 +89,7 @@ class Model:
         self.param = self.engine.addParam(self.matlab_var,param)
 
     def addLocalVar(self, ctx, localvar):
-        istext(ctx, param)
+        istext(ctx, localvar)
         self.localVar = self.engine.addVariable(self.matlab_var,localvar,'Local')
 
     def copyModel(self, ctx):
@@ -111,13 +110,13 @@ class CopyModel:
     def __init__(self, matlab_var, engine, copy=None):
         self.engine = engine
         self.matlab_var = matlab_var
-        self.modes = {Mode(m[0],engine)
+        self.Mode = {Mode(m[0],engine)
                           for m in engine.find(matlab_var,'states')}
-        self.transitions = {Transition(t[0],engine)
+        self.Trans = {Transition(t[0],engine)
                           for t in engine.find(matlab_var,'trans')}
-        for t in self.transitions.copy():
+        for t in self.Trans.copy():
             if t.source.matlab_var.size == (0,0):
-                self.transitions.remove(t)
+                self.Trans.remove(t)
 
     def copyModel(self, ctx):
         return CopyModel(self, self.engine.copyModel(self.matlab_var,"copyModel"),
@@ -141,7 +140,7 @@ class Mode:
     #Flow is read-only, since updates must happen per-mode otherwise
     #changes will not be propagated to MATLAB
     @property
-    def flow(self, ctx):
+    def flow(self):
         return self.engine.get(self.matlab_var,'LabelString')
 
     @property
@@ -414,6 +413,8 @@ def runHATL(script, modelfile,modelname=None):
     else:
         print("Connecting to MATLAB engine")
         eng = engine.connect_matlab(sessions[0])
+    # print("Starting MATLAB engine")
+    # eng = engine.start_matlab()
 
     print("Loading Initial Model")
     eng.clear('all',nargout=0)
