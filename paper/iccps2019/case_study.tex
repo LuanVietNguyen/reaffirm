@@ -51,13 +51,12 @@ The performance of \toolreaffirm for the second pattern is similar to the first 
 		%\includegraphics[trim = 17mm 85mm 17mm 0mm, clip, width=0.95\textwidth]{image/spectral_signal}%
 	\caption{The repaired ACC model with a synthesized value of $\theta = 0.1543$ for the resiliency pattern shown in ~\figref{acc_code_3}.}%
 	\figlabel{acc_model_pat3}%
-\end{figure}% 
+\end{figure}%
 %
 \begin{figure}[tbp]%frame=none,
 \begin{lstlisting}[basicstyle=\ttfamily\footnotesize, numbers=none]
-model = getModelByName("ACC") # retrieve the ACC model
 
-# start a transformation  
+# start a transformation
 formode m = model.Mode {
     m.replace(m.flow,"ngps", "2*theta*ngps")
     m.replace(m.flow,"nenc", "2*(1-theta)*nenc")

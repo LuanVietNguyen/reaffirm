@@ -86,19 +86,18 @@ Finally, we need to copy all transitions between original modes (stored in a cop
 %
 \begin{figure}[!t]%frame=none,
 \begin{lstlisting}[basicstyle=\ttfamily\footnotesize, numbers=none]
-model = getModelByName("ACC") # retrieve the ACC model
-model_copy = copyModel(model) # make a model copy 
+model_copy = copyModel(model) # make a model copy
 
-# start a transformation  
+# start a transformation
 model.addParam("theta") # add new parameter theta
 
-formode m = model.modes {
+formode m = model.Mode {
 		m_copy = model.addMode(m)
 		m.replace(m_copy.flow,"ngps","nenc")
 		model.addTransition(m,m_copy,"abs(ngps-nenc)>theta")
 }
 
-fortran t = model_copy.transitions {
+fortran t = model_copy.Trans {
 		# get source and destination modes of transition t
 		src = t.source
 		dst = t.destination
@@ -126,7 +125,13 @@ exiting. Additionally, these error messages are reported in terms of
 generic HATL models, so an engineer writing a resiliency pattern does
 not need to worry about the underlying implementation.
 
-Currently, HATL provides enough programming abstraction to express concise model transformations that function as valid resiliency patterns: more examples of these scripts can be seen in our case studies. There is room for future improvement, such as adding language constructs like object hierarchy or type checking. Expanding HATL's backend to include more modeling frameworks besides SLSF would be useful as well.
+Currently, HATL provides enough programming abstraction to express
+concise model transformations that function as valid resiliency
+patterns: more examples of these scripts can be seen in our case
+studies. There is room for future improvement, such as adding language
+constructs like object hierarchy or type checking. Expanding HATL's
+backend to include more modeling frameworks besides SLSF would be
+useful as well.
 
 
 
