@@ -1,12 +1,12 @@
 duplicate_model = model.copyModel()
 model.addParam("theta")
-formode m = model.modes {
+formode m = model.Mode {
     m_copy = model.addMode(m)
     m_copy.replace("ngps","nenc")
     model.addTransition(m,m_copy,"abs(ngps-nenc) > theta")
 }
 
-fortran t = duplicate_model.transitions {
+fortran t = duplicate_model.Trans {
     src = t.source
     dst = t.destination
     copy_src = model.getCopy(src)

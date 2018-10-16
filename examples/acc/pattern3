@@ -1,5 +1,5 @@
-addParam(model,"theta")
-formode m = model.modes {
+model.addParam("theta")
+formode m = model.Mode {
     m.replace("ngps", "2*theta*ngps")
     m.replace("nenc", "2*(1-theta)*nenc")
 }
