@@ -4,6 +4,7 @@ from antlr4.InputStream import InputStream
 import pdb
 import os
 import argparse
+
 from enum import Enum
 
 sys.path.append("/Users/gautam/research/CASE/reaffirm/python")

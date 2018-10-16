@@ -1,7 +1,7 @@
 %!TEX root = main.tex
 \documentclass[sigconf]{acmart}
 %\documentclass[format=acmsmall, review=false, screen=true]{acmart}
- \usepackage{booktabs} 
+ \usepackage{booktabs}
 
 % \usepackage{epstopdf}
 % \usepackage{textcomp} % copyright symbol
@@ -151,8 +151,8 @@
 %\setcopyright{cagovmixed}
 
 
-%\copyrightyear{2019} 
-%\acmYear{2019} 
+%\copyrightyear{2019}
+%\acmYear{2019}
 %\setcopyright{acmcopyright}
 %\acmConference{ICCPS '19}{April 16-18, 2019}{Montreal, Canada}\acmPrice{15.00}\acmDOI{}
 %\acmISBN{9}
@@ -207,6 +207,7 @@
 \renewcommand{\shortauthors}{Nguyen et al.}
 %\vspace{1em}
 \input{abstract}
+\thanks{This material is based upon work supported by the Defense Advanced Research Projects Agency (DARPA) and Space and Naval Warfare Systems Center Pacific (SSC Pacific) under Contract No. N6600118C4007}
 \maketitle
 %\vspace{-1em}
 
@@ -235,11 +236,16 @@
 %\vspace{-1em}
 %\input{conclusion}
 %\vspace{-1em}
-%\renewcommand{\baselinestretch}{0.6}
+\renewcommand{\baselinestretch}{0.98}
 %\scriptsize
 %
 \bibliographystyle{ACM-Reference-Format}
-%\bibliography{sigproc} 
+%\bibliography{sigproc}
 % \bibliographystyle{abbrv}
 \bibliography{luan}  % sigproc.bib is the name of the Bibliography in this case
 \end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

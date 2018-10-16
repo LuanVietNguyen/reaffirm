@@ -6,10 +6,10 @@
 \section{Model Transformation}
 \seclabel{transformation}
 %\vspace{-0.5em}
-% 
-\subsection{Representation of Hybrid System}
-Hybrid automata~\cite{alur1995algorithmic} are a modeling formalism popularly used to model hybrid systems which include both continuous dynamics and discrete state transitions. A hybrid automaton is essentially a finite state machine extended with a set of real-valued variables evolving continuously over intervals of real-time~\cite{alur1995algorithmic}\footnote{In this paper, we only consider \emph{deterministic} systems, where the system produces the same output for a given input. Note the contrast with {\em stochastic} systems in which one or more elements of the system have randomness associated with them; for example, the value of some system parameter may be extracted from a probability distribution. As a result, the stochastic system may yield different outputs for a given input.}. 
 %
+\subsection{Representation of Hybrid System}
+Hybrid automata~\cite{alur1995algorithmic} are a modeling formalism popularly used to model hybrid systems which include both continuous dynamics and discrete state transitions. A hybrid automaton is essentially a finite state machine extended with a set of real-valued variables evolving continuously over intervals of real-time~\cite{alur1995algorithmic}\footnote{In this paper, we only consider \emph{deterministic} systems, where the system produces the same output for a given input.Note the contrast with {\em stochastic} systems in which one or more elements of the system have randomness associated with them; for example, the value of some system parameter may be extracted from a probability distribution. As a result, the stochastic system may yield different outputs for a given input.}.
+%\footnote{In this paper, we only consider \emph{deterministic} systems, where the system produces the same output for a given input. Note the contrast with {\em stochastic} systems in which one or more elements of the system have randomness associated with them; for example, the value of some system parameter may be extracted from a probability distribution. As a result, the stochastic system may yield different outputs for a given input.}
 %%
 The main structure of a hybrid automaton $\AutomatonH$ includes the following components.
 %
@@ -21,26 +21,26 @@ The main structure of a hybrid automaton $\AutomatonH$ includes the following co
 %
  %Analogous to hybrid automata, a Stateflow diagram is a finite state machine extended with different types of variables, and its structures includes the following components.
 
-%In a Stateflow diagram, a designer can specify different data types including continuous state variables, parameters, inputs, and outputs of the model, and define the discrete structures similar to a hybrid automata. The Stateflow includes the folli 
+%In a Stateflow diagram, a designer can specify different data types including continuous state variables, parameters, inputs, and outputs of the model, and define the discrete structures similar to a hybrid automata. The Stateflow includes the folli
 %
 \begin{itemize}[leftmargin= 2em]
 %\begin{inparaenum}[(a)]
 %
-\item $\X$: the finite set of $n$ continuous, real-valued variables. 
+\item $\X$: the finite set of $n$ continuous, real-valued variables.
 \item $\P$: the finite set of $p$ real-valued parameters.
 %we have $\Varset = \X \cup \P$, where $\X \in \Realn$ is the set of $n$ state variables and $\P\in\Realp$ is the set of $p$ parameters. Moreover, $\Varset$ is the disjoint of the set of input variables $\I$ and the set of output variables $\O$.
 \item $\Locset$: the finite set of discrete modes. For each mode $\mode \in \Locset$, $\mode.\inveg$ is an expression over $\X \cup \P$ denotes the invariant of mode $\mode$, and $\mode.\floweg$ describes the continuous dynamics governed by a set of ordinary differential equations. %$\Q \deq \Locset \times \Realn$ is the state space.
 %(a set of algebraic constraints)
-\item $\Transset$: the finite set of transitions between modes. Each transition is a tuple $\tau \deq \tuple{\src, \dst, \guard, \reset}$, where $\src$ is a source mode and $\dst$ is a target mode that may be taken when a guard condition $\guard$, which is an expression over $\X \cup \P$, is satisfied, and $\reset$ is an assignment of $\X$ after the transition. 
+\item $\Transset$: the finite set of transitions between modes. Each transition is a tuple $\tau \deq \tuple{\src, \dst, \guard, \reset}$, where $\src$ is a source mode and $\dst$ is a target mode that may be taken when a guard condition $\guard$, which is an expression over $\X \cup \P$, is satisfied, and $\reset$ is an assignment of $\X$ after the transition.
 %
 %
 %\item $\Initset$: the initial condition, which is an expression over $\Locset \cup \X$.%, and $\Initset \subseteq \Q$.
 %\end{inparaenum}
 \end{itemize}
 %
-We use the dot (.) notation to refer to different components of tuples \eg $\AutomatonH.\Transset$ refers to the transitions of automaton $\AutomatonH$ and $\tau.\guard$ refers to the guard of a transition $\tau$. Since our goal is to repair a hybrid automaton syntactically, we will not discuss its semantics in this paper, but refer reader to~\cite{alur1995algorithmic} for details. 
+We use the dot (.) notation to refer to different components of tuples \eg $\AutomatonH.\Transset$ refers to the transitions of automaton $\AutomatonH$ and $\tau.\guard$ refers to the guard of a transition $\tau$. Since our goal is to repair a hybrid automaton syntactically, we will not discuss its semantics in this paper, but refer reader to~\cite{alur1995algorithmic} for details.
 %
-We note that the \emph{model transformation language} proposed in this paper transforms a hybrid automaton based on modifying the syntactic components of a hybrid automaton in a generic manner. 
+We note that the \emph{model transformation language} proposed in this paper transforms a hybrid automaton based on modifying the syntactic components of the hybrid automaton in a generic manner.
 %
 The transformation tool of \toolreaffirm can take a HATL transformation script and translate it into an equivalent script that performs a model transformation for different modeling framework of hybrid automata including a continuous-time Stateflow chart.
 %
@@ -65,38 +65,17 @@ Intuitively, a transition in a Stateflow chart is triggered as soon as the trans
 
 \subsection{Hybrid Automata Transformation Language}
 
-In our approach, the partial model of the system, which satisfies functional but not necessarily resiliency requirements is originally modeled in the form of hybrid automata. The model transformation that is at the core of the \toolreaffirm tool will then attempt to modify the components of the automata such as modes, flows, or switching logic, by applying user-defined resiliency patterns.
-
-
-In order to specify resiliency patterns for hybrid automata, we introduce a new language for model transformation called HATL (Hybrid Automata Transformation Language). The goal of HATL is to allow a
-designer to repair an original model in a programmatic fashion. HATL scripts abstract model implementation details so engineers do not need to learn the intricacies of an individual framework. A key use of HATL is to write generic scripts that applicable to many models, promoting resiliency scripts which are reusable.
-
-A script written in HATL is a sequence of \emph{statements} that specify the changes over the structure of given hybrid automata. HATL's syntax and semantics are designed to make it intuitive to anyone who is familiar with imperative languages. HATL includes \emph{loop} statements that iterate over sets of objects, such as modes or transitions of a model. It uses \emph{dot references} to index into structures to obtain data fields or to call object-specific methods. \emph{Assignments} are mutable, and scoped within statement blocks. Functions and methods can have variable
-numbers of arguments which are eagerly evaluated.
-
-The model transformation tool built in \toolreaffirm takes a resiliency pattern in the form of a HATL script. HATL will translate each of these statements into operations on continous-time Stateflow
-models.~\figref{examplecode} shows an example of a HATL script that specifies a transformation from the original ACC model shown in~\figref{original} to the parametrized model shown in~\figref{updated}. 
-In this script, we first create a copy of the original model. Next, we iterate over each mode of the model by calling the \emph{formode loop}, make a copy with replacing the variable $\ngps$ by $\nenc$, and then add a new transition from the original mode to the copied mode with a new guard condition. This guard condition is a constraint specified over the difference between $\ngps$ by $\nenc$ and a new parameter $\theta$, which is added into the model using a function call \emph{addParam}. 
-%%%
-Finally, we need to copy all transitions between original modes (stored in a copied version of the original model) and assign them to the corresponding duplicated modes.
-
-%\footnote{While Stateflow chart requires that the default transitions should be explicitly specified for exclusive (OR) states at every level of a hierarchy, other modeling frameworks of hybrid automata often describe it separately in a configuration file.}.
-%# model is already with the model specified
-%# by the script arguments
-%
 \begin{figure}[!t]%frame=none,
 \begin{lstlisting}[basicstyle=\ttfamily\footnotesize, numbers=none]
 model_copy = copyModel(model) # make a model copy
 
 # start a transformation
 model.addParam("theta") # add new parameter theta
-
 formode m = model.Mode {
 		m_copy = model.addMode(m)
 		m.replace(m_copy.flow,"ngps","nenc")
 		model.addTransition(m,m_copy,"abs(ngps-nenc)>theta")
 }
-
 fortran t = model_copy.Trans {
 		# get source and destination modes of transition t
 		src = t.source
@@ -108,13 +87,34 @@ fortran t = model_copy.Trans {
 }
 # end of the transformation
 \end{lstlisting}
+\vspace{-0.5em}%
 \caption{An example of a resiliency pattern written as a HATL script for the ACC system.}%
 \figlabel{examplecode}%
-	%\vspace{-0.5em}%
+	\vspace{-1.5em}%
 \end{figure}
 
-\subsection{Implementation}
+In our approach, the partial model of the system, which satisfies functional but not necessarily resiliency requirements is originally modeled in the form of hybrid automata. The model transformation that is at the core of the \toolreaffirm tool will then attempt to modify the components of the automata such as modes, flows, or switching logic, by applying user-defined resiliency patterns.
 
+
+In order to specify resiliency patterns for hybrid automata, we introduce a new language for model transformation called HATL (Hybrid Automata Transformation Language). The goal of HATL is to allow a designer to repair an original model in a programmatic fashion. HATL scripts abstract model implementation details so engineers do not need to learn the intricacies of an individual framework. A key use of HATL is to write generic scripts that are applicable to many models, promoting resiliency scripts which are reusable.
+%
+A script written in HATL is a sequence of \emph{statements} that specify the changes over the structure of given hybrid automata. HATL's syntax and semantics are designed to make it intuitive to anyone who is familiar with imperative languages. HATL includes \emph{loop} statements that iterate over sets of objects, such as modes or transitions of a model. It uses \emph{dot references} to index into structures to obtain data fields or to call object-specific methods. \emph{Assignments} are mutable, and scoped within statement blocks. Functions and methods can have variable numbers of arguments which are eagerly evaluated.
+
+The model transformation tool built in \toolreaffirm takes a resiliency pattern in the form of a HATL script, and then translates each of the statements of the script into equivalent transformation operations on continuous-time Stateflow models.
+%equivalent MATLAB codes that perform a modification to the Stateflow chart through the Stateflow API.
+%
+~\figref{examplecode} shows an example of a HATL script that specifies a transformation from the original ACC model shown in~\figref{original} to the parametrized model shown in~\figref{updated}.
+In this script, we first create a copy of the original model. Next, we iterate over each mode of the model by calling the \emph{formode loop}, make a copy with replacing the variable $\ngps$ by $\nenc$, and then add a new transition from the original mode to the copied mode with a new guard condition. This guard condition is a constraint specified over the difference between $\ngps$ by $\nenc$ (\ie the difference between $\vgps$ and $\venc$)  and a new parameter $\theta$, which is added into the model using a function call \emph{addParam}.
+%%%
+Finally, we need to copy all transitions between original modes (stored in a copied version of the original model) and assign them to the corresponding duplicated modes.
+
+%\footnote{While Stateflow chart requires that the default transitions should be explicitly specified for exclusive (OR) states at every level of a hierarchy, other modeling frameworks of hybrid automata often describe it separately in a configuration file.}.
+%# model is already with the model specified
+%# by the script arguments
+%
+\vspace{-0.5em}%
+\subsection{Implementation}
+%
 Our current implementation dynamically interprets HATL scripts in
 Python and translates them into Stateflow model transformations via
 the MATLAB Engine. Our interpreter checks argument values at runtime
@@ -125,15 +125,7 @@ exiting. Additionally, these error messages are reported in terms of
 generic HATL models, so an engineer writing a resiliency pattern does
 not need to worry about the underlying implementation.
 
-Currently, HATL provides enough programming abstraction to express
-concise model transformations that function as valid resiliency
-patterns: more examples of these scripts can be seen in our case
-studies. There is room for future improvement, such as adding language
-constructs like object hierarchy or type checking. Expanding HATL's
-backend to include more modeling frameworks besides SLSF would be
-useful as well.
-
-
+Currently, HATL provides enough programming abstraction to express concise model transformations that function as valid resiliency patterns, and more examples of these scripts will be introduced in \secref{result}. There is room for future improvement, such as adding language constructs like object hierarchy or type checking. Expanding HATL's backend to include more modeling frameworks besides SLSF would be useful as well.
 
 
 
@@ -145,7 +137,7 @@ useful as well.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%In our approach, the partial model of the system, which satisfies functional but not necessarily resiliency requirements is originally modeled in the form of hybrid automata. The model transformation that is at the core of \toolreaffirm tool will then attempt to add resilient modules to the system and modify switching logic between modes of the automata, by applying resiliency patterns. 
+%In our approach, the partial model of the system, which satisfies functional but not necessarily resiliency requirements is originally modeled in the form of hybrid automata. The model transformation that is at the core of \toolreaffirm tool will then attempt to add resilient modules to the system and modify switching logic between modes of the automata, by applying resiliency patterns.
 %%
 %%
 %%
@@ -157,9 +149,9 @@ useful as well.
 %\end{inparaenum}
 %%
 %
-%\figref{examplecode} shows an example of a HATL script that specifies a transformation from the original ACC model shown in~\figref{original} to the parametrized model shown in~\figref{updated}. 
+%\figref{examplecode} shows an example of a HATL script that specifies a transformation from the original ACC model shown in~\figref{original} to the parametrized model shown in~\figref{updated}.
 %%
-%In this script, we first create a copy of the original model. Next, we iterate over each mode of the model by calling the \emph{formode loop}, make a copy with replacing the variable $\ngps$ by $\nenc$, and then add a new transition from the original mode to the copied mode with a new guard condition. This guard condition is a constraint specified over the difference between $\ngps$ by $\nenc$ and a new parameter $\theta$, which is added into the model using a function call \emph{addParam}. 
+%In this script, we first create a copy of the original model. Next, we iterate over each mode of the model by calling the \emph{formode loop}, make a copy with replacing the variable $\ngps$ by $\nenc$, and then add a new transition from the original mode to the copied mode with a new guard condition. This guard condition is a constraint specified over the difference between $\ngps$ by $\nenc$ and a new parameter $\theta$, which is added into the model using a function call \emph{addParam}.
 %%%
 %Finally, we need to copy all transitions between original modes (stored in a copied version of the original model) and assign them to the corresponding duplicated modes.
 %%%
@@ -177,9 +169,9 @@ useful as well.
 %\begin{figure}[!t]%frame=none,
 %\begin{lstlisting}[basicstyle=\ttfamily\footnotesize, numbers=none]
 %model = getModelByName("ACC") # retrieve the ACC model
-%model_copy = copyModel(model) # make a model copy 
+%model_copy = copyModel(model) # make a model copy
 	%
-%# start a transformation  
+%# start a transformation
 %addParam(model,"theta") # add new parameter theta
 	%
 %formode m = model.Mode {
@@ -190,11 +182,11 @@ useful as well.
 %
 %fortran t = model_copy.Trans {
 		%# get source and destination modes of transition t
-		%src = t.source	
-		%dst = t.destination 
-		%# retrieve copies of source and destination modes 
-		%src_copy = getCopyState(model,src)  
-		%dst_copy = getCopyState(model,dst) 
+		%src = t.source
+		%dst = t.destination
+		%# retrieve copies of source and destination modes
+		%src_copy = getCopyState(model,src)
+		%dst_copy = getCopyState(model,dst)
 		%addTransition(model,src_copy,dst_copy,t.guard)
 %}
 %# end of the transformation
@@ -205,7 +197,7 @@ useful as well.
 %\end{figure}
 %
 %
-%The model transformation tool built in \toolreaffirm takes a resiliency pattern written as HATL script, parses it to an intermediate representation, which is a set of data structures encoding the syntax of a hybrid automaton in Python. As we represent hybrid automata as continuous-time Stateflow charts, the HATL script then will be translated to a MATLAB script that performs a modification to the Stateflow chart through its API (Application Programming Interface). As an example, \figref{translatecode} describes the translated MATLAB script of the HATL script shown in \figref{examplecode}. The translation to MATLAB is straightforward except that the iteration over each transition in MATLAB should neglect the \emph{default transition}\footnote{While Stateflow chart requires that the default transitions should be explicitly specified for exclusive (OR) states at every level of a hierarchy, other modeling frameworks of hybrid automata often describe it separately in a configuration file.}.  
+%The model transformation tool built in \toolreaffirm takes a resiliency pattern written as HATL script, parses it to an intermediate representation, which is a set of data structures encoding the syntax of a hybrid automaton in Python. As we represent hybrid automata as continuous-time Stateflow charts, the HATL script then will be translated to a MATLAB script that performs a modification to the Stateflow chart through its API (Application Programming Interface). As an example, \figref{translatecode} describes the translated MATLAB script of the HATL script shown in \figref{examplecode}. The translation to MATLAB is straightforward except that the iteration over each transition in MATLAB should neglect the \emph{default transition}\footnote{While Stateflow chart requires that the default transitions should be explicitly specified for exclusive (OR) states at every level of a hierarchy, other modeling frameworks of hybrid automata often describe it separately in a configuration file.}.
 %%
 %\begin{figure}[!t]%
 %\begin{lstlisting}[basicstyle=\ttfamily\footnotesize, numbers=none]
