@@ -190,6 +190,7 @@ class Transition:
 class MATLABVisitor(ReaffirmVisitor):
     def __init__(self, e, modelfile, modelname=None):
         self.env = {}
+        self.functions = {}
         print("Initializing!")
         self.modelfile = modelfile
         self.eng = e
@@ -256,10 +257,11 @@ class MATLABVisitor(ReaffirmVisitor):
 
     # Visit a parse tree produced by ReaffirmParser#objectRef.
     def visitObjectRef(self, ctx:ReaffirmParser.ObjectRefContext):
+        print("visit objectref")
         refs = ctx.children[0].children[:]
         ident = refs.pop(0).getText() #must be Terminal
-        #need to check that ident is in env
 
+        #need to check that ident is in env
         try:
             obj = self.env[ident]
         except KeyError as e:
@@ -306,11 +308,13 @@ class MATLABVisitor(ReaffirmVisitor):
 
     # Visit a parse tree produced by ReaffirmParser#fieldref.
     def visitFieldref(self, ctx:ReaffirmParser.FieldrefContext):
+        print("Visiting fieldref")
         return self.visitChildren(ctx)
 
 
     # Visit a parse tree produced by ReaffirmParser#methodref.
     def visitMethodref(self, ctx:ReaffirmParser.MethodrefContext):
+        print("Visiting methodref")
         return self.visitChildren(ctx)
 
     # Visit a parse tree produced by ReaffirmParser#string.
@@ -369,7 +373,9 @@ class MATLABVisitor(ReaffirmVisitor):
 
     # Visit a parse tree produced by ReaffirmParser#funcall.
     def visitFuncall(self, ctx:ReaffirmParser.FuncallContext):
-        print("visitFuncall")
+f        fname = ctx.children[0].getText()
+        if not fname in self.functions:
+            errorClose(ctx, "Unknown reference to '" + fname + "'")
         return self.visitChildren(ctx)
 
     # Visit a parse tree produced by ReaffirmParser#objref.
@@ -403,8 +409,6 @@ def runHATL(script, modelfile,modelname=None):
     tree = parser.prog()
     print(tree.toStringTree(recog=parser))
 
-    print("Initializing!")
-
     sessions = engine.find_matlab()
     eng = None
     if sessions == ():
@@ -413,8 +417,13 @@ def runHATL(script, modelfile,modelname=None):
     else:
         print("Connecting to MATLAB engine")
         eng = engine.connect_matlab(sessions[0])
-    # print("Starting MATLAB engine")
-    # eng = engine.start_matlab()
+
+    #set the appropriate path and then restore the cwd
+    oldpwd = eng.pwd()
+    assert('REAFFIRM_ROOT' in os.environ)
+    eng.cd(os.environ['REAFFIRM_ROOT'])
+    eng.addpath(eng.genpath('functions'))
+    eng.cd(oldpwd)
 
     print("Loading Initial Model")
     eng.clear('all',nargout=0)
