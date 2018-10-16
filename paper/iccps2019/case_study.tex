@@ -4,7 +4,30 @@
 %\vspace{-0.5em}
 %
 %
-In this section, we demonstrate the capability of \toolreaffirm\footnote{\toolreaffirm was tested using Matlab 2016b, 2017a, and Matlab 2018a executed on an x86-64 laptop with a 2.8 GHz Intel(R) Core(TM) i7-7700HQ processor and 32 GB RAM. All performance metrics reported were recorded on this system using Matlab 2018a. In Breach, we choose the CMAES, which is a stochastic optimization solver that can address non-linear or non-convex continuous optimization problem; and the maximum optimization time is specified as 30 seconds for each iteration of the falsification loop. \toolreaffirm and all case studies investigated in this paper are available to download at \url{https://github.com/LuanVietNguyen/reaffirm}.} to repair CPSs models under unanticipated attacks. We first revisit the ACC example and evaluate more resiliency patterns that can be applied to repair the ACC model under the GPS sensor spoofing attack. Second, we investigate a sliding-mode switching attack that causes instability for a smart grid system, and how \toolreaffirm can be utilized to automatically repair the model under this attack.
+In this section, we demonstrate the capability of \toolreaffirm to repair CPSs models under unanticipated attacks. We first revisit the ACC example and evaluate three resiliency patterns that can be applied to repair the ACC model under the GPS sensor spoofing attack. Second, we investigate a sliding-mode switching attack that causes instability for a smart grid system and how \toolreaffirm can use a dwell-time pattern to repair the model under this attack automatically. The overall performance of \toolreaffirm in repairing the initial model of two case studies to mitigate their corresponding attacks is summarized in \tabref{performance_results}. Next, we will describe two case studies in more details.
+
+
+\begin{table*}[t!]
+\large
+\centering
+\resizebox{0.98\linewidth}{!}{\begin{tabular}{|l|l|l|l|l|l|l|l|l|} 
+\hline
+\textbf{Model}       & \textbf{Attack}                                                 & \multicolumn{2}{l|}{\textbf{Resiliency Pattern }}                                                                                                                          & \textbf{Unknown Condition}                                                               & \textbf{Parameter~Range}              & \textbf{Synthesized Value} & \textbf{Transformation Time} & \textbf{Synthesis Time}  \\ 
+\hline
+\multirow{3}{*}{ACC} & \multirow{3}{*}{GPS spoofing}                                   & \multirow{3}{*}{\begin{tabular}[c]{@{}l@{}}Ignore GPS measurement,~\\use wheel~encoders value\end{tabular}} & Pattern 1                                                    & \multirow{2}{*}{\begin{tabular}[c]{@{}l@{}}When to switch to \\a safe copy\end{tabular}} & \multirow{2}{*}{$\theta \in [0, 50]$} & 7.08515~~                  & 2~seconds                    & 88~seconds               \\ 
+\cline{4-4}\cline{7-9}
+                     &                                                                 &                                                                                                             & Pattern 2                                                    &                                                                                          &                                       & 7.08515~ ~~                & 2 seconds                    & 88~seconds               \\ 
+\cline{4-9}
+                     &                                                                 &                                                                                                             & Pattern 3                                                    & \begin{tabular}[c]{@{}l@{}}Ratio of GPS/encoders\\measurements\end{tabular}              & $\theta \in [0.1, 0.9]$               & 0.1543~                    & 1.75~seconds                 & 55.78~seconds            \\ 
+\hline
+SMIB                 & \begin{tabular}[c]{@{}l@{}}Sliding-mode\\switching\end{tabular} & \begin{tabular}[c]{@{}l@{}}Introduce a dwell-time\\to avoid rapid switching\end{tabular}                    & \begin{tabular}[c]{@{}l@{}}Pattern \\dwell-time\end{tabular} & Minimal dwell-time                                                                       & $\theta \in [0, 0.3]$                 & 0.12                       & 2~seconds                    & 45~seconds               \\
+\hline
+\end{tabular}}
+\vspace{1em}
+\caption{REAFFIRM performance results for the ACC and SMIB case studies.}
+\label{tab:performance_results}
+\vspace{-2em}
+\end{table*}
 
 \subsection{Adaptive Cruise Control System}
 
@@ -12,7 +35,7 @@ In this section, we demonstrate the capability of \toolreaffirm\footnote{\toolre
 %
 The model has four state variables where $d$ and $e_d$ are the actual distance and estimated distance between the host car and the lead vehicle, $v$ and $e_v$ represent the actual velocity and estimated velocity of the host car, respectively.  
 %
-Besides the GPS and wheel encoders sensors used to measure the velocity of the host car, the ACC system has a radar sensor that measures the distance to the lead vehicle, $\drad = d+\nrad$. In this example, we assume that the lead vehicle travel with a constant speed $\vlead$. The transition from speed control to spacing control occurs when the estimate of the distance is less than twice the estimated safe distance, \ie $e_d < 10 + 2e_v$. A similar condition is provided for switching from spacing control to speed control, \ie $e_d \geq 10 + 2e_v$. In this case study, we assume that the designer has verified the initial SLSF model of the ACC system against the safety requirement $\varphi_{ACC}$ under the scenario when $d(0) \in [90, 100]$, $v(0) \in [25, 30]$, $|d(0) - e_d(0)| \leq 10$, $|v(0) - e_v(0)| \leq 10$ , $\vlead \geq 20$, $|\nrad| \leq 0.05$, $|\nenc| \leq 0.05$ and $|\ngps| \leq 0.05$.
+In this model, we assume that the lead vehicle travel with a constant speed $\vlead$. The transition from speed control to spacing control occurs when the estimate of the distance is less than twice the estimated safe distance, \ie $e_d < 10 + 2e_v$. A similar condition is provided for switching from spacing control to speed control, \ie $e_d \geq 10 + 2e_v$. In this case study, we assume that the designer has verified the initial SLSF model of the ACC system against the safety requirement $\varphi_{ACC}$ under the scenario when $d(0) \in [90, 100]$, $v(0) \in [25, 30]$, $|d(0) - e_d(0)| \leq 10$, $|v(0) - e_v(0)| \leq 5$ , $\vlead  = 20$, $|\nrad| \leq 0.05$, $|\nenc| \leq 0.05$ and $|\ngps| \leq 0.05$.
 
  %The \emph{safety specification} of the system is specified that $d$ should always be greater than $\dsafe$, where $\dsafe = v + 5$.
 
@@ -22,16 +45,8 @@ Besides the GPS and wheel encoders sensors used to measure the velocity of the h
 		%\includegraphics[trim = 17mm 85mm 17mm 0mm, clip, width=0.95\textwidth]{image/spectral_signal}%
 	\caption{The original SLSF model of the ACC system.}%
 	\figlabel{acc_slsf_model}%
+	\vspace{-1em}
 \end{figure}% 
-
-\vspace{0.5em}
-\noindent
-{\bf GPS sensor attack construction.} To perform a spoofing attack on the GPS sensor of the SLSF ACC model, we continuously inject false data to manipulate its measurement value. In this case, we omit the original assumption $|\ngps| \leq 0.05$, and employ the new assumption as $|\ngps| \leq 50$. Using the input generator in Breach, we can specify the GPS spoofing attack as a standard input test signal such as a constant, ramp, step, sinusoid or random signal whose amplitude varies over the range of [-50, 50]. The following evaluations of three different resiliency patterns used to repair the ACC model are based on the same assumption that the GPS spoofing occurs at every time point, specified as a random constant signal over the range of [-50, 50] during 50 seconds. 
-
-
-\vspace{0.5em}
-\noindent
-{\bf Resiliency patterns for the ACC system.} Under the GPS sensor spoofing  attack, the original SLSF model does not satisfy its safety requirement and a designer needs to apply a certain resiliency pattern to repair the model. The first example of such a resiliency pattern for the ACC system has been introduced in~\secref{overview}, which makes the copy of the original model where the controller simple ignores the GPS reading as it can no longer be trusted. However, we need to determine the best switching condition from the original model to the copy.~\figref{acc_model_pat1} shows the completed model, where the switching condition is determined by synthesizing the value of $\theta$ over the range of [0, 50] using Breach. For the first pattern, the model transformation takes about 2 seconds, and the synthesis procedure takes approximately 88 seconds over 6 iterations of the falsification loop. %\JW{Fixed: The following figure (figure 6) is unreadable.}  
 
 \begin{figure}[t!]%
 	\centering%
@@ -39,24 +54,28 @@ Besides the GPS and wheel encoders sensors used to measure the velocity of the h
 		%\includegraphics[trim = 17mm 85mm 17mm 0mm, clip, width=0.95\textwidth]{image/spectral_signal}%
 	\caption{The repaired ACC model with a synthesized value of $\theta = 7.08515$.}%
 	\figlabel{acc_model_pat1}%
-\end{figure}% 
+	\vspace{-1em}
+\end{figure}%
+ 
+\vspace{0.5em}
+\noindent
+{\bf GPS sensor attack.} To perform a spoofing attack on the GPS sensor of the  ACC model, we continuously inject false data to manipulate its measurement value. In this case, we omit the original assumption $|\ngps| \leq 0.05$, and employ the new assumption as $|\ngps| \leq 50$. Using the input generator in Breach, we can specify the GPS spoofing attack as a standard input test signal such as a constant, ramp, step, sinusoid or random signal. The following evaluations of three different resiliency patterns used to repair the ACC model are based on the same assumption that the GPS spoofing occurs at every time point, specified as a random constant signal over the range of [-50, 50] during 50 seconds. 
+% whose amplitude varies over the range of [-50, 50]
 
-The second resiliency pattern for the ACC model is the extended version of the first one where it includes a switching-back condition from the copy to the original model when the GPS sensor attack is detected and mitigated. An example of such a switching-back condition is when the difference between the $\nenc$ and $\ngps$ are getting smaller, \ie $|\ngps -\nenc| < \theta - \epsilon$, where $\epsilon$ is a positive user-defined tolerant. For this pattern, the model transformation script can be written similar to the one shown in~\figref{examplecode} with adding the \emph{addTransition} function from the copy mode to the original mode with the guard condition labeled as $|\ngps -\nenc| < \theta - \epsilon$ in the \emph{formode} loop.
+\vspace{0.5em}
+\noindent
+{\bf Model Repair for the ACC system.} Under the GPS sensor spoofing  attack, the original SLSF model does not satisfy its safety requirement and a designer needs to apply a certain resiliency pattern to repair the model. The \emph{first resiliency pattern} for repairing the ACC system has been introduced in~\secref{overview}, which makes the copy of the original model where the controller ignores the GPS reading as it can no longer be trusted. However, we need to determine the best switching condition from the original model to the copy.~\figref{acc_model_pat1} shows the completed model, where the switching condition is determined by synthesizing the value of $\theta$ over the range of [0, 50] using Breach. For the first pattern, the model transformation takes about 2 seconds, and the synthesis procedure takes approximately 88 seconds over 6 iterations of the falsification loop. %\JW{Fixed: The following figure (figure 6) is unreadable.}  
+
+
+
+The \emph{second resiliency pattern} for the ACC model is the extended version of the first one where it includes a switching-back condition from the copy to the original model when the GPS sensor attack is detected and mitigated. An example of such a switching-back condition is when the difference between the $\nenc$ and $\ngps$ are getting smaller, \ie $|\ngps -\nenc| < \theta - \epsilon$, where $\epsilon$ is a positive user-defined tolerant. For this pattern, the model transformation script can be written similar to the one shown in~\figref{examplecode} with adding the \emph{addTransition} function from the copy mode to the original mode with the guard condition labeled as $|\ngps -\nenc| < \theta - \epsilon$ in the \emph{formode} loop.
 %
 The performance of \toolreaffirm for the second pattern is similar to the first pattern with the same synthesized value of $\theta = 7.08515$.
 
-\begin{figure}[t!]%
-	\centering%
-    \includegraphics[width=0.48\textwidth]{image/acc_model_pat3}%\vspace{1cm}
-		%\includegraphics[trim = 17mm 85mm 17mm 0mm, clip, width=0.95\textwidth]{image/spectral_signal}%
-	\caption{The repaired ACC model with a synthesized value of $\theta = 0.1543$ for the resiliency pattern shown in ~\figref{acc_code_3}.}%
-	\figlabel{acc_model_pat3}%
-\end{figure}% 
 %
-\begin{figure}[tbp]%frame=none,
+\begin{figure}[t!]%frame=none,
 \begin{lstlisting}[basicstyle=\ttfamily\footnotesize, numbers=none]
 model = getModelByName("ACC") # retrieve the ACC model
-
 # start a transformation  
 formode m = model.Mode {
     m.replace(m.flow,"ngps", "2*theta*ngps")
@@ -67,10 +86,19 @@ formode m = model.Mode {
 \caption{The third resiliency pattern for the ACC system based on the linear combination of $\nenc$ and $\ngps$.}%
 \figlabel{acc_code_3}%
 	%\vspace{-0.5em}%
+	
 \end{figure}
+\begin{figure}[tbp]%
+	\centering%
+    \includegraphics[width=0.48\textwidth]{image/acc_model_pat3}%\vspace{1cm}
+		%\includegraphics[trim = 17mm 85mm 17mm 0mm, clip, width=0.95\textwidth]{image/spectral_signal}%
+	\caption{The repaired ACC model with a synthesized value of $\theta = 0.1543$ for the resiliency pattern shown in ~\figref{acc_code_3}.}%
+	\figlabel{acc_model_pat3}%
+	\vspace{-1em}
+\end{figure}% 
 
 
-Alternatively, another resiliency pattern, which we do not need to modify the structure of the original model, is to model the redundancy in the sensory information as a linear combination of different sensor measurements. For example, instead of taking the average of $\ngps$ and $\nenc$, we can model their relationship as $\theta\ngps + (1-\theta)\nenc$, and then synthesize the value of $\theta$ so that the safety property is satisfied. The transformation script of this resiliency pattern is given in~\figref{acc_code_3}. For this pattern, we assume that a designer still wants to use all sensor measurements even some of them are under spoofing attacks and would like to search for the value of $\theta$ over the range of [0.2, 0.8] (instead of [0, 1]). Given the same attack model for the other patterns, the synthesizer in \toolreaffirm fails to find the value of $\theta$ within the given range to ensure the safety property holds. However, if we enlarge the range of $\theta$ to [0.1, 0.9], the synthesizer successfully finds the safe value $\theta = 0.1543$ that appears in the repaired model shown in~\figref{acc_model_pat3}. In this scenario, the model transformation takes about 1.75 seconds, and the synthesis procedure takes approximately 55.78 seconds over 5 iterations of the falsification loop.    
+Alternatively, the \emph{third resiliency pattern}, which we do not need to modify the structure of the original model, is to model the redundancy in the sensory information as a linear combination of different sensor measurements. For example, instead of taking the average of $\ngps$ and $\nenc$, we can model their relationship as $\theta\ngps + (1-\theta)\nenc$, and then synthesize the value of $\theta$ so that the safety property is satisfied. The transformation script of this resiliency pattern is given in~\figref{acc_code_3}. For this pattern, we assume that a designer still wants to use all sensor measurements even some of them are under spoofing attacks and would like to search for the value of $\theta$ over the range of [0.2, 0.8] (instead of [0, 1]). Given the same attack model for the other patterns, the synthesizer in \toolreaffirm fails to find the value of $\theta$ within the given range to ensure that the safety property is satisfied. However, if we enlarge the range of $\theta$ to [0.1, 0.9], the synthesizer successfully finds the safe value $\theta = 0.1543$ that appears in the repaired model shown in~\figref{acc_model_pat3}. In this scenario, the model transformation takes about 1.75 seconds, and the synthesis procedure takes approximately 55.78 seconds over 5 iterations of the falsification loop.    
 %
 This result indicates that the third pattern can repair the model if the portion of the GPS measurement contributed to estimating the velocity is significantly smaller than that of the wheel encoders. However, if the GPS spoofing attack specified over a broader range (\eg $|\nenc| \leq 100$), the pattern will fail to repair the model.          
 
@@ -84,113 +112,121 @@ This result indicates that the third pattern can repair the model if the portion
 
 \subsection{Single-Machine Infinite-Bus System}
 %
-
-Next, we study a class of cyber-physical switching attacks that can destabilize a smart grid system model, and then apply \toolreaffirm to repair the model to provide resilience. 
-
-\vspace{0.5em}
-\noindent
-{\bf SMIB System.}
-%
 \begin{figure}[t!]%
 	\centering%
     \includegraphics[width=0.42\textwidth]{image/smib}%
 		%\includegraphics[trim = 17mm 85mm 17mm 0mm, clip, width=0.95\textwidth]{image/spectral_signal}%
-	\caption{Single-machine infinite-bus model~\cite{farraj2014practical}.}%
+	\caption{Single-machine infinite-bus system~\cite{farraj2014practical}.}%
+	\vspace{-1em}
 	\figlabel{smib}%
 \end{figure}%
+Next, we study a class of cyber-physical switching attacks that can destabilize a smart grid system model, and then apply \toolreaffirm to repair the model to provide resilience. A smart power grid system such as the Western Electricity Coordinating Council (WECC) 3-machine, 9-bus system~\cite{sauer1998power}, can be represented as a single-machine infinite-bus (SMIB) system shown\footnote{the figure is copied from \cite{farraj2014practical}.} in~\figref{smib}. In this system, $G_\infty$ and $G_1$ correspondingly represent the SMIB and local generators; $B_\infty$ and $B_1$ denote the infinite and local bus, respectively; $E_\infty$ is the infinite bus voltage; $E_1$ is the internal voltage of $G_1$; $B_{1\infty}$ is the transfer susceptance of the line between $B_1$ and $B_\infty$; and $P_M$ is the mechanical power of $G_1$. The local load $P_L$ is connected or disconnected to the grid by changing a circuit breaker status. The SMIB system is considered as a \emph{switched system} in which the physical dynamics are changed between two operation modes based on the position of the circuit breaker. The system has two states, $\delta_1$ and $\omega_1$, which are the deviation of the rotor angle and speed of $G_1$ respectively, and $x = [\delta_1,\omega_1]^T$ is the state vector of $G_1$.
 %
-A smart power grid system such as the Western Electricity Coordinating
-Council (WECC) 3-machine, 9-bus system~\cite{sauer1998power}, can be represented as a single-machine infinite-bus (SMIB) model shown\footnote{the figure is copied from \cite{farraj2014practical}.} in~\figref{smib}. In this model, $G_\infty$ and $G_1$ correspondingly represent the SMIB and local generators; $B_\infty$ and $B_1$ denote the infinite and local bus, respectively; $E_\infty$ is the infinite bus voltage; $E_1$ is the internal voltage of $G_1$; $B_{1\infty}$ is the transfer susceptance of the line between $B_1$ and $B_\infty$; and $P_M$ is the mechanical power of $G_1$. The local load $P_L$ is connected or disconnected to the grid by changing a circuit breaker status. 
+The stability (safety) property of the system can be specified as the following STL formula,
 %
-The SMIB system is considered as a \emph{switched system} in which the physical dynamics are changed between two operation modes based on the position of the circuit breaker. 
-%
-%
-For an appropriate selection of parameters~\cite{farraj2014practical}, the second-order swing equation which characterizes the transient stability of the local generator $G_1$ can be described as:
-%
-\begin{align}
-\dot{\delta_1} & = \omega \nonumber \\
-\dot{\omega} & = 
-\begin{cases}
-    -10sin\delta_1 - \omega_1, & \text{if $P_L$ is connected}.\\
-    9 - 10sin\delta_1 - \omega_1, & \text{if $P_L$ is disconnected},
- \end{cases} \label{eq:smib_dynamics}
-\end{align}
-%
-where, $\delta_1$, $\omega_1$ are the deviation of the rotor angle and speed of $G_1$ respectively, and $x = [\delta_1,\omega_1]^T$ is the state vector of $G_1$.
-%
-%
-
-The swing equation of the SMIB system has an interesting property known as a \emph{sliding mode} behavior. This behavior occurs when the state of the system is attracted and subsequently stays within the \emph{sliding surface} defined by a state-dependent switching signal $s(x)\in\Real$~\cite{decarlo1988variable, liu2014coordinated}. An example of a sliding surface is $s(x) = 0$. When the system is confined on a sliding mode surface, its dynamics exhibit high-frequency oscillations behaviors, so-called a \emph{chattering} phenomenon, which is well-known in the power system design~\cite{sabanovic2004variable}.
-%
-At this moment, if the attacker conducts the fast switchings between two  operation modes, the system will be steered out of its desirable equilibrium position. As a result, the power system becomes unstable even if each individual subsystem is stand-alone stable~\cite{liu2014coordinated}.  
-% 
-
 \begin{align} 
 \vspace{-1em}
-	\varphi_{smib} & = \Box_{[0, T]} (0 \leq \delta_1[t] \leq 3.5) \wedge (-2 \leq \omega_1[t] \leq 3),\formlabel{smib_stl}
+	\varphi_{SMIB} & = \Box_{[0, T]} (0 \leq \delta_1[t] \leq 3.5) \wedge (-2 \leq \omega_1[t] \leq 3),\formlabel{smib_stl}
+		\vspace{-1em}
 \end{align} 
-where $T$ is a simulation duration.   
+where $T$ is a simulation duration.  
+
+\vspace{0.5em}
+\noindent
+{\bf Original SLSF Model.} In this paper, we model the SMIB system as the SLSF model displayed in \figref{smib_plant_model}. The model contains two operation modes whose nonlinear dynamics characterize the transient stability of the local generator $G_1$ presented in~\cite{farraj2014practical}. The transitions between two operation modes depend on the status of the circuit breaker which is connected or disconnected to the load. 
+%
+In the model, $\delta_1$ and $\omega_1$ are represented by $delta$ and $omega$, respectively; and the initial conditions are $delta0 \in [0, 1.1198]$ and $omega0 \in [0, 1]$. The discrete variable $load$ captures the open and closed status of the circuit breaker.
+%
 
 %
-\begin{figure}[t!]%
+\begin{figure}[tbp]%
 	\centering%
     \includegraphics[width=0.48\textwidth]{image/smib_plant_model}%\vspace{1cm}
+		\vspace{-1em}
 		%\includegraphics[trim = 17mm 85mm 17mm 0mm, clip, width=0.95\textwidth]{image/spectral_signal}%
 	\caption{The Stateflow chart models the plant of the SMIB system.}%
 	\figlabel{smib_plant_model}%
+	\vspace{-1em}
 \end{figure}% 
+%
+%
+%For an appropriate selection of parameters~\cite{farraj2014practical}, the second-order swing equation which characterizes the transient stability of the local generator $G_1$ can be described as:
+%
+%\begin{align}
+%\dot{\delta_1} & = \omega \nonumber \\
+%\dot{\omega} & = 
+%\begin{cases}
+    %-10sin\delta_1 - \omega_1, & \text{if $P_L$ is connected}.\\
+    %9 - 10sin\delta_1 - \omega_1, & \text{if $P_L$ is disconnected},
+ %\end{cases} \label{eq:smib_dynamics}
+%\end{align}
+%%
+%where, $\delta_1$, $\omega_1$ are the deviation of the rotor angle and speed of $G_1$ respectively, and $x = [\delta_1,\omega_1]^T$ is the state vector of $G_1$.
+%%
+%%
+%
+%The swing equation of the SMIB system has an interesting property known as a \emph{sliding mode} behavior. This behavior occurs when the state of the system is attracted and subsequently stays within the \emph{sliding surface} defined by a state-dependent switching signal $s(x)\in\Real$~\cite{decarlo1988variable, liu2014coordinated}. An example of a sliding surface is $s(x) = 0$. When the system is confined on a sliding mode surface, its dynamics exhibit high-frequency oscillations behaviors, so-called a \emph{chattering} phenomenon, which is well-known in the power system design~\cite{sabanovic2004variable}.
+%%
+%At this moment, if the attacker conducts the fast switches between two operation modes, the system will be steered out of its desirable equilibrium position. As a result, the power system becomes unstable even if each individual subsystem is stand-alone stable~\cite{liu2014coordinated}.  
+%% 
+
+
+
+%
+
 
 \begin{figure}[t!]%
 	\centering%
     \includegraphics[width=0.42\textwidth]{image/smib_attack_model}%\vspace{1cm}
+		\vspace{-1em}
 		%\includegraphics[trim = 17mm 85mm 17mm 0mm, clip, width=0.95\textwidth]{image/spectral_signal}%
 	\caption{The Stateflow chart models the sliding-mode attack to the SMIB system.}%
 	\figlabel{smib_attack_model}%
+	\vspace{-1em}
 \end{figure}% 
 
 
 \vspace{0.5em}
 \noindent
-{\bf Sliding-mode attack construction.} To successfully perform a sliding-mode attack to a power grid system, we assume that the attack can a) gain some knowledge about the state information to mathematically construct an unstable sliding surface that can destabilize the system, and b) access to the communication channel to control the circuit breaker position. We note that a sliding-mode attack can be considered as a cyber-physical attack as it requires the attacker to manipulate both physical and cyber parts of the system. For the SMIB model with the swing equation defined as \eqref{smib_dynamics}, an attacker can use a sliding surface $s(x) = \delta_1 + \omega_1$ to calculate the value of the switching signal based on the following equation.
+{\bf Sliding-mode attack.} The SMIB system has an interesting property known as a \emph{sliding mode} behavior. This behavior occurs when the state of the system is attracted and subsequently stays within the \emph{sliding surface} defined by a state-dependent switching signal $s(x)\in\Real$~\cite{decarlo1988variable, liu2014coordinated}. An example of a sliding surface is $s(x) = 0$. When the system is confined on a sliding mode surface, its dynamics exhibit high-frequency oscillations behaviors, so-called a \emph{chattering} phenomenon, which is well-known in the power system design~\cite{sabanovic2004variable}. At this moment, if an attacker conducts the fast switches between two operation modes, the system will be steered out of its desirable equilibrium position. As a result, the power system becomes unstable even each individual subsystem is stand-alone stable~\cite{liu2014coordinated}. 
+%\IL{the system is attacked?}
+%To successfully perform a sliding-mode attack to a power grid system, we assume that the attack can a) gain some knowledge about the state information to mathematically construct an unstable sliding surface that can destabilize the system, and b) access to the communication channel to control the circuit breaker position. We note that a sliding-mode attack can be considered as a cyber-physical attack as it requires the attacker to manipulate both physical and cyber parts of the system. For the SMIB model with the swing equation defined as \eqref{smib_dynamics}, an attacker can use a sliding surface $s(x) = \delta_1 + \omega_1$ to calculate the value of the switching signal based on the following equation.
+%%
+%\begin{align}
+%\dot{\delta_1} & = \omega \nonumber \\
+%\dot{\omega} & = 
+%\begin{cases}
+    %-10sin\delta_1 - \omega_1, & \text{$s(x) \geq \epsilon$}.\\
+    %9 - 10sin\delta_1 - \omega_1, & \text{$s(x) < -\epsilon$},
+ %\end{cases} 
+%\end{align},
+%where $\epsilon$ represents switching delays and hysteresis~\cite{liu2011class}.
 %
-\begin{align}
-\dot{\delta_1} & = \omega \nonumber \\
-\dot{\omega} & = 
-\begin{cases}
-    -10sin\delta_1 - \omega_1, & \text{$s(x) \geq \epsilon$}.\\
-    9 - 10sin\delta_1 - \omega_1, & \text{$s(x) < -\epsilon$},
- \end{cases} 
-\end{align},
-where $\epsilon$ represents switching delays and hysteresis~\cite{liu2011class}.
 %
-%
-The stages of sliding-mode attack can be summarized as follows. The attacker first switches the circuit breaker to connect the load to the grid. When $\delta_1 + \omega_1 < -\epsilon$, the attacker switches the circuit breaker to disconnect the load; and when $\delta_1 + \omega_1 \geq \epsilon$, the attacker switches the circuit breaker to connect the load. The two switching actions are repeated until the system is driven out of the stability boundary, and then the attacker permanently switches the circuit breaker to disconnect the load.
+%The stages of sliding-mode attack can be summarized as follows. The attacker first switches the circuit breaker to connect the load to the grid. When $\delta_1 + \omega_1 < -\epsilon$, the attacker switches the circuit breaker to disconnect the load; and when $\delta_1 + \omega_1 \geq \epsilon$, the attacker switches the circuit breaker to connect the load. The two switching actions are repeated until the system is driven out of the stability boundary, and then the attacker permanently switches the circuit breaker to disconnect the load.
 %
 
-\vspace{0.5em}
-\noindent
-{\bf Original SLSF model of the SMIB system.} 
-In this paper, we model the sliding-mode attack to the SMIB system as an SLSF diagram including two Stateflow models, where the plant model displayed in \figref{smib_plant_model} represents the physical dynamics of the system and the attack model is shown in \figref{smib_attack_model}. 
+%\vspace{0.5em}
+%\noindent
+%{\bf Original SLSF model of the SMIB system.} 
+%In this paper, we model the sliding-mode attack to the SMIB system as an SLSF diagram including two Stateflow models, where the plant model displayed in \figref{smib_plant_model} represents the physical dynamics of the system and the attack model is shown in \figref{smib_attack_model}. 
 %
-In the plant model, $\delta_1$ and $\omega_1$ are represented by $delta$ and $omega$, respectively; and the initial conditions are $delta0 \in [0, 1.1198]$ and $omega0 \in [0, 1]$. The discrete variable $load$ captures the open and closed status of the circuit breaker.
+%In the plant model, $\delta_1$ and $\omega_1$ are represented by $delta$ and $omega$, respectively; and the initial conditions are $delta0 \in [0, 1.1198]$ and $omega0 \in [0, 1]$. The discrete variable $load$ captures the open and closed status of the circuit breaker.
 %
-In the attack model, the attacker selects $\epsilon = 0.2$, and the local variable $t$ captures a simulation duration. We note that two transitions from the first mode to the second mode are executed with priorities such that the load is permanently disconnected at some instance where $t \geq 2.5$ seconds. 
+To perform the sliding-mode attack on the original SMIB model, we model the attack as the SLSF model shown in \figref{smib_attack_model}. In this model, we assume that the attacker selects a sliding surface $s(x) = \delta_1 + \omega_1 = 0.2$, and the local variable $t$ captures a simulation duration. We note that two transitions from the first mode to the second mode are executed with priorities such that the load is permanently disconnected at some instance where $t \geq 2.5$ seconds. More details of the stages to construct the sliding-mode attack can be found in~\cite{farraj2014practical}. 
 %
 %
-\figref{smib_result} illustrates the examples of stable (\ie without an attack) and unstable (\ie a counterexample appearing under the sliding-model attack) behaviors of the SMIB system returned by running the falsifier of Breach, respectively. The red box defines the stable (safe) operation region of the SMIB that can be formalized as the following STL formula, 
+\figref{smib_result} illustrates the examples of stable (\ie without an attack) and unstable (\ie a counterexample appearing under the sliding-model attack) behaviors of the SMIB system returned by running the falsifier of Breach, respectively. The red box defines the stable (safe) operation region of the SMIB system that can be formalized by the STL formula $\varphi_{SMIB}$.
 %
 \begin{figure}[!t]%frame=none,
 \begin{lstlisting}[basicstyle=\ttfamily\footnotesize, numbers=none]
-model = getModelByName("SMIB") # retrieve the plant model
-	
+model = getModelByName("SMIB") # retrieve the plant model	
 # start a transformation  
 model.addParam("theta") # add a new parameter theta
 model.addLocalVar("clock") # add a clock variable
-	
 formode m = model.Mode {
     m.addFlow("clock_dot = 1")
 }
-
 fortran t = model.Trans {
 		# a transition only triggers after theta seconds
     t.addGuardLabel("&&","clock > theta") 
@@ -199,28 +235,35 @@ fortran t = model.Trans {
 }
 # end of the transformation
 \end{lstlisting}
+	\vspace{-0.5em}
 \caption{A dwell-time resiliency pattern for the SMIB system.}%
+\vspace{-1em}
 \figlabel{smib_code}%
 	%\vspace{-0.5em}%
 \end{figure}
 
-
-\begin{figure}[t!]%
+\begin{figure}[tbp]%
 	\centering%
     \includegraphics[width=0.48\textwidth]{image/smib_plant_model_res}%\vspace{1cm}
+			\vspace{-0.5em}
 		%\includegraphics[trim = 17mm 85mm 17mm 0mm, clip, width=0.95\textwidth]{image/spectral_signal}%
 	\caption{The repaired SMIB model with a synthesized dwell-time.}%
 	\figlabel{smib_plant_model_res}%
+\vspace{-1em}
 \end{figure}% 
+
+
 
 \begin{figure*}[t!]%
 	\centering%
     \includegraphics[width=0.31\textwidth]{image/normal}%\vspace{1cm}
-		\includegraphics[width=0.31\textwidth]{image/counter}%
-		\includegraphics[width=0.3\textwidth]{image/load_v2}%
+		\includegraphics[width=0.307\textwidth]{image/counter}%
+		\includegraphics[width=0.294\textwidth]{image/load_v2}%
+		%\vspace{-0.5em}
 		%\includegraphics[trim = 17mm 85mm 17mm 0mm, clip, width=0.95\textwidth]{image/spectral_signal}%
 	\caption{From left to right: 1) the stable system trajectory without an attack, 2) the counterexample represents the unstable system trajectory under the sliding-mode attack, and 3) the status of a circuit breaker during the attack, where 0 and 1 represent the disconnection and connection of the load $P_L$, respectively.}%
 	\figlabel{smib_result}%
+	%\vspace{-0.5em}
 \end{figure*}% 
 
 
@@ -228,12 +271,12 @@ fortran t = model.Trans {
 
 \vspace{0.5em}
 \noindent
-{\bf Resiliency Pattern for the SMIB system.} 
+{\bf Model Repair for the SMIB system.} 
 As a sliding-mode attack is constructed based on switching back-and-forth the circuit breaker quickly to trap the system inside the sliding surface before guiding its state variables evolving outside the stability boundary, a potential strategy to mitigate such an attack is to increase the minimum switching time of the circuit breakers. Indeed, the designer can repair the original model by including a minimum dwell time in each mode of the system to prevent rapid switching.~\figref{smib_code} shows a resiliency pattern written as a HATL script that introduces the \emph{clock} variable as a timer, and the switching time relies on the value of $\theta$.
 
 The model transformation of \toolreaffirm takes the dwell-time pattern shown in~\figref{smib_code}, and then convert the model to a new version that integrates the pattern with the unknown parameter $\theta$.
 %
-Then, the model synthesis of \toolreaffirm calls Breach to search for the best (\ie minimum) value of $\theta$ over and the range of $[0, 0.3]$ that ensures the final model satisfies the STL \formref{smib_stl} (with $T = 10$ seconds) under the sliding-mode attack. The final model, which is stable, and its simulation trajectories contain within a red box similar to the most left subfigure shown in \figref{smib_result}, is displayed in~\figref{smib_plant_model_res}, where the synthesized value of $\theta$ equals to $0.12$. Overall, the model transformation takes about 2 seconds, and the synthesis procedure takes approximately 45 seconds over 8 iterations of the falsification loop.
+Then, the model synthesis of \toolreaffirm calls Breach to search for the best (\ie minimum) value of $\theta$ over and the range of $[0, 0.3]$ that ensures the final model satisfies $\varphi_{SMIB}$ (with $T = 10$ seconds) under the sliding-mode attack. The final model, which is stable, and its simulation trajectories contain within a red box similar to the most left subfigure shown in \figref{smib_result}, is displayed in~\figref{smib_plant_model_res}, where the synthesized value of $\theta$ equals to $0.12$. Overall, the model transformation takes about 2 seconds, and the synthesis procedure takes approximately 45 seconds over 8 iterations of the falsification loop.
 
 
 

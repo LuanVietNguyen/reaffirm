@@ -11,7 +11,7 @@ For example, the transformation of the ACC model shown in \figref{updated} intro
 %
 %The model synthesizer of Reaffirm adapts the falsification mechanism implemented within Breach to conduct a parameter synthesis for a transformed model.
 %
-In our proposed methodology, we incorporated Breach into the model synthesizer of \toolreaffirm as an analysis mechanism to perform the falsification and parameter synthesis for hybrid systems. Given a hybrid system modeled as a Simulink/Stateflow diagram, an STL specification described the safety property, and specific parameter domains, Breach~\cite{donze2010breach} can perform an optimized search over the parameter ranges to find parameter values that cause the system violating the given STL specification. 
+In our proposed methodology, we incorporated Breach into the model synthesizer of \toolreaffirm as an analysis mechanism to perform the falsification and parameter synthesis for hybrid systems. Given a hybrid system modeled as an SLSF diagram, an STL specification described the safety property, and specific parameter domains, Breach~\cite{donze2010breach} can perform an optimized search over the parameter ranges to find parameter values that cause the system violating the given STL specification. 
 %
 %
 The parameter mining procedure is guided by the counterexample obtained from the falsification, and it terminates if there is no counterexample found by the falsifier or the maximum number of iterations specified by a user is reached.
@@ -25,10 +25,10 @@ Moreover, the general problem of verifying a CPS modeled as a hybrid system is p
 %
 Instead, the falsification algorithms embedded within Breach are scalable and work properly for black-box hybrid systems with different classes of dynamics.
 %
-Thus, in practice, engineers prefer to use counterexamples obtained by a falsification tool to refine their design. Our prototype \toolreaffirm utilizes the advantages of Simulink/Stateflow modeling framework and the falsification tool Breach to design a resiliency pattern and perform the model synthesis for a resilient CPS.
+Thus, in practice, engineers prefer to use counterexamples obtained by a falsification tool to refine their design. Our prototype \toolreaffirm utilizes the advantages of SLSF modeling framework and the falsification tool Breach to design a resiliency pattern and perform the model synthesis for a repaired CPS model with resiliency.
 %
 \subsection{Model Synthesis using Breach}
-Next, we describe how to use Breach to synthesize parameters values for the parametrized model returned from the model transformation tool. The parameter synthesis procedure include following steps.
+Next, we describe how REAFFIRM uses Breach to synthesize parameters values for the parametrized model returned from the model transformation tool. The parameter synthesis procedure include following steps.
 
 \begin{enumerate}[leftmargin= 2 em]
 \item We first specify the initial conditions of state variables and parameters, the set of parameters $\P_s$ that need to be mined, their certain ranges of values $\bar{\P_s}$, and the maximum time (or number of iterations) for the optimization solver of Breach.

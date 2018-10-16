@@ -1,15 +1,15 @@
 %!TEX root = main.tex
-\section{Overviews of The Methodology}
+\section{Overview of The Methodology}
 \seclabel{overview}
 %
 %
 %\JW{Fixed: In general, I think this section needs to describe the ACC example (which it does) but also needs to make sure the reviewers know how everything can be generalized.  These insights will segue nicely to the \toolreaffirm discussion in the next section.}
 %
-In this section, we will explain our methodology through a simplified example of an adaptive cruise control system (ACC). This system has been designed to satisfy safety requirements pertaining to vehicle spacing that varies with vehicle speed.
+In this section, we will explain our methodology through a simplified example of the ACC system. This system has been designed to satisfy safety requirements pertaining to vehicle spacing that varies with vehicle speed.
 %
 %
 %
-Assume that a designer has previously modeled the ACC system as a combination of the vehicle dynamics and an control module, and resiliency was not considered in the initial design. In the following, we will describe the ACC system as originally designed, an attack scenario, and an example of resiliency pattern to repair the ACC model\footnote{We note that the ACC model presented herein is not a representative of the complexity of a true ACC system, but a simplified example in which the dynamics and control equations are chosen for simplicity in the ensuing discussion of the paper.}.
+Assume that a designer has previously modeled the ACC system as a combination of the vehicle dynamics and an ACC module, and GPS measurements were considered trusted in the initial design. In the following, we will describe the ACC system as originally designed, an attack scenario, and an example of resiliency pattern to repair the ACC model\footnote{We note that the ACC model presented herein is not a representative of the complexity of a true ACC system, but a simplified example in which the dynamics and control equations are chosen for simplicity in the ensuing discussion of the paper.}.
 %
 Then, we present how \toolreaffirm can automatically perform a model transformation and synthesis to construct a new ACC model with resiliency. 
 %
@@ -32,9 +32,9 @@ For simplicity, we assume that the designer initially model the ACC system (incl
 % 
 The original ACC system operates in two modes: \emph{speed control} and \emph{spacing control}. In speed control, the host car travels at a driver-set speed. In spacing control, the host car aims to maintain a safe distance from the lead car. 
 %
-The vehicle has two states in which $d$ is the distance to the lead car, and $v$ is the speed of the host vehicle. The ACC system has two sensors that measure its velocity $v$ via noisy wheel encoders, $\venc = v + \nenc$, and a noisy GPS sensor, $\vgps = v+\ngps$, where $\nenc$ and $\ngps$ denote the encoder and GPS noises, respectively. 
+The vehicle has two states in which $d$ is the distance to the lead car, and $v$ is the speed of the host vehicle. The ACC system has two sensors that measure its velocity $v$ via noisy wheel encoders, $\venc = v + \nenc$, and a noisy GPS sensor, $\vgps = v+\ngps$, where $\nenc$ and $\ngps$ denote the encoder and GPS noises, respectively. Additionally, the ACC system has a radar sensor that measures the distance to the lead vehicle, $\drad = d+\nrad$.
 %
-The ACC system decides which mode to use based on the real-time sensor measurements. For example, if the lead car is too close, the ACC system triggers the control signal $u_d$ to switch from speed control to spacing control. Similarly, if the lead car is further away, the ACC system switches from spacing control to speed control by executing the control signal $u_s$. 
+The ACC system decides which mode to use based on the real-time sensor measurements. For example, if the lead car is too close, the controller triggers the transition $g_{sd}$ to switch from speed control to spacing control. Similarly, if the lead car is further away, the ACC system switches from spacing control to speed control by executing the transition $g_{ds}$. 
 %
 The \emph{safety specification} of the system is specified that $d$ should always be greater than $\dsafe$, where $\dsafe = v + 5$. We will describe the ACC model in more details in~\secref{result}.
 %
@@ -47,15 +47,25 @@ The \emph{safety specification} of the system is specified that $d$ should alway
 %
 %\JW{Fixed: This subsection needs to be short (like it is) but it also needs to let the reviewers know that we agree the model is simple.  Please take another attempt at it -- then I will do a pass to appease people that know something about real-world CPS modeling.}
 %
-\begin{figure}[tbp]%
+\begin{figure}[t!]%
 	\centering%
     %\includegraphics[width=0.48\textwidth]{image/acc_abstract_model}%
-		\includegraphics[width=0.48\textwidth]{image/acc_abstract_model}%
+		\includegraphics[width=0.46\textwidth]{image/acc_abstract_model}%
 		%\includegraphics[trim = 17mm 85mm 17mm 0mm, clip, width=0.95\textwidth]{image/spectral_signal}%
-		%\vspace{-1em}
+		\vspace{-0.5em}
 	\caption{An original ACC model.}%
 	\figlabel{original}%
-	%\vspace{-1em}
+	\vspace{-1em}
+\end{figure}%
+\begin{figure}[t!]%
+	\centering%
+    %\includegraphics[width=0.48\textwidth]{image/acc_abstract_model}%
+		\includegraphics[width=0.48\textwidth]{image/acc_abstract_model_pat1}%
+		%\includegraphics[trim = 17mm 85mm 17mm 0mm, clip, width=0.95\textwidth]{image/spectral_signal}%
+		\vspace{-0.5em}
+	\caption{A repaired ACC model without a reference to GPS sensor under spoofing attacks.}%
+	\figlabel{updated}%
+	\vspace{-1em}
 \end{figure}%
 
 %\subsection{Safety Violation under GPS Sensor Attack}
@@ -67,36 +77,31 @@ The \emph{safety specification} of the system is specified that $d$ should alway
 %
 In this example, we assume that after designing and verifying the initial ACC system, it is determined that the GPS sensor can be \emph{spoofed} \cite{tippenhauer2011requirements, kerns2014unmanned}. GPS spoofing occurs when incorrect GPS packets (possibly sent by a malicious attacker) are received by the GPS receiver. In the ACC system, this allows an attacker to arbitrarily change the GPS velocity measurement. 
 %
-Thus, a new scenario occurs when the original assumption of GPS noise \eg $|\ngps| \leq 0.05$ is omitted, and the new assumption is $|\ngps| \leq \infty$.
+Thus, a new scenario occurs when the original assumption of GPS noise, \eg $|\ngps| \leq 0.05$ is omitted, and the new assumption is $|\ngps| \leq 50$.
 As a result, the safety specification could be violated under the GPS sensor attacks, and a designer needs to repair the original model with a resiliency pattern. 
 
-\begin{figure}[t!]%
-	\centering%
-    %\includegraphics[width=0.48\textwidth]{image/acc_abstract_model}%
-		\includegraphics[width=0.48\textwidth]{image/acc_abstract_model_pat1}%
-		%\includegraphics[trim = 17mm 85mm 17mm 0mm, clip, width=0.95\textwidth]{image/spectral_signal}%
-		%\vspace{-1em}
-	\caption{A repaired ACC model without a reference to GPS sensor under spoofing attacks.}%
-	\figlabel{updated}%
-	%\vspace{-1em}
-\end{figure}%
+
 
 
 \vspace{0.5em}
 \noindent
-{\bf Example of resiliency pattern.}
+{\bf Example of resiliency pattern: ignoring GPS measurement.}
 %\subsection{Example of Resiliency Pattern}
 Since the ACC system has redundancy in the sensory information of its estimated velocity, to provide resilience against the GPS attacks, a mitigation strategy is to ignore the GPS value, and use only the wheel encoders to estimate velocity. 
 %
 Thus, a potential resiliency pattern is first to create a copy of the original model where the controller simply ignores the GPS reading as it can no longer be trusted. 
 %
-Then, adding new transitions from the legacy speed and spacing modes of the original model to the new copied speed and spacing modes of the copy that uses only the wheel encoder as a velocity measurement source. We note that this transformation is generic, that is, it can be applied in a uniform manner to any given model simply by creating a duplicate version of each original mode and transition, copying the dynamics in each mode, but without a reference to the variable $\ngps$. 
+Then, adding new transitions from the legacy speed and spacing modes of the original model to the new copied speed and spacing modes of the copy that uses only the wheel encoder as a velocity measurement source. We note that this transformation is generic, that is, it can be applied in a uniform manner to any given model simply by creating a duplicate version of each original mode and transition, copying the dynamics in each mode, but without a reference to the variable $\vgps$. 
 
-\figref{updated} illustrates the repaired model in which the transition from the original speeding and spacing control modes to their copies is an expression over $\ngps$ and $\nenc$. 
+\figref{updated} illustrates the repaired model in which the transition from the original speeding and spacing control modes to their copies is an expression over $\vgps$ and $\venc$. 
 %
-Observe that while it would be possible to use only the wheel encoder all the time, a better velocity estimate must be obtained by using an average velocity measurement (from both the GPS and wheel encoders) when the GPS sensor is performing within nominal specifications. The main analysis question is when should the model switch from the original modes to the copied modes during the spoofing attack. %\ie how to determine a transition condition $g(\ngps,\nenc)$. 
+Observe that while it would be possible to use only the wheel encoders all the time, a better velocity estimate must be obtained by using an average velocity measurement (from both the GPS and wheel encoders) when the GPS sensor is performing within nominal specifications. The main analysis question is when should the model switch from the original modes to the copied modes during the spoofing attack. %\ie how to determine a transition condition $g(\ngps,\nenc)$. 
 %
-From a practical standpoint, such a transition should occur when the GPS measurement significantly deviates from the wheel encoder measurement, and a transition condition can be specified as $g(\ngps,\nenc) = |\ngps -\nenc| \geq \theta$, where $\theta$ is an unknown parameter. Then, one needs to synthesize the suitable value of the parameter $\theta$ that specifies the threshold for switching from the original copy to the new copy so that the safety requirement is satisfied.
+From a practical standpoint, such a transition should occur when the GPS measurement significantly deviates from the wheel encoder measurement, and a transition condition can be specified as $g(\vgps,\venc) = |\vgps -\venc| \geq \theta$, where $\theta$ is an unknown parameter. 
+%
+Since $\venc = v + \nenc$ and $\vgps = v+\ngps$, we can rewrite the transition condition as $g(\vgps,\venc) = |\ngps -\nenc| \geq \theta$.
+%
+Then, one needs to synthesize the suitable value of the parameter $\theta$ that specifies the threshold for switching from the original copy to the new copy so that the safety requirement is satisfied.
 
 
 
@@ -112,17 +117,23 @@ Our \toolreaffirm prototype for the model-based design and repair with resilienc
 %
 \end{itemize}
 
-In the case of the ACC example mentioned previously, the inputs of \toolreaffirm are the SLSF model of the original ACC system shown in~\figref{original}, the resiliency pattern that creates the copied version of the original model without a reference to the variable $\ngps$, and the safety requirement encoded as an STL formula 
+In the case of the ACC example mentioned previously, the inputs of \toolreaffirm are the SLSF model of the original ACC system shown in~\figref{original}, the resiliency pattern that creates the copied version of the original model without a reference to the variable $\vgps$, and the safety requirement encoded as an STL formula 
 \begin{align}
-\varphi_{ACC} &= \Box_{[0, \infty]} d[t] < 5 + v[t]. 
+\vspace{-1em}
+\varphi_{ACC} &= \Box_{[0, \infty)} d[t] < 5 + v[t]. 
+\vspace{-1em}
 \end{align}
 %
 The model transformation tool of \toolreaffirm takes the initial SLSF model and the resiliency pattern, and then generates the new SLSF model of the ACC system that contains a parameter $\theta$ captured the switching condition based on the difference between the GPS measurement and the wheel encoder measurement.
 %
 %
-Then, the model synthesizer tool of \toolreaffirm takes the parametrized ACC model in SLSF and the STL formula $\varphi_{ACC}$ as inputs, and then performs a parameter synthesis to find the desired value of $\theta$ over a certain range, to ensure that $\varphi_{ACC}$ is satisfied. Internally, the model synthesizer of \toolreaffirm utilizes an open-source model falsification tool---Breach~\cite{donze2010breach} to synthesize values for the desired parameters. If the synthesizer can find the best value of $\theta$ over the given range, \toolreaffirm outputs a competed SLSF model which satisfies $\varphi_{ACC}$ under the GPS attacks. Otherwise, \toolreaffirm will suggest a designer to either search over different parameter ranges or try different resiliency patterns to repair the ACC model.   
+Then, the model synthesizer tool of \toolreaffirm takes the parametrized ACC model in SLSF and the STL formula $\varphi_{ACC}$ as inputs, and then performs a parameter synthesis to find the desired value of $\theta$ over a certain range, to ensure that $\varphi_{ACC}$ is satisfied. Internally, the model synthesizer of \toolreaffirm utilizes an open-source model falsification tool---Breach~\cite{donze2010breach} to synthesize values for the desired parameters. If the synthesizer can find the best value of $\theta$ over the given range, \toolreaffirm outputs a competed SLSF model which satisfies $\varphi_{ACC}$ under the GPS attacks. Otherwise, the tool will suggest a designer to either search over different parameter ranges or try different resiliency patterns to repair the ACC model.   
+%
+
+\toolreaffirm was tested using Matlab 2017a and Matlab 2018a executed on an x86-64 laptop with 2.8 GHz Intel(R) Core(TM) i7-7700HQ processor and 32 GB RAM. All performance metrics reported were recorded on this system using Matlab 2018a. In Breach, we choose the CMAES solver, and the maximum optimization time is 30 seconds for each iteration of the falsification loop. \toolreaffirm and all case studies investigated in this paper are available to download at \url{https://github.com/LuanVietNguyen/reaffirm}.
+
 % 
-In the next section, we present the model transformation language that we have developed to assist designers in specifying a resiliency pattern to repair their initial designs effectively.
+%In the next section, we present the model transformation language that we have developed to assist designers in specifying a resiliency pattern to repair their initial designs effectively.
 %Internally, the model synthesizer of \toolreaffirm  utilizes an open-source model falsification tool---Breach~\cite{donze2010breach}, to check an SLSF model against the specification. The counterexamples returned by this falsification tool are used to determine values for the desired parameters. At the end of a falsification loop, the completed model produced by \toolreaffirm, compared to the original model, can have additional modes of operation as well as new transitions between different modes, and as a result, has resilient behaviors specified in the resiliency patterns.   
 %
 %\begin{itemize}[leftmargin= 2 em]
