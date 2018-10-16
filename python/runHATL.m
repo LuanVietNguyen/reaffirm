@@ -11,10 +11,6 @@ if ~contains(output,"Python 3.6")
     error("Invalid python version, must run Python 3.6 or greater")
 end
 
-if matlab.engine.isEngineShared
-   error("Do not share the engine when running HATL from inside MATLAB")
-end
-
 args = hatlScript + " " + modelFile;
 if nargin == 3
     args = args + " --name " + varargin{1};

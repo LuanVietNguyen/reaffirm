@@ -5,11 +5,6 @@ import pdb
 import os
 import argparse
 
-from enum import Enum
-
-sys.path.append("/Users/gautam/research/CASE/reaffirm/python")
-#os.chdir("python")
-
 from ReaffirmLexer import ReaffirmLexer
 from ReaffirmParser import ReaffirmParser
 from ReaffirmVisitor import ReaffirmVisitor
