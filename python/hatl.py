@@ -71,7 +71,7 @@ class Model:
 
         raw_mode = self.engine.addState(self.matlab_var, mode.matlab_var)
         newmode = Mode(raw_mode, self.engine)
-        self.modes.add(newmode)
+        self.Mode.add(newmode)
         return newmode
 
     def addTransition(self, ctx, src, dest, eqn):
@@ -98,7 +98,7 @@ class Model:
         return CopyModel(mvar, self.engine)
 
     def getCopy(self, ctx, mode):
-        copymodes = [m for m in self.modes if m.name == (mode.name + '_copy')]
+        copymodes = [m for m in self.Mode if m.name == (mode.name + '_copy')]
         if copymodes == []:
             errorClose(ctx, "In '" + ctx.getText() + "', did not find a copy of the mode ")
         elif len(copymodes) > 1:
