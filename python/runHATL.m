@@ -26,7 +26,7 @@ hatlPath = ".." + filesep + ".." + filesep + "python" + filesep;
 %hatlPath = "python" + filesep;
 hatlInterpreter = hatlPath + "hatl.py";
 
-err = system("python" + " " + hatlInterpreter + " " + args);
+err = system("python" + " " + hatlInterpreter + " " + args + "--fromMATLAB");
 if err
     error("HATL failed")
 end

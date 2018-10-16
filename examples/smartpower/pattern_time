@@ -1,10 +1,10 @@
-addParam(model,"theta")
-addLocalVar(model,"clock")
-formode m = model.modes {
-    addFlow(m,"clock_dot = 1")
+model.addParam("theta")
+model.addLocalVar("clock")
+formode m = model.Mode {
+    m.addFlow("clock_dot = 1")
 }
 
-fortran t = model.trans {
-    addGuardLabel(t,"&&","clock > theta")
-    addResetLabel(t,"clock = 0")
+fortran t = model.Trans {
+    t.addGuardLabel("&&","clock > theta")
+    t.addResetLabel("clock = 0")
 }

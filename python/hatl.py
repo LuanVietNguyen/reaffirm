@@ -373,7 +373,7 @@ class MATLABVisitor(ReaffirmVisitor):
 
     # Visit a parse tree produced by ReaffirmParser#funcall.
     def visitFuncall(self, ctx:ReaffirmParser.FuncallContext):
-f        fname = ctx.children[0].getText()
+        fname = ctx.children[0].getText()
         if not fname in self.functions:
             errorClose(ctx, "Unknown reference to '" + fname + "'")
         return self.visitChildren(ctx)
@@ -399,7 +399,7 @@ f        fname = ctx.children[0].getText()
         return self.visitChildren(ctx)
 
 
-def runHATL(script, modelfile,modelname=None):
+def runHATL(script, modelfile,modelname=None,fromMATLAB=False):
 
     global scriptFile
     scriptFile = script
@@ -411,7 +411,7 @@ def runHATL(script, modelfile,modelname=None):
 
     sessions = engine.find_matlab()
     eng = None
-    if sessions == ():
+    if sessions == () or fromMATLAB:
         print("Starting MATLAB engine")
         eng = engine.start_matlab()
     else:
@@ -450,9 +450,11 @@ if __name__ == '__main__':
     parser.add_argument('--name',nargs=1,type=str,metavar='modelName',
                         help='If the model file contains multiple models, '
                         'specify a single model by name as the script target')
+    parser.add_argument('--fromMATLAB',action='store_const',const=True)
 
     args = vars(parser.parse_args())
+
     name = None
     if args['name']:
         name = args['name'].pop()
-    runHATL(args['script'].pop(),args['model'].pop(),modelname=name)
+    runHATL(args['script'].pop(),args['model'].pop(),modelname=name,fromMATLAB=args['fromMATLAB'])
