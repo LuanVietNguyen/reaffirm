@@ -4,7 +4,11 @@
 function [resModelName] = model_transformation(patternFile, modelName, varargin)
     resModelName = [modelName,'_resilient'];
     tStartT = tic;
-    runHATL(patternFile,modelName,varargin)
+    if nargin == 2
+        runHATL(patternFile,modelName);
+    else
+        runHATL(patternFile,modelName,varargin);
+    end
     tTransform=toc(tStartT);
     fprintf('Total transformation time %f\n',tTransform);
 end

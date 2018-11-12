@@ -56,8 +56,9 @@ model_synthesis
 tElapsed=toc(tStartE);
 fprintf('Total synthesize time: time %f\n',tElapsed);
 
-
-
+% update the parameter to a constant with a synthesized value
+% export the final model
+complete_model_gen
 
 
 

@@ -36,61 +36,14 @@ Tsim = 50; Ts = 0.01;
 time = 0:Ts:Tsim; t = time';
 falsify_obj.SetTime(t(end));
 
-% setting input profiles
-nenc_gen = constant_signal_gen({'nenc'});
-% generate gps attacks as a step/pulse/constant input
-ngps_input_type = 'const';
-switch ngps_input_type
-    case 'const'
-        % set as constant signal
-        ngps_gen = constant_signal_gen({'ngps'});
-        input_gen = BreachSignalGen({ngps_gen, nenc_gen});
-        falsify_obj.SetInputGen(input_gen);
-        ngps_input_variation = 'ngps_u0';
-    case 'ramp'
-        % set as a ramp signal
-        ngps_gen= ramp_signal_gen({'ngps'});
-        input_gen = BreachSignalGen({ngps_gen, nenc_gen});
-        falsify_obj.SetInputGen(input_gen);
-        ngps_input_variation = 'ngps_ramp_amp';
-    case 'impulse'
-        ngps_gen = impulse_signal_gen({'ngps'});
-        input_gen = BreachSignalGen({ngps_gen, nenc_gen});
-        falsify_obj.SetInputGen(input_gen);
-        falsify_obj.SetParam({'ngps_base_value', 'ngps_impulse_time', 'ngps_impulse_period'}, [0.05 20 10]);
-        ngps_input_variation = 'ngps_impulse_amp';
-    case 'pulse_train'
-        ngps_gen = pulse_signal_gen({'ngps'});
-        input_gen = BreachSignalGen({ngps_gen, nenc_gen});
-        falsify_obj.SetInputGen(input_gen);
-        falsify_obj.SetParam({'ngps_base_value', 'ngps_pulse_period'}, [0.05 10]);
-        ngps_input_variation = 'ngps_pulse_amp';
-    case 'step'
-        ngps_gen = step_signal_gen({'ngps'});
-        input_gen = BreachSignalGen({ngps_gen, nenc_gen});
-        falsify_obj.SetInputGen(input_gen);
-        falsify_obj.SetParam({'ngps_step_base_value','ngps_step_time'}, [0.05 1]);
-        ngps_input_variation = 'ngps_step_amp';
-    case 'sinusoid'
-        % set as sinusoid signal
-        ngps_gen = sinusoid_signal_gen({'ngps'});
-        input_gen = BreachSignalGen({ngps_gen, nenc_gen});
-        falsify_obj.SetInputGen(input_gen);
-        falsify_obj.SetParam({'ngps_sin_amp', 'ngps_sin_freq'}, [1 1/(2*pi)]);
-        ngps_input_variation = 'ngps_sin_offset';
-    case 'random'
-        % set as a random signal
-        ngps_gen = random_signal_gen({'ngps'});
-        input_gen = BreachSignalGen({ngps_gen, nenc_gen});
-        falsify_obj.SetInputGen(input_gen);
-        falsify_obj.SetParam({'ngps_max'}, guardPattern.values{1}(2));
-        ngps_input_variation = 'ngps_min';
-    otherwise
-        'Error';
-end
+% setting input profiles 
+% we can generate gps attacks as a step/pulse/constant input   
+signals = {'ngps', 'nenc'};
+signal_types = {'const', 'const'};
+falsify_obj = input_gen(falsify_obj, signals, signal_types); 
 
 % specify the amplitude range of an attack signal
-falsify_obj.SetParamRanges({'nenc_u0', ngps_input_variation}, [0 0.05; -50 50]);
+falsify_obj.SetParamRanges({'nenc_u0', 'ngps_u0'}, [0 0.05; -50 50]);
 % specify the ranges of initial values of state variables
 falsify_obj.SetParamRanges({'d0', 'v0', 'ed0', 'ev0'},[90 100; 25 30; 90 100; 25 30]);
 % specify a safety property: d > safe == 5 + v[t]
@@ -114,3 +67,7 @@ guess_mono = -ones(1,length(param.names)); % if no mononicity check or the check
 model_synthesis
 tElapsed=toc(tStartE);
 fprintf('Total synthesize time: time %f\n',tElapsed);
+
+% update the parameter to a constant with a synthesized value
+% export the final model
+complete_model_gen
