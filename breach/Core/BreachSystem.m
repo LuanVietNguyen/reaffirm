@@ -391,7 +391,7 @@ classdef BreachSystem < BreachSet
             opt.params = FindParam(this.Sys,params);
             opt.lbound = ranges(:,1)';
             opt.ubound = ranges(:,2)';
-            opt.plot = 2;
+            opt.plot = 3;
             
             [mu, mustar, sigma, Pr]= SPropSensi(this.Sys, this.P, phi, opt);
             this.P=Pr;

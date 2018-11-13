@@ -127,7 +127,8 @@ if opt.plot==1
     subplot(3,1,1);
     barh(mu(isort));
     title('Expectation of elementary effects (mu)')
-    set(gca, 'YTick', 1:numel(opt.params), 'YTickLabel', opt.params(isort));
+    %set(gca, 'YTick', 1:numel(opt.params), 'YTickLabel', opt.params(isort));
+    set(gca, 'YTick', 1:numel(opt.params), 'YTickLabel', Sys.ParamList(opt.params(isort)));
     if isfield(opt,'muGraphOpt')
         set(gca,opt.muGraphOpt{:});
     end
@@ -161,6 +162,26 @@ elseif opt.plot==2
         set(gca,opt.muGraphOpt{:});
     end
 
+elseif opt.plot==3 
+    figure;
+    hb = bar([mu mustar sigma]);
+    set(hb(1), 'FaceColor','r')
+    set(hb(2), 'FaceColor','b')
+    set(hb(3), 'FaceColor','g')
+    %hold on;
+    %errorbar(mu,sigma,'+');
+    title('Expectation of elementary effects')
+    set(gca, 'XTickLabel',Sys.ParamList(opt.params), 'TickLabelInterpreter','None');
+    if isfield(opt,'muGraphOpt')
+        set(gca,opt.muGraphOpt{:});
+    end
+    legend(hb,{'mu', 'mustar', 'sigma'})
+    %hold off;
+    figure;
+    scatter(mustar, sigma,'filled')
+    text(mustar, sigma, Sys.ParamList(opt.params), 'VerticalAlignment','bottom', 'HorizontalAlignment','right')
+    xlabel('Absoluate elementary effect mu')
+    ylabel('Standard deviation of elementary effectss sigma')
 end
 
 end
