@@ -6,7 +6,7 @@ termination = false;
 best_value = zeros(1, length(param.names)); % Store counter example values
 while robustness < 0 && nLoop < maxLoop && termination == false
 
-    [falsify_obj, robustness, best_value, param.values, mono, nLoop, termination] = falsification(falsify_obj, param.names, param.values, safe_distance ...
+    [falsify_obj, robustness, best_value, param.values, mono, nLoop, termination] = falsification(falsify_obj, param.names, param.values, safe_prop ...
                                                                    , best_value, tol, mono, guess_mono, nLoop,termination, option_check_mono, option_plot);
 end
 

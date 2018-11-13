@@ -4,7 +4,11 @@ function [transition] = addTransition(chart, src, dest, label, srcO, dstO )
         transition = Stateflow.Transition(chart);
         transition.Source = src;
         transition.Destination = dest;
-        transition.LabelString = label;
+        if ~contains(label, '[')
+            transition.LabelString = strcat('[',label,']');
+        else
+            transition.LabelString = label;
+        end
     end
     if nargin > 4
         transition.SourceOClock = srcO;

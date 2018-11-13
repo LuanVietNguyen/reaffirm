@@ -40,7 +40,7 @@ function [obj, robustness, best_value, inputValues, mono, nLoop, termination] = 
             best_value(i) = inputValues{i}(2);
         end
         if inputValues{i}(1) > inputValues{i}(2)
-           fprintf('All parameters within given ranges of param %s are falsified, please try another pattern or change its range\n',inputName{i});
+           fprintf('All parameters within given ranges of param %s are falsified. If the tool still find a counterexample, please try another pattern or change its range\n',inputName{i});
            termination = true;
         end
     end

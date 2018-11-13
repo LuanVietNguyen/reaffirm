@@ -1,0 +1,8 @@
+duplicate_model = model.copyModel()
+model.addParam("theta")
+formode m = model.Mode {
+    m_copy = model.addMode(m)
+    m_copy.replace("ngyro2","ngyro1")
+    model.addTransition(m,m_copy,"abs(ngyro2-ngyro1) > theta")
+    model.addTransition(m_copy,m,"abs(ngyro2-ngyro1) < theta")
+}

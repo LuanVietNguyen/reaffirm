@@ -1,0 +1,5 @@
+model.addParam("theta")
+formode m = model.Mode {
+    m.replace("ngyro2", "2*theta*ngyro2")
+    m.replace("ngyro1", "2*(1-theta)*ngyro1")
+}

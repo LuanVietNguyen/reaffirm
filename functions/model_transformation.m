@@ -9,6 +9,7 @@ function [resModelName] = model_transformation(patternFile, modelName, varargin)
     else
         runHATL(patternFile,modelName,varargin);
     end
+    %sfsave(modelName, [resModelName,'.mdl']);
     tTransform=toc(tStartT);
     fprintf('Total transformation time %f\n',tTransform);
 end

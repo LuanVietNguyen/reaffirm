@@ -14,7 +14,7 @@ bdclose all; clc; clear all; close all;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % MODEL TRANSFORMATION 
-resModelName = model_transformation('pattern3', 'acc_model_new');
+resModelName = model_transformation('pattern2', 'acc_model_new');
 tStartE=tic;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -47,7 +47,7 @@ falsify_obj.SetParamRanges({'nenc_u0', 'ngps_u0'}, [0 0.05; -50 50]);
 % specify the ranges of initial values of state variables
 falsify_obj.SetParamRanges({'d0', 'v0', 'ed0', 'ev0'},[90 100; 25 30; 90 100; 25 30]);
 % specify a safety property: d > safe == 5 + v[t]
-safe_distance = STL_Formula('safe_distance', 'alw(d[t] >= 5 + v[t])');
+safe_prop = STL_Formula('safe_distance', 'alw(d[t] >= 5 + v[t])');
 
 
 
