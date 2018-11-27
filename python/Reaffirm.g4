@@ -23,9 +23,9 @@ expr   		:   ID					# id
 assign		: 	ID '=' expr;
 exprList 	: 	expr (',' expr)* ; // arg list
 forloop		:	('formode' |'fortran') assign block ; // forloop over modes or transitions
-ifstat		:	'if' ( expr | bexpr ) 'then' stat ('else' stat)? ;
+ifstat		:	'if' ( expr | bexpr ) 'then' block ('else' block)? ;
 
-funcall		:	ID '(' exprList? ')' ; // funtion call
+funcall		:	ID '(' exprList? ')' ; // function call
 
 fieldref	: 	 '.' ID ; // e.g., model.mode.flowstring
 

@@ -364,7 +364,15 @@ class MATLABVisitor(ReaffirmVisitor):
 
     # Visit a parse tree produced by ReaffirmParser#ifstat.
     def visitIfstat(self, ctx:ReaffirmParser.IfstatContext):
-        print("visitIfstat")
+        if ctx.expr():
+            cond = self.visit(ctx.expr())
+        else:
+            cond = self.visit(ctx.bexpr())
+
+        if cond:
+            self.visit(ctx.children[3])
+        else:
+            self.visit(ctx.children[5])
         return self.visitChildren(ctx)
 
     # Visit a parse tree produced by ReaffirmParser#funcall.
