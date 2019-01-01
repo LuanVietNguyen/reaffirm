@@ -1,0 +1,40 @@
+function t = buildTree(chart)
+%BUILDTREE Given a hierarchical SLSF chart, return a tree according to
+%Hylink's strategy
+
+% Compute the leaves from a list of all the states. Construct a node for
+% each leaf, then for each parent of each leaf, construct nodes and add the
+% leaves as children. repeat until we hit the root, which corresponds to
+% there being no more states left to encapsulate into nodes.
+
+% careful, this do
+
+children = find(chart,'-isa','Stateflow.State');
+free = {}
+leaves = {};
+
+for i=1:length(children)
+    c = children(i);
+    if isempty(find(c.getChildren,'-isa','Stateflow.State'))
+        leaves{end+1} = Node(get(c,'Name'),decomp(c));
+    else
+        free{end+1} = Node(get(c,'Name'),decomp(c))
+    end
+end
+
+t = free;
+
+    function t = buildTreeHelper(
+
+
+    function d = decomp(s)
+        if get(s,'Decomposition') == "PARALLEL_AND"
+            d = decomp.AND;
+        elseif get(s,'Decomposition') == "EXCLUSIVE_OR"
+            d = decomp.OR;
+        else
+            error("something bad happened")
+        end
+    end
+end
+
