@@ -1,0 +1,11 @@
+clc; clear;
+Bmax = 50;
+grm0 = 0;
+p10 = 0;
+p20 = 0;
+%d1 = 10; 
+r1 = 3;
+d2 = 0; r2 = 3; 
+maxm = 2;
+thresh = 5;
+Tmax = 30;
