@@ -45,7 +45,7 @@ class SuperMode():
     def attachToChart(self, chart):
         self.matlabObj = eng.Stateflow.State(chart)
         eng.set(self.matlabObj,'Name',self.name, nargout=0)
-        eng.set(self.matlabObj,'LabelString',self.name + ":" + "\n" + self.flow, nargout=0)
+        eng.set(self.matlabObj,'LabelString',self.name + "\ndu:" + "\n" + self.flow, nargout=0)
 
 
 def extractFlow(mode):
@@ -101,7 +101,8 @@ def run():
     global eng
     eng = matlab.engine.connect_matlab(matlab.engine.find_matlab()[0])
     chart = eng.find(eng.sfroot(),'-isa','Stateflow.Chart',
-                     '-and', 'Path', 'thermostat/Chart')
+                     '-and', 'Path', 'thermostat2/Chart')
+    dataVariables = eng.find(chart,'-isa','Stateflow.Data')
     allChildren = eng.find(chart,'-isa','Stateflow.State')
 
     #construct superModes from the SLSF hierarchy tree
@@ -114,8 +115,19 @@ def run():
     eng.sfnew('flattened')
     flatChart = eng.find(eng.sfroot(),'-isa','Stateflow.Chart',
                          '-and','Path','flattened/Chart')
-    for m in superModes:
+
+    #Set new chart parameters to reflect old chart parameters
+    eng.set(flatChart,'ActionLanguage','C','ChartUpdate','CONTINUOUS',nargout=0)
+    cb = eng.sfclipboard()
+    eng.copy(cb,dataVariables,nargout=0)
+    eng.pasteTo(cb,flatChart,nargout=0)
+
+    for i,m in enumerate(superModes):
         m.attachToChart(flatChart)
+        pos = eng.get(m.matlabObj,'Position')
+        pos[0][0] = 300*i
+        pos[0][1] = 300*i
+        eng.set(m.matlabObj,'Position',pos,nargout=0)
 
     allTransitions = [t[0] for t in eng.find(chart,'-isa','Stateflow.Transition')]
 
@@ -145,12 +157,11 @@ def run():
                                  eng.get(eng.get(t,'Destination'), 'Name') in m2Modes)]
 
         if relevantTransitions == []:
-            import pdb; pdb.set_trace()
             continue
 
         #construct one transition that combines the guards of all the transitions
         guards = [eng.get(t,'LabelString').strip("[]") for t in relevantTransitions]
-        newGuard = " && ".join(guards)
+        newGuard = '[' + " && ".join(guards) + ']'
 
         print(i)
         #add that transition between m1 and m2
